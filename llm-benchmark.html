@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>LLM Evaluation - Anime Mapping</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="metodologia.html">Metodologia</a>
+            <a href="sparql.html">SPARQL</a>
+            <a href="llm-benchmark.html">LLM Results</a>
+            <a href="conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Prompt Engineering & LLM Extraction</h1>
+        <p>Visualizzazione affiancata del prompt di sistema strutturato e del corrispondente output JSON validato.</p>
+
+        <div class="prompt-split-grid">
+            <div class="prompt-pane">
+                <span class="pane-title system-bg">System Prompt</span>
+                <div class="prompt-text">You are an expert knowledge engineer specialized in narratology. Extract the core narrative archetype based on the Wikidata property schema. 
+
+Output format MUST be strictly valid JSON containing:
+- character_name
+- archetype_class
+- confidence_score</div>
+            </div>
+
+            <div class="prompt-pane">
+                <span class="pane-title user-bg">Output JSON Validato</span>
+                <div class="prompt-text">
+{
+  "character_name": "Monkey D. Luffy",
+  "archetype_class": "ex:ShonenHero",
+  "confidence_score": 0.98
+}</div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

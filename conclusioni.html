@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusioni e Analisi LLM - Anime Mapping</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="metodologia.html">Metodologia</a>
+            <a href="sparql.html">SPARQL Queries</a>
+            <a href="llm-benchmark.html">LLM Results</a>
+            <a href="conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <header class="project-header">
+            <h1>Discussione dei Risultati e Sfide Affrontate</h1>
+            <p class="project-subtitle">
+                Analisi critica dell'estrazione semantica e confronto tra i modelli generativi.
+            </p>
+        </header>
+
+        <section class="report-section">
+            <h2>Sfide Metodologiche e Soluzioni</h2>
+            <p>
+                Durante lo sviluppo della pipeline per il popolamento ontologico degli archetipi narratologici dei media giapponesi, il team ha riscontrato diverse criticità legate alla natura destrutturata dei dati di partenza.
+            </p>
+            <h3 style="color: #0f172a; margin-top: 20px;">Allineamento Culturale e Semantico</h3>
+            <p>
+                Una delle sfide principali è stata la mappatura di concetti fortemente radicati nella cultura pop giapponese (es. "Tsundere", "Shonen Hero", "Nakama") verso archetipi narratologici occidentali più generici o standardizzati su Wikidata. Per ovviare a questo problema, abbiamo sfruttato la flessibilità di RDFS per suggerire un'estensione locale del vocabolario, creando sottoclassi gerarchiche che permettessero di conservare la sfumatura semantica originale dell'anime o del manga, collegandola al contempo alla macro-categoria di riferimento.
+            </p>
+            <h3 style="color: #0f172a; margin-top: 20px;">Normalizzazione delle Entità</h3>
+            <p>
+                L'estrazione dai testi liberi ha generato ambiguità nei nomi dei personaggi (es. differenze tra traduzioni italiane, inglesi e romaji originale). La problematica è stata gestita introducendo un passaggio di validazione nel prompt: il modello linguistico è stato istruito a restituire sempre l'URI esatto di Wikidata corrispondente al personaggio, piuttosto che la semplice stringa di testo, garantendo così l'esattezza dei nodi nel grafo.
+            </p>
+        </section>
+
+        <section class="report-section">
+            <h2>Confronto tra i Modelli di Linguaggio (LLMs)</h2>
+            <p>
+                Come previsto dall'architettura del progetto, l'estrazione semantica è stata testata parallelamente su due modelli differenti per valutarne l'affidabilità nella generazione di triple formali e output JSON rigorosi.
+            </p>
+            
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <div style="flex: 1; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
+                    <h4 style="margin-top: 0; color: #1e1b4b; border-bottom: 2px solid #38bdf8; padding-bottom: 5px;">Modello A (es. GPT-4o)</h4>
+                    <p style="font-size: 0.95em; color: #475569;">
+                        Il modello ha mostrato un'eccellente capacità di aderenza strutturale, restituendo JSON sempre validi e rispettando fedelmente le classi ontologiche fornite nel System Prompt. Ha dimostrato inoltre un'ottima conoscenza pregressa dei trope legati agli anime, necessitando di meno esempi (Few-Shot) per inquadrare correttamente l'archetipo di un personaggio.
+                    </p>
+                </div>
+                
+                <div style="flex: 1; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
+                    <h4 style="margin-top: 0; color: #1e1b4b; border-bottom: 2px solid #f43f5e; padding-bottom: 5px;">Modello B (es. Claude 3.5 Sonnet)</h4>
+                    <p style="font-size: 0.95em; color: #475569;">
+                        Pur dimostrando una capacità di analisi del testo in input più sfumata e discorsiva, ha richiesto regole di prompting più rigide (Zero-Tolerance) per forzare l'output nel formato computazionale richiesto. Occasionalmente ha tentato di generare nuove proprietà RDF non dichiarate, rendendo necessaria un'istruzione esplicita di vincolo al vocabolario fornito.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Considerazioni Finali</h2>
+            <p>
+                L'approccio ibrido sviluppato dimostra concretamente come sia possibile colmare i "Data Gap" nelle piattaforme di conoscenza collaborativa. Attraverso la pipeline progettata, le ricche descrizioni psicologiche e di ruolo presenti nei fandom wiki sono state trasformate con successo in relazioni strutturate, abilitando nuove possibilità di query semantiche complesse (es. "Estrai tutti i manga che presentano una dinamica Eroe/Mentore pubblicati dopo il 2010") prima impossibili da eseguire su Wikidata.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="project-footer">
+        <p>&copy; 2026 Progetto di Simulazione Semantica &bull; Master GEPID &bull; Alma Mater Studiorum - Università di Bologna</p>
+    </footer>
+
+</body>
+</html>

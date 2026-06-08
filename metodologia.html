@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Metodologia - Anime Mapping</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="metodologia.html">Metodologia</a>
+            <a href="sparql.html">SPARQL</a>
+            <a href="llm-benchmark.html">LLM Results</a>
+            <a href="conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <main class="main-report">
+            <h1>Metodologia di Estrazione Semantica</h1>
+            
+            <h2>1. Identificazione del Data Gap in Wikidata</h2>
+            <p>
+                Durante la fase preliminare di esplorazione del Knowledge Graph globale di Wikidata, il team ha riscontrato un'importante asimmetria informativa. Sebbene l'ontologia di Wikidata preveda formalmente proprietà narratologiche specifiche ideate per mappare i costrutti dei racconti — come la definizione dell'archetipo di un personaggio — queste risultano quasi interamente vuote o non valorizzate quando applicate ai personaggi di anime e manga giapponesi.
+            </p>
+            <p>
+                La ricca conoscenza accademica e culturale di questo settore rimane confinata sotto forma di testo libero e destrutturato all'interno delle community wiki di settore (come i portali Fandom). Il nostro obiettivo progettuale è diventato quindi estrarre questa conoscenza per dimostrare come i metodi semantici favoriscano i processi di trasformazione digitale e recupero dell'informazione.
+            </p>
+
+            <h2>2. Definizione della pipeline</h2>
+            <p>
+                Per risolvere il gap informativo individuato, il processo è stato articolato in fasi distinte. In primo luogo, sono stati isolati i testi liberi (non strutturati) dalle wiki di settore. Successivamente, tali testi sono stati sottoposti a modelli di linguaggio (LLM) tramite tecniche avanzate di Few-Shot Prompting per l'estrazione delle entità e delle relazioni.
+            </p>
+            
+            <h2>3. Allineamento Ontologico e RDFS</h2>
+            <p>
+                Le triple estratte non vengono inserite in modo isolato, ma mappate all'interno del perimetro concettuale delle proprietà narratologiche già esistenti nel vocabolario di Wikidata, garantendo la piena interoperabilità dei dati risultanti. 
+                <em>[Qui espanderemo con i dettagli sul namespace e l'estensione del vocabolario]</em>
+            </p>
+        </main>
+
+        <aside class="sidebar-visual">
+            <div class="side-card">
+                <img class="side-img" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=500&auto=format&fit=crop" alt="Graph Diagram">
+                <h4>Struttura del Grafo</h4>
+                <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra i nodi.</p>
+            </div>
+            <div class="side-card">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="180" style="background-color: #0f172a; border-radius: 8px; margin-bottom: 15px;">
+                    <line x1="200" y1="100" x2="100" y2="50" stroke="#475569" stroke-width="2"/>
+                    <line x1="200" y1="100" x2="100" y2="150" stroke="#475569" stroke-width="2"/>
+                    <line x1="200" y1="100" x2="300" y2="50" stroke="#f43f5e" stroke-width="2"/> <line x1="200" y1="100" x2="300" y2="150" stroke="#475569" stroke-width="2"/>
+                    <line x1="300" y1="50" x2="360" y2="90" stroke="#f43f5e" stroke-width="2"/>
+                    <line x1="100" y1="50" x2="40" y2="80" stroke="#475569" stroke-width="2"/>
+                    
+                    <circle cx="200" cy="100" r="14" fill="#38bdf8"/> <circle cx="100" cy="50" r="8" fill="#94a3b8"/>
+                    <circle cx="100" cy="150" r="8" fill="#94a3b8"/>
+                    <circle cx="300" cy="50" r="12" fill="#f43f5e"/> <circle cx="300" cy="150" r="8" fill="#94a3b8"/>
+                    <circle cx="360" cy="90" r="6" fill="#f43f5e"/>
+                    <circle cx="40" cy="80" r="6" fill="#94a3b8"/>
+                    
+                    <text x="200" y="135" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">Personaggio</text>
+                    <text x="300" y="30" fill="#f43f5e" font-size="14" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">Archetipo</text>
+                </svg>
+
+                <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Grafo</h4>
+                <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra le entità narrative estratte e le classi ontologiche.</p>
+            </div>
+        </aside>
+    </div>
+
+</body>
+</html>

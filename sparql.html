@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SPARQL Queries - Anime Mapping</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="metodologia.html">Metodologia</a>
+            <a href="sparql.html">SPARQL</a>
+            <a href="llm-benchmark.html">LLM Results</a>
+            <a href="conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Validazione tramite SPARQL Queries</h1>
+        <p>Esempio di query semantica strutturata per verificare l'estrazione degli archetipi eseguiti sui casi di studio.</p>
+
+        <div class="query-box">
+            <h3>Query 1: Estrazione dei Personaggi associati all'archetipo "Shonen Hero"</h3>
+            <div class="code-block">
+                <span class="keyword">PREFIX</span> ex: &lt;https://animemanga.schema.org/ontology/&gt;<br>
+                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
+                <span class="keyword">SELECT DISTINCT</span> ?characterName ?archetypeLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;?char ex:hasArchetype ex:ShonenHero .<br>
+                &nbsp;&nbsp;?char rdfs:label ?characterName .<br>
+                &nbsp;&nbsp;ex:ShonenHero rdfs:label ?archetypeLabel .<br>
+                }
+            </div>
+
+            <h4>Risultati simulati dall'endpoint:</h4>
+            <table class="results-table">
+                <thead>
+                    <tr><th>?characterName</th><th>?archetypeLabel</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>"Monkey D. Luffy"@it</td><td>"Eroe Shonen"</td></tr>
+                    <tr><td>"Uzumaki Naruto"@it</td><td>"Eroe Shonen"</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>

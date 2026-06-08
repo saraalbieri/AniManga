@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappatura degli Archetipi Narrativi negli Anime e Manga - Home</title>
+    <!-- Collegamento al file CSS unico posizionato nella cartella style -->
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR FISSA: Identica in tutte le pagine per una navigazione fluida -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="metodologia.html">Metodologia</a>
+            <a href="sparql.html">SPARQL</a>
+            <a href="llm-benchmark.html">LLM Results</a>
+            <a href="conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <!-- CONTENITORE PRINCIPALE -->
+    <main class="container">
+        
+        <!-- INTESTAZIONE: Titolo del Progetto ed Elenco del Team -->
+        <header class="project-header">
+            <h1>Mappatura degli Archetipi Narrativi nei Media Giapponesi</h1>
+            <p class="project-subtitle">
+                Progetto d'esame per il corso di <em>Metodologie e tecniche di simulazione</em>
+            </p>
+            <div class="team-credits">
+                <strong>Team:</strong> Sara Albieri & Michele Franco &mdash; GEPID, Università di Bologna
+            </div>
+        </header>
+
+        <!-- SEZIONE ABSTRACT: Richiesta obbligatoria dalle linee guida -->
+        <section class="report-section">
+            <h2>Abstract del Progetto</h2>
+            <p>
+                Questo progetto esplora l'uso combinato di <strong>Knowledge Graphs (KGs)</strong> e <strong>Large Language Models (LLMs)</strong> per automatizzare l'estrazione e la formalizzazione della conoscenza nell'ambito della narratologia applicata ai media pop giapponesi (Anime e Manga). 
+            </p>
+            <p>
+                L'obiettivo principale è colmare un <strong>significativo gap informativo</strong> individuato all'interno di <a href="https://www.wikidata.org/" target="_blank">Wikidata</a>: la totale assenza di dati strutturati riguardanti gli archetipi narrativi dei personaggi. Trasformando descrizioni testuali destrutturate in triple RDF, abbiamo costruito un'architettura semantica pronta per essere interrogata.
+            </p>
+            <p style="margin-top: 15px; font-weight: 500; color: #f43f5e;">
+                &rarr; <a href="metodologia.html" style="color: #f43f5e; text-decoration: none;">Scopri come abbiamo identificato il gap e definito la pipeline nella sezione Metodologia.</a>
+            </p>
+        </section>
+
+        <!-- GRIGLIA IN STILE MAGAZINE (Glitch Theme): Collegamenti alle sezioni interne -->
+        <div class="magazine-grid">
+            
+            <!-- Card 1: Metodologia -->
+            <a href="metodologia.html" class="card">
+                <img class="card-img" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=600&auto=format&fit=crop" alt="Metodologia e Pipeline">
+                <div class="card-content">
+                    <span class="card-tag">01. Metodologia</span>
+                    <h3 class="card-title">Pipeline & Vocabolario</h3>
+                    <p>La definizione dei passi metodologici, degli strumenti utilizzati e delle proposte di estensione del vocabolario tramite RDFS[cite: 1].</p>
+                </div>
+            </a>
+
+            <!-- Card 2: SPARQL Queries -->
+            <a href="sparql.html" class="card">
+                <img class="card-img" src="https://images.unsplash.com/photo-1560942485-b2a11cc13456?q=80&w=600&auto=format&fit=crop" alt="Validazione Grafi">
+                <div class="card-content">
+                    <span class="card-tag">02. Grafi Semantici</span>
+                    <h3 class="card-title">Interrogazione SPARQL</h3>
+                    <p>I costrutti e i pattern di query impiegati per la simulazione e la verifica dei dati strutturati inseriti nel grafo[cite: 1].</p>
+                </div>
+            </a>
+
+            <!-- Card 3: LLM Results -->
+            <a href="llm-benchmark.html" class="card">
+                <img class="card-img" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=600&auto=format&fit=crop" alt="Ingegnerizzazione dei Prompt">
+                <div class="card-content">
+                    <span class="card-tag">03. Intelligenza Artificiale</span>
+                    <h3 class="card-title">Prompt & LLM Benchmark</h3>
+                    <p>L'ingegnerizzazione dei prompt (Zero/Few-Shot) e l'analisi comparativa dei comportamenti tra i diversi modelli linguistici testati[cite: 1].</p>
+                </div>
+            </a>
+
+        </div>
+
+
+    </main>
+
+    <!-- FOOTER DI PROGETTO -->
+    <footer class="project-footer">
+        <p>&copy; 2026 Progetto di Simulazione Semantica &bull; Master GEPID &bull; Alma Mater Studiorum - Università di Bologna</p>
+    </footer>
+
+</body>
+</html>
