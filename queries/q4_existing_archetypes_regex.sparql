@@ -1,0 +1,10 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?archetype ?archetypeLabel
+WHERE {
+  ?archetype rdfs:label ?archetypeLabel .
+  FILTER(LANG(?archetypeLabel) = "en")
+  FILTER(REGEX(?archetypeLabel, "tsundere|kuudere|dandere|yandere|antihero|mentor|rival|protagonist|villain|chosen one", "i"))
+}
+ORDER BY ?archetypeLabel
+LIMIT 80

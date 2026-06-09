@@ -24,21 +24,124 @@
             
             <h2>1. Identificazione del Data Gap in Wikidata</h2>
             <p>
-                Durante la fase preliminare di esplorazione del Knowledge Graph globale di Wikidata, il team ha riscontrato un'importante asimmetria informativa. Sebbene l'ontologia di Wikidata preveda formalmente proprietà narratologiche specifiche ideate per mappare i costrutti dei racconti — come la definizione dell'archetipo di un personaggio — queste risultano quasi interamente vuote o non valorizzate quando applicate ai personaggi di anime e manga giapponesi.
+                Il progetto è iniziato con una fase di ricerca esplorativa all'interno del dominio degli anime e dei manga. Il nostro obiettivo iniziale era individuare un possibile <em>data gap</em> in Wikidata, cioè un tipo di informazione rilevante per l'analisi culturale e narrativa ma non ancora rappresentato in modo sistematico nel Knowledge Graph.
             </p>
             <p>
-                La ricca conoscenza accademica e culturale di questo settore rimane confinata sotto forma di testo libero e destrutturato all'interno delle community wiki di settore (come i portali Fandom). Il nostro obiettivo progettuale è diventato quindi estrarre questa conoscenza per dimostrare come i metodi semantici favoriscano i processi di trasformazione digitale e recupero dell'informazione.
+                Abbiamo iniziato analizzando i personaggi principali di alcune opere molto note: <em>Death Note</em>, <em>One Piece</em> e <em>Naruto</em>. In questa prima fase abbiamo osservato che Wikidata contiene molte informazioni strutturate sui personaggi, come l'opera di appartenenza, il sesso o genere, eventuali doppiatori, immagini, descrizioni brevi e collegamenti ad altre entità. Tuttavia, queste informazioni descrivono soprattutto aspetti identificativi, biografici o editoriali.
+            </p>
+            <p>
+                Successivamente abbiamo esteso l'analisi anche ad alcuni personaggi secondari o con funzioni narrative diverse, come rivali, mentori, antagonisti, figure comiche e personaggi moralmente ambigui. Proprio confrontando personaggi principali e secondari abbiamo notato una differenza significativa: mentre le informazioni enciclopediche sono spesso presenti, le caratteristiche narratologiche e psicologiche dei personaggi sono raramente esplicitate come proprietà RDF.
+            </p>
+            <p>
+                Per estrarre e confrontare le proprietà disponibili sui personaggi abbiamo usato query SPARQL su Wikidata. In particolare, abbiamo verificato la presenza della proprietà <code>wdt:P9071</code>, corrispondente a <em>character type</em>, che permette di collegare un personaggio al suo archetipo narrativo. Questa proprietà è adatta al nostro dominio, ma nel campione analizzato risulta assente nella maggior parte dei casi.
+            </p>
+            <p>
+                La ricca conoscenza culturale di questo settore rimane spesso confinata sotto forma di testo libero e destrutturato all'interno delle community wiki di settore, dei fan database e delle recensioni. Il nostro obiettivo progettuale è quindi estrarre questa conoscenza e trasformarla in una proposta RDF controllabile, interrogabile e documentata.
             </p>
 
-            <h2>2. Definizione della pipeline</h2>
+            <table class="results-table">
+                <thead>
+                    <tr><th>Indicatore</th><th>Valore verificato</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Anime analizzati</td><td>One Piece, Naruto, Death Note</td></tr>
+                    <tr><td>Personaggi selezionati</td><td>15</td></tr>
+                    <tr><td>Personaggi con almeno un valore <code>P9071</code></td><td>4</td></tr>
+                    <tr><td>Personaggi senza valori <code>P9071</code></td><td>11</td></tr>
+                    <tr><td>Data della verifica SPARQL</td><td>8 giugno 2026</td></tr>
+                </tbody>
+            </table>
+
+            <h2>2. Corpus di analisi</h2>
             <p>
-                Per risolvere il gap informativo individuato, il processo è stato articolato in fasi distinte. In primo luogo, sono stati isolati i testi liberi (non strutturati) dalle wiki di settore. Successivamente, tali testi sono stati sottoposti a modelli di linguaggio (LLM) tramite tecniche avanzate di Few-Shot Prompting per l'estrazione delle entità e delle relazioni.
+                Abbiamo scelto tre opere molto note, diverse per tono e struttura narrativa: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Per ciascuna opera abbiamo selezionato cinque personaggi, in modo da coprire protagonisti, rivali, mentori, antagonisti, figure comiche e personaggi moralmente ambigui.
+            </p>
+
+            <table class="results-table">
+                <thead>
+                    <tr><th>Opera</th><th>Personaggi</th><th>Focus narrativo</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><em>One Piece</em></td><td>Monkey D. Luffy, Roronoa Zoro, Nami, Sanji, Nico Robin</td><td>avventura, gruppo, lealtà, comic relief</td></tr>
+                    <tr><td><em>Naruto</em></td><td>Naruto Uzumaki, Sasuke Uchiha, Sakura Haruno, Kakashi Hatake, Itachi Uchiha</td><td>rivalità, mentorship, trauma, antieroe tragico</td></tr>
+                    <tr><td><em>Death Note</em></td><td>Light Yagami, L, Misa Amane, Ryuk, Near</td><td>ambiguità morale, detective, trickster, ossessione</td></tr>
+                </tbody>
+            </table>
+
+            <h2>3. Flusso di lavoro</h2>
+            <p>
+                Dopo la fase esplorativa, la pipeline è stata ridefinita per seguire in modo esplicito il percorso che ci ha portato dal dominio anime/manga all'individuazione del gap su <code>P9071</code>. Il processo non parte direttamente dagli LLM: prima usa SPARQL per osservare Wikidata, confrontare le proprietà disponibili e dimostrare che gli archetipi narrativi sono poco rappresentati.
+            </p>
+            <ol class="step-list">
+                <li><div><strong>Esplorazione iniziale del dominio</strong><br>
+                    Abbiamo cercato in Wikidata le entità relative a <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>, verificando che opere e personaggi fossero già rappresentati nel Knowledge Graph.</div></li>
+                <li><div><strong>Scoperta dei personaggi tramite SPARQL</strong><br>
+                    Abbiamo recuperato i personaggi collegati alle opere usando i QID verificati delle tre opere e query con <code>VALUES</code>, <code>UNION</code>, <code>FILTER</code>, <code>LIMIT</code> e <code>ORDER BY</code>, perché Wikidata può modellare il legame tra opera e personaggio attraverso proprietà diverse.</div></li>
+                <li><div><strong>Confronto delle proprietà disponibili</strong><br>
+                    Abbiamo estratto le proprietà dei personaggi principali e poi di personaggi secondari o narrativamente più ambigui. Questo confronto ha mostrato che Wikidata contiene soprattutto dati enciclopedici, identificativi o editoriali, mentre gli aspetti narrativi sono meno strutturati.</div></li>
+                <li><div><strong>Identificazione del gap su <code>P9071</code></strong><br>
+                    Abbiamo individuato <code>wdt:P9071</code> (<em>character type</em>) come proprietà adatta a rappresentare archetipi narrativi. Nel campione di 15 personaggi, però, 11 risultano senza valori <code>P9071</code>.</div></li>
+                <li><div><strong>Acquisizione delle fonti descrittive</strong><br>
+                    Per i personaggi privi di informazioni narratologiche sufficienti, abbiamo previsto il recupero di descrizioni da fonti esterne e API pubbliche: Jikan/MyAnimeList, AniList e Wikipedia.</div></li>
+                <li><div><strong>Normalizzazione delle descrizioni</strong><br>
+                    I testi recuperati vengono puliti, confrontati e riscritti come brevi parafrasi basate sulle fonti, mantenendo solo elementi utili alla classificazione: ruolo narrativo, motivazioni, relazioni e tratti comportamentali.</div></li>
+                <li><div><strong>Prompt engineering e confronto tra modelli</strong><br>
+                    Le descrizioni normalizzate vengono usate con tre tecniche di prompting: Zero-shot, Few-shot e Chain-of-Thought. Gli output di diversi LLM vengono confrontati per accuratezza, coerenza e aderenza al formato richiesto.</div></li>
+                <li><div><strong>Validazione manuale</strong><br>
+                    Gli archetipi proposti non vengono accettati automaticamente: controlliamo coerenza con la descrizione, compatibilità con Wikidata, correttezza dei QID e rischio di allucinazione.</div></li>
+                <li><div><strong>Generazione RDF/Turtle</strong><br>
+                    Gli output validati vengono trasformati in triple RDF con <code>wdt:P9071</code>. Quando un archetipo non esiste in Wikidata, viene proposto un namespace locale <code>animanga:</code>.</div></li>
+            </ol>
+            <p>
+                In forma sintetica, la pipeline può essere riassunta così: <strong>SPARQL exploration → property comparison → P9071 gap identification → source description retrieval → description normalization → LLM prompting → model comparison → validation → RDF generation</strong>.
             </p>
             
-            <h2>3. Allineamento Ontologico e RDFS</h2>
+            <h2>4. Struttura del Knowledge Graph</h2>
             <p>
-                Le triple estratte non vengono inserite in modo isolato, ma mappate all'interno del perimetro concettuale delle proprietà narratologiche già esistenti nel vocabolario di Wikidata, garantendo la piena interoperabilità dei dati risultanti. 
-                <em>[Qui espanderemo con i dettagli sul namespace e l'estensione del vocabolario]</em>
+                La proposta di arricchimento si fonda sul riuso del modello Wikidata. I personaggi sono rappresentati tramite le loro entità <code>wd:</code>, la relazione narratologica usa la proprietà diretta <code>wdt:P9071</code>, mentre gli archetipi già esistenti vengono collegati tramite il loro QID. Per gli archetipi culturalmente rilevanti ma assenti o troppo specifici per Wikidata, usiamo un namespace locale <code>animanga:</code>.
+            </p>
+            <p>
+                La struttura minima della tripla è:
+            </p>
+            <pre class="code-block"><code>[wd:Personaggio] → wdt:P9071 → [wd:Archetipo oppure animanga:Archetipo]</code></pre>
+
+            <h2>5. Proprietà e copertura</h2>
+            <p>
+                Seguendo il modello dell'analisi di copertura, abbiamo distinto tra proprietà già presenti in Wikidata e proprietà oggetto dell'arricchimento.
+            </p>
+            <table class="results-table">
+                <thead>
+                    <tr><th>Elemento</th><th>Uso nel progetto</th><th>Fonte</th><th>Copertura nel campione</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>wd:</code> character entity</td><td>identifica il personaggio</td><td>Wikidata</td><td>15/15</td></tr>
+                    <tr><td><code>schema:description</code></td><td>descrizione breve enciclopedica</td><td>Wikidata</td><td>variabile</td></tr>
+                    <tr><td><code>wdt:P1441</code> / <code>wdt:P1080</code></td><td>collegamento a opera o universo narrativo</td><td>Wikidata</td><td>variabile</td></tr>
+                    <tr><td><code>wdt:P9071</code></td><td>character type / archetipo narrativo</td><td>Wikidata</td><td>4/15 già presenti, 11/15 mancanti</td></tr>
+                    <tr><td><code>animanga:</code></td><td>archetipi locali proposti</td><td>proposta del progetto</td><td>usato quando manca un QID adatto</td></tr>
+                    <tr><td>descrizioni testuali</td><td>input per LLM</td><td>Jikan, AniList, Wikipedia</td><td>recupero tramite frontend/API</td></tr>
+                </tbody>
+            </table>
+
+            <h2>6. Allineamento Ontologico e RDFS</h2>
+            <p>
+                Le triple estratte non vengono inserite in modo isolato, ma mappate all'interno del perimetro concettuale delle proprietà narratologiche già esistenti nel vocabolario di Wikidata. Quando l'archetipo esiste in Wikidata, usiamo direttamente il relativo QID; quando invece il concetto è rilevante ma non disponibile come entità stabile, proponiamo un namespace locale <code>animanga:</code>.
+            </p>
+            <pre class="code-block"><code>@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
+@prefix wdt: &lt;http://www.wikidata.org/prop/direct/&gt; .
+@prefix animanga: &lt;https://w3id.org/animanga/archetype/&gt; .
+
+wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
+            <p>
+                Questa scelta permette di mantenere compatibilità con Wikidata senza forzare concetti culturali specifici, come <em>dandere</em> o <em>shonen protagonist</em>, dentro categorie troppo generiche.
+            </p>
+
+            <h2>7. Decisioni metodologiche</h2>
+            <p>
+                Gli LLM non vengono usati come fonte primaria, ma come strumenti di classificazione semantica. Le fonti descrittive forniscono il testo di partenza; Wikidata fornisce identificativi e proprietà già strutturate; la validazione umana decide quali output possono diventare triple RDF.
+            </p>
+            <p>
+                In particolare, non accettiamo QID generati direttamente dagli LLM: ogni identificativo deve essere verificato tramite Wikidata. Inoltre, quando un archetipo non è presente come entità Wikidata, la tripla viene marcata come proposta locale tramite <code>animanga:</code>, invece di inventare un QID inesistente.
             </p>
         </main>
 

@@ -1,0 +1,23 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT DISTINCT ?work ?workLabel ?description
+WHERE {
+  VALUES ?work {
+    wd:Q710324    # One Piece
+    wd:Q25929253  # Naruto
+    wd:Q718624    # Death Note
+  }
+
+  OPTIONAL {
+    ?work schema:description ?description .
+    FILTER(LANG(?description) = "en")
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+ORDER BY ?workLabel

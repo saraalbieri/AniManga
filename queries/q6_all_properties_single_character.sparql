@@ -1,0 +1,14 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?property ?propertyLabel ?value ?valueLabel
+WHERE {
+  wd:Q1740 ?property ?value . # Sasuke Uchiha
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+ORDER BY ?propertyLabel
+LIMIT 100

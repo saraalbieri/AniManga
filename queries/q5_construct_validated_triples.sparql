@@ -1,0 +1,15 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX animanga: <https://w3id.org/animanga/archetype/>
+
+CONSTRUCT {
+  ?character wdt:P9071 ?archetype .
+}
+WHERE {
+  VALUES (?character ?archetype) {
+    (wd:Q477948 animanga:ShonenProtagonist)
+    (wd:Q858432 animanga:LoyalRival)
+    (wd:Q1061765 animanga:ComicReliefFighter)
+    (wd:Q52863 animanga:DetectiveFoil)
+  }
+}

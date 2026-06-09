@@ -1,0 +1,44 @@
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix animanga: <https://w3id.org/animanga/archetype/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# Local vocabulary for anime and manga archetypes that are useful for analysis
+# but are not always available as stable Wikidata entities.
+
+animanga:ShonenProtagonist
+    a animanga:LocalArchetype ;
+    rdfs:label "shonen protagonist"@en ;
+    rdfs:label "protagonista shonen"@it ;
+    skos:broader wd:Q113946608 .
+
+animanga:LoyalRival
+    a animanga:LocalArchetype ;
+    rdfs:label "loyal rival"@en ;
+    rdfs:label "rivale leale"@it .
+
+animanga:ComicReliefFighter
+    a animanga:LocalArchetype ;
+    rdfs:label "comic relief fighter"@en ;
+    rdfs:label "combattente comico"@it .
+
+animanga:DetectiveFoil
+    a animanga:LocalArchetype ;
+    rdfs:label "detective foil"@en ;
+    rdfs:label "detective rivale"@it .
+
+animanga:TragicAntihero
+    a animanga:LocalArchetype ;
+    rdfs:label "tragic antihero"@en ;
+    rdfs:label "antieroe tragico"@it ;
+    skos:broader wd:Q110910 .
+
+# Candidate enrichment triples validated by the project workflow.
+# They are proposed triples, not statements already present in Wikidata.
+
+wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .  # Monkey D. Luffy
+wd:Q858432 wdt:P9071 animanga:LoyalRival .         # Roronoa Zoro
+wd:Q1061765 wdt:P9071 animanga:ComicReliefFighter . # Sanji
+wd:Q52863 wdt:P9071 animanga:DetectiveFoil .        # L
+wd:Q1043344 wdt:P9071 animanga:TragicAntihero .     # Itachi Uchiha

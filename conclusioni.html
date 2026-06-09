@@ -41,6 +41,14 @@
             <p>
                 L'estrazione dai testi liberi ha generato ambiguità nei nomi dei personaggi (es. differenze tra traduzioni italiane, inglesi e romaji originale). La problematica è stata gestita introducendo un passaggio di validazione nel prompt: il modello linguistico è stato istruito a restituire sempre l'URI esatto di Wikidata corrispondente al personaggio, piuttosto che la semplice stringa di testo, garantendo così l'esattezza dei nodi nel grafo.
             </p>
+            <h3 style="color: #0f172a; margin-top: 20px;">Disambiguazione delle label Wikidata</h3>
+            <p>
+                Alcune label sono altamente ambigue. Il caso più evidente è <strong>L</strong>: una ricerca per label esatta restituisce anche entità non pertinenti, come servizi di trasporto o altre abbreviazioni. Per questo motivo le query finali usano QID verificati e non soltanto stringhe testuali. Il QID corretto per il personaggio di <em>Death Note</em> è <code>wd:Q52863</code>.
+            </p>
+            <h3 style="color: #0f172a; margin-top: 20px;">Allucinazione dei QID</h3>
+            <p>
+                Gli LLM sono utili per interpretare descrizioni narrative, ma non sono affidabili come fonte primaria per identificativi Wikidata. Quando richiesto di produrre QID, possono generare codici plausibili ma inesatti. Per questo motivo i QID sono stati verificati tramite Wikidata Query Service e non accettati direttamente dall'output del modello.
+            </p>
         </section>
 
         <section class="report-section">
@@ -67,9 +75,29 @@
         </section>
 
         <section class="report-section">
+            <h2>Risultati RDF</h2>
+            <p>
+                Le classificazioni ritenute più solide sono state trasformate in triple Turtle usando <code>wdt:P9071</code>. Quando l'archetipo non era disponibile come entità Wikidata stabile, abbiamo introdotto il namespace locale <code>animanga:</code>, documentato nel file <code>data/animanga_archetypes.ttl</code>.
+            </p>
+            <div class="code-block">
+@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .<br>
+@prefix wdt: &lt;http://www.wikidata.org/prop/direct/&gt; .<br>
+@prefix animanga: &lt;https://w3id.org/animanga/archetype/&gt; .<br><br>
+wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .<br>
+wd:Q858432 wdt:P9071 animanga:LoyalRival .<br>
+wd:Q1061765 wdt:P9071 animanga:ComicReliefFighter .<br>
+wd:Q52863 wdt:P9071 animanga:DetectiveFoil .<br>
+wd:Q1043344 wdt:P9071 animanga:TragicAntihero .
+            </div>
+        </section>
+
+        <section class="report-section">
             <h2>Considerazioni Finali</h2>
             <p>
-                L'approccio ibrido sviluppato dimostra concretamente come sia possibile colmare i "Data Gap" nelle piattaforme di conoscenza collaborativa. Attraverso la pipeline progettata, le ricche descrizioni psicologiche e di ruolo presenti nei fandom wiki sono state trasformate con successo in relazioni strutturate, abilitando nuove possibilità di query semantiche complesse (es. "Estrai tutti i manga che presentano una dinamica Eroe/Mentore pubblicati dopo il 2010") prima impossibili da eseguire su Wikidata.
+                L'approccio ibrido sviluppato dimostra concretamente come sia possibile colmare i data gap nelle piattaforme di conoscenza collaborativa. Attraverso la pipeline progettata, le ricche descrizioni psicologiche e narrative presenti nei fandom wiki possono essere trasformate in relazioni strutturate, abilitando nuove possibilità di query semantiche complesse, per esempio: "estrai tutti i personaggi shonen protagonist" oppure "confronta i personaggi classificati come antihero in opere diverse".
+            </p>
+            <p>
+                Il risultato più importante non è solo la produzione di nuove triple, ma la definizione di un metodo controllato: SPARQL individua il gap, gli LLM propongono classificazioni, la validazione umana filtra errori e allucinazioni, RDF rende il risultato interoperabile.
             </p>
         </section>
 

@@ -1,0 +1,17 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?character ?characterLabel
+WHERE {
+  VALUES ?character {
+    wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653
+    wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344
+    wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008
+  }
+
+  FILTER NOT EXISTS { ?character wdt:P9071 ?characterType . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
+}
+ORDER BY ?characterLabel

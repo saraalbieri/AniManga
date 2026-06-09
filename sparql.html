@@ -20,31 +20,223 @@
 
     <main class="container">
         <h1>Validazione tramite SPARQL Queries</h1>
-        <p>Esempio di query semantica strutturata per verificare l'estrazione degli archetipi eseguiti sui casi di studio.</p>
+        <p>Le query SPARQL sono state usate prima per esplorare il dominio anime/manga in Wikidata e solo successivamente per verificare la proprietà <code>wdt:P9071</code>. In questo modo il gap sugli archetipi narrativi non è stato assunto in partenza, ma individuato progressivamente confrontando le proprietà disponibili sui personaggi.</p>
 
         <div class="query-box">
-            <h3>Query 1: Estrazione dei Personaggi associati all'archetipo "Shonen Hero"</h3>
+            <h3>Fase esplorativa 1: trovare le opere su Wikidata</h3>
+            <p>La prima operazione è stata cercare le entità Wikidata relative alle tre opere scelte: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Questa query serve a verificare che il dominio sia già rappresentato nel Knowledge Graph.</p>
             <div class="code-block">
-                <span class="keyword">PREFIX</span> ex: &lt;https://animemanga.schema.org/ontology/&gt;<br>
-                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
-                <span class="keyword">SELECT DISTINCT</span> ?characterName ?archetypeLabel<br>
+                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
+                <span class="keyword">PREFIX</span> schema: &lt;http://schema.org/&gt;<br>
+                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
+                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
+                <span class="keyword">SELECT DISTINCT</span> ?work ?workLabel ?description<br>
                 <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;?char ex:hasArchetype ex:ShonenHero .<br>
-                &nbsp;&nbsp;?char rdfs:label ?characterName .<br>
-                &nbsp;&nbsp;ex:ShonenHero rdfs:label ?archetypeLabel .<br>
-                }
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
+                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?work schema:description ?description . <span class="keyword">FILTER</span>(LANG(?description) = "en") }<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?workLabel
+            </div>
+            <p><strong>Perché è utile:</strong> mostra che le opere sono già presenti in Wikidata e possono essere usate come punto di partenza per esplorare i personaggi collegati.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Fase esplorativa 2: recuperare i personaggi collegati alle opere</h3>
+            <p>Dopo aver individuato le opere, abbiamo cercato i personaggi collegati. La query usa <code>UNION</code> perché Wikidata può rappresentare il legame personaggio-opera con proprietà diverse, come <code>P1441</code> e <code>P1080</code>.</p>
+            <div class="code-block">
+                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
+                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
+                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
+                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?work ?workLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
+                &nbsp;&nbsp;{ ?character wdt:P1441 ?work . }<br>
+                &nbsp;&nbsp;<span class="keyword">UNION</span><br>
+                &nbsp;&nbsp;{ ?character wdt:P1080 ?work . }<br>
+                &nbsp;&nbsp;?work rdfs:label ?workLabel .<br>
+                &nbsp;&nbsp;?character rdfs:label ?characterLabel .<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?workLabel) = "en")<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?characterLabel) = "en")<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?workLabel ?characterLabel<br>
+                <span class="keyword">LIMIT</span> 100
+            </div>
+            <p><strong>Perché è utile:</strong> questa query ci ha permesso di vedere che Wikidata contiene già numerosi personaggi delle tre opere, quindi il problema non è l'assenza delle entità.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Fase esplorativa 3: osservare le proprietà dei personaggi principali</h3>
+            <p>Prima di concentrarci su <code>P9071</code>, abbiamo estratto le proprietà disponibili per alcuni personaggi principali: Monkey D. Luffy, Naruto Uzumaki e Light Yagami. L'obiettivo era capire che tipo di informazione Wikidata registra più frequentemente.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?property ?propertyLabel ?value ?valueLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q931 wd:Q843545 }<br>
+                &nbsp;&nbsp;?character ?property ?value .<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?characterLabel ?propertyLabel<br>
+                <span class="keyword">LIMIT</span> 300
+            </div>
+            <p><strong>Risultato metodologico:</strong> questa esplorazione ha mostrato che le proprietà disponibili sono soprattutto enciclopediche, identificative o editoriali. Da qui è nata la domanda: Wikidata rappresenta anche la funzione narrativa e l'archetipo dei personaggi?</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Dal confronto delle proprietà al gap</h3>
+            <p>
+                Dopo aver confrontato personaggi principali e secondari, abbiamo cercato una proprietà adatta a rappresentare gli archetipi narrativi. La proprietà individuata è <code>wdt:P9071</code>, <em>character type</em>. Il passaggio successivo è stato quindi verificare se questa proprietà fosse effettivamente valorizzata nei personaggi analizzati.
+            </p>
+            <p><strong>Conclusione della fase esplorativa:</strong> il vocabolario esiste, ma il dato manca o è incompleto. Questo è il gap semantico su cui si basa il progetto.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 1: personaggi selezionati e valori P9071</h3>
+            <p>Questa query usa i QID verificati dei 15 personaggi e controlla, tramite <code>OPTIONAL</code>, se esiste un valore per <code>wdt:P9071</code>.</p>
+            <div class="code-block">
+                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
+                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
+                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
+                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
+                <span class="keyword">SELECT</span> ?character ?characterLabel ?characterType ?characterTypeLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
+                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P9071 ?characterType . }<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?characterLabel ?characterTypeLabel
             </div>
 
-            <h4>Risultati simulati dall'endpoint:</h4>
+            <h4>Risultati ottenuti</h4>
             <table class="results-table">
                 <thead>
-                    <tr><th>?characterName</th><th>?archetypeLabel</th></tr>
+                    <tr><th>Personaggio</th><th>Valore P9071</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>"Monkey D. Luffy"@it</td><td>"Eroe Shonen"</td></tr>
-                    <tr><td>"Uzumaki Naruto"@it</td><td>"Eroe Shonen"</td></tr>
+                    <tr><td>Monkey D. Luffy</td><td>The Chosen One</td></tr>
+                    <tr><td>Naruto Uzumaki</td><td>The Chosen One</td></tr>
+                    <tr><td>Sasuke Uchiha</td><td>Lone Cowboy</td></tr>
+                    <tr><td>Light Yagami</td><td>antihero; villain</td></tr>
+                    <tr><td>Altri 11 personaggi del campione</td><td>Nessun valore P9071</td></tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 2: personaggi collegati ai tre anime</h3>
+            <p>Questa query usa <code>UNION</code> perché Wikidata può collegare i personaggi alle opere attraverso proprietà diverse. Le tre opere sono selezionate tramite QID verificati, così evitiamo ambiguità dovute alle label.</p>
+            <div class="code-block">
+                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
+                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
+                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
+                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?work ?workLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
+                &nbsp;&nbsp;{ ?character wdt:P1441 ?work . }<br>
+                &nbsp;&nbsp;<span class="keyword">UNION</span><br>
+                &nbsp;&nbsp;{ ?character wdt:P1080 ?work . }<br>
+                &nbsp;&nbsp;?work rdfs:label ?workLabel .<br>
+                &nbsp;&nbsp;?character rdfs:label ?characterLabel .<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?workLabel) = "en")<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?characterLabel) = "en")<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?workLabel ?characterLabel<br>
+                <span class="keyword">LIMIT</span> 100
+            </div>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 3: personaggi senza P9071</h3>
+            <p>Questa query usa <code>FILTER NOT EXISTS</code> per isolare i personaggi del campione privi di archetipo narrativo strutturato.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT</span> ?character ?characterLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER NOT EXISTS</span> { ?character wdt:P9071 ?characterType . }<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?characterLabel
+            </div>
+            <p><strong>Interpretazione:</strong> 11 personaggi su 15 non hanno un valore <code>P9071</code>. Questa query fornisce la prova quantitativa del nostro gap.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 4: archetipi già presenti in Wikidata</h3>
+            <p>Questa query verifica quali termini narrativi esistono già come entità Wikidata e quali invece richiedono un namespace locale.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT DISTINCT</span> ?archetype ?archetypeLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;?archetype rdfs:label ?archetypeLabel .<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?archetypeLabel) = "en")<br>
+                &nbsp;&nbsp;<span class="keyword">FILTER</span>(<span class="keyword">REGEX</span>(?archetypeLabel, "tsundere|kuudere|dandere|yandere|antihero|mentor|rival|protagonist|villain|chosen one", "i"))<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?archetypeLabel<br>
+                <span class="keyword">LIMIT</span> 80
+            </div>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 5: estrazione delle proprietà di un singolo personaggio</h3>
+            <p>Questa query è stata usata nella fase iniziale per osservare quali proprietà fossero già disponibili su un personaggio specifico. L'esempio usa Sasuke Uchiha (<code>wd:Q1740</code>).</p>
+            <div class="code-block">
+                <span class="keyword">SELECT</span> ?property ?propertyLabel ?value ?valueLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;wd:Q1740 ?property ?value .<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?propertyLabel<br>
+                <span class="keyword">LIMIT</span> 100
+            </div>
+            <p><strong>Uso metodologico:</strong> questa query mostra che Wikidata descrive bene aspetti identificativi ed enciclopedici, ma non sempre include informazioni narratologiche.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 6: confronto delle proprietà nel campione</h3>
+            <p>Questa query estende l'estrazione delle proprietà a tutti i 15 personaggi del corpus, permettendo di confrontare la ricchezza informativa tra personaggi principali e secondari.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?property ?propertyLabel ?value ?valueLabel<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
+                &nbsp;&nbsp;?character ?property ?value .<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">ORDER BY</span> ?characterLabel ?propertyLabel<br>
+                <span class="keyword">LIMIT</span> 500
+            </div>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 7: frequenza delle proprietà nel corpus</h3>
+            <p>Questa è una delle query più importanti per dimostrare il gap: conta su quanti personaggi compare ogni proprietà.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT</span> ?property ?propertyLabel (<span class="keyword">COUNT</span>(<span class="keyword">DISTINCT</span> ?character) AS ?numberOfCharacters)<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
+                &nbsp;&nbsp;?character ?property ?value .<br>
+                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
+                }<br>
+                <span class="keyword">GROUP BY</span> ?property ?propertyLabel<br>
+                <span class="keyword">ORDER BY DESC</span>(?numberOfCharacters)<br>
+                <span class="keyword">LIMIT</span> 50
+            </div>
+            <p><strong>Interpretazione:</strong> proprietà come label, descrizione, immagine, opera o genere tendono a essere più frequenti. <code>P9071</code>, invece, compare solo in pochi casi, confermando il gap sugli archetipi narrativi.</p>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 8: confronto tra personaggi principali e secondari</h3>
+            <p>Questa query divide manualmente il campione in personaggi principali e secondari, poi conta quanti hanno almeno un valore per <code>P9071</code>.</p>
+            <div class="code-block">
+                <span class="keyword">SELECT</span> ?group (<span class="keyword">COUNT</span>(<span class="keyword">DISTINCT</span> ?character) AS ?characters) (<span class="keyword">COUNT</span>(<span class="keyword">DISTINCT</span> ?characterWithType) AS ?charactersWithP9071)<br>
+                <span class="keyword">WHERE</span> {<br>
+                &nbsp;&nbsp;<span class="keyword">VALUES</span> (?character ?group) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(wd:Q477948 "main character") (wd:Q931 "main character") (wd:Q843545 "main character")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(wd:Q858432 "secondary character") (wd:Q877964 "secondary character") (wd:Q1061765 "secondary character") (wd:Q1190653 "secondary character")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(wd:Q1740 "secondary character") (wd:Q203240 "secondary character") (wd:Q1767 "secondary character") (wd:Q1043344 "secondary character")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(wd:Q52863 "secondary character") (wd:Q687038 "secondary character") (wd:Q2328583 "secondary character") (wd:Q138008 "secondary character")<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P9071 ?characterType . <span class="keyword">BIND</span>(?character AS ?characterWithType) }<br>
+                }<br>
+                <span class="keyword">GROUP BY</span> ?group
+            </div>
         </div>
     </main>
 

@@ -19,31 +19,432 @@
     </nav>
 
     <main class="container">
-        <h1>Prompt Engineering & LLM Extraction</h1>
-        <p>Visualizzazione affiancata del prompt di sistema strutturato e del corrispondente output JSON validato.</p>
+        <h1>LLM Experimentation</h1>
+        <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando tre tecniche: Zero-shot, Few-shot e Chain-of-Thought.</p>
+
+        <section class="report-section">
+            <h2>Acquisizione automatica delle descrizioni</h2>
+            <p>
+                Wikidata è stato usato per identificare i personaggi tramite QID e verificare la presenza o assenza di <code>wdt:P9071</code>. Tuttavia, quando <code>P9071</code> è assente, Wikidata non fornisce abbastanza informazioni narrative per dedurre l'archetipo. Per questo motivo abbiamo previsto un secondo livello della pipeline: il recupero automatico di descrizioni testuali da API e fonti pubbliche dedicate ad anime, manga e cultura generale.
+            </p>
+            <p>
+                Le descrizioni recuperate non vengono copiate direttamente nel sito, ma usate come input di lavoro per gli LLM e poi sintetizzate in parafrasi brevi, con citazione della fonte. Questo ci permette di mantenere tracciabilità metodologica senza trasformare il progetto in una raccolta di testi copiati.
+            </p>
+
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Fonte/API</th>
+                        <th>Uso nella pipeline</th>
+                        <th>Vantaggi</th>
+                        <th>Limiti</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://jikan.moe/" target="_blank">Jikan / MyAnimeList</a></td>
+                        <td>recupero descrizioni e metadati dei personaggi</td>
+                        <td>semplice, JSON, non richiede OAuth</td>
+                        <td>API non ufficiale; serve rispettare rate limit e caching</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://anilist.gitbook.io/anilist-apiv2-docs" target="_blank">AniList GraphQL API</a></td>
+                        <td>fonte alternativa per descrizioni e media collegati</td>
+                        <td>GraphQL, buona copertura anime/manga/personaggi</td>
+                        <td>richiede query GraphQL e normalizzazione HTML/testo</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.wikipedia.org/" target="_blank">Wikipedia REST API</a></td>
+                        <td>fonte enciclopedica di controllo e contesto</td>
+                        <td>utile per parafrasi sintetiche e disambiguazione</td>
+                        <td>non sempre descrive archetipi narrativi in modo esplicito</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Pipeline automatizzata proposta</h3>
+            <div class="code-block">
+characters_seed.csv<br>
+&nbsp;&nbsp;↓ QID + MAL/AniList ID<br>
+Wikidata SPARQL check<br>
+&nbsp;&nbsp;↓ verifica P9071<br>
+Jikan / AniList / Wikipedia API<br>
+&nbsp;&nbsp;↓ descrizione testuale<br>
+LLM prompt builder<br>
+&nbsp;&nbsp;↓ Zero-shot / Few-shot / CoT<br>
+JSON output validation<br>
+&nbsp;&nbsp;↓ controllo QID, archetipo, fonte<br>
+Turtle RDF generation
+            </div>
+
+            <p>
+                In questo modo l'LLM non lavora su memoria interna o conoscenza implicita, ma su descrizioni testuali recuperate e documentate. Il modello viene usato come strumento di classificazione semantica, non come fonte primaria.
+            </p>
+
+            <h3>Estensione a nuovi personaggi</h3>
+            <p>
+                La pipeline è pensata per essere estendibile. Per aggiungere un personaggio già scelto dal gruppo, è sufficiente inserire una nuova riga nel file <code>characters_seed.csv</code> con nome del personaggio, QID Wikidata e identificativi delle fonti Jikan/MyAnimeList e AniList. Lo script recupera automaticamente le descrizioni, controlla se <code>P9071</code> è già presente e prepara l'input per i prompt.
+            </p>
+            <div class="code-block">
+anime,character_name,wikidata_qid,mal_id,anilist_id<br>
+Naruto,Kakashi Hatake,Q1767,85,121<br>
+Bleach,Ichigo Kurosaki,Q222006,5,5
+            </div>
+            <p>
+                La stessa logica può essere usata anche per personaggi non inclusi nel corpus iniziale. A partire dal titolo di un anime, la pipeline può recuperare una lista di personaggi principali da Jikan/MyAnimeList o AniList, tentare l'allineamento con Wikidata, verificare la presenza di <code>P9071</code> e generare descrizioni normalizzate per gli esperimenti LLM.
+            </p>
+            <p>
+                Tuttavia, i personaggi scoperti automaticamente richiedono sempre una validazione manuale prima della generazione RDF. In particolare, il QID Wikidata deve essere controllato dal gruppo, perché nomi brevi o ambigui, come <em>L</em>, possono produrre corrispondenze errate.
+            </p>
+        </section>
+
+        <section class="report-section">
+            <h2>Frontend demo: descrizione e prompt</h2>
+            <p>
+                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da Jikan/MyAnimeList, AniList e Wikipedia, permette di selezionare o modificare il testo e genera i tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
+            </p>
+
+            <div class="api-demo">
+                <div class="form-row">
+                    <label for="characterName">Personaggio</label>
+                    <input id="characterName" type="text" value="Sasuke Uchiha">
+                </div>
+                <div class="form-row">
+                    <label for="animeName">Anime/Manga</label>
+                    <input id="animeName" type="text" value="Naruto">
+                </div>
+                <div class="form-row">
+                    <label for="wikidataQid">Wikidata QID</label>
+                    <input id="wikidataQid" type="text" value="Q1740">
+                </div>
+                <button id="fetchDescriptions" class="primary-button" type="button">Recupera descrizioni</button>
+                <p id="apiStatus" class="status-text">Inserisci un personaggio e recupera contesto Wikidata e descrizioni dalle fonti pubbliche.</p>
+
+                <div class="source-grid">
+                    <div class="source-card">
+                        <h3>Wikidata context</h3>
+                        <textarea id="wikidataContext" rows="8" placeholder="Contesto strutturato da Wikidata"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Jikan / MyAnimeList</h3>
+                        <textarea id="jikanDescription" rows="8" placeholder="Descrizione da Jikan"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>AniList</h3>
+                        <textarea id="anilistDescription" rows="8" placeholder="Descrizione da AniList"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Wikipedia</h3>
+                        <textarea id="wikipediaDescription" rows="8" placeholder="Descrizione da Wikipedia"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="selectedDescription">Descrizione selezionata/parafrasata</label>
+                    <textarea id="selectedDescription" rows="7" placeholder="Qui viene inserita la descrizione scelta o una parafrasi breve."></textarea>
+                </div>
+
+                <button id="generatePrompts" class="primary-button" type="button">Genera prompt</button>
+
+                <div class="source-grid">
+                    <div class="source-card">
+                        <h3>Zero-shot</h3>
+                        <textarea id="zeroPrompt" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Few-shot</h3>
+                        <textarea id="fewPrompt" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Chain-of-Thought</h3>
+                        <textarea id="cotPrompt" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <div class="prompt-split-grid">
             <div class="prompt-pane">
-                <span class="pane-title system-bg">System Prompt</span>
-                <div class="prompt-text">You are an expert knowledge engineer specialized in narratology. Extract the core narrative archetype based on the Wikidata property schema. 
+                <span class="pane-title system-bg">Zero-shot Prompt</span>
+                <div class="prompt-text">You are a knowledge engineer and narratology expert.
 
-Output format MUST be strictly valid JSON containing:
-- character_name
-- archetype_class
-- confidence_score</div>
+Given the following character description, identify:
+1. the most appropriate narrative archetype;
+2. the narrative role;
+3. whether the archetype can be mapped to Wikidata property P9071.
+
+Return valid JSON only.
+
+Character: Monkey D. Luffy
+Description: Luffy is the optimistic captain of the Straw Hat Pirates. He is impulsive, idealistic, deeply loyal to his friends and constantly driven by the dream of becoming Pirate King.</div>
             </div>
 
             <div class="prompt-pane">
-                <span class="pane-title user-bg">Output JSON Validato</span>
+                <span class="pane-title user-bg">Output atteso</span>
                 <div class="prompt-text">
 {
   "character_name": "Monkey D. Luffy",
-  "archetype_class": "ex:ShonenHero",
-  "confidence_score": 0.98
+  "narrative_archetype": "shonen protagonist",
+  "narrative_role": "main protagonist",
+  "p9071_mapping": "animanga:ShonenProtagonist",
+  "confidence_score": 0.92
 }</div>
             </div>
         </div>
+
+        <section class="report-section">
+            <h2>Few-shot Prompt</h2>
+            <p>Il Few-shot prompting è stato usato per ridurre le classificazioni troppo generiche. Abbiamo fornito esempi di personaggi e archetipi prima di chiedere la classificazione del nuovo caso.</p>
+            <div class="code-block">
+Example 1:<br>
+Character: Naruto Uzumaki<br>
+Description: orphaned boy, socially excluded, wants recognition, grows through perseverance.<br>
+Answer: shonen protagonist / underdog hero<br><br>
+Example 2:<br>
+Character: Light Yagami<br>
+Description: brilliant student who becomes morally corrupted by supernatural power.<br>
+Answer: villain protagonist / antihero<br><br>
+Now classify:<br>
+Character: Sasuke Uchiha<br>
+Description: survivor of clan massacre, motivated by revenge, rival of the protagonist, oscillates between ally and antagonist.
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Chain-of-Thought Prompt</h2>
+            <p>La tecnica Chain-of-Thought è stata usata per i personaggi più ambigui, chiedendo al modello di distinguere tra personalità, ruolo narrativo e archetipo.</p>
+            <div class="code-block">
+Analyze the character description step by step, but return only the final structured answer.<br><br>
+Steps to consider:<br>
+1. Identify the character's function in the plot.<br>
+2. Identify recurring psychological traits.<br>
+3. Separate narrative role from personality trope.<br>
+4. Choose the most appropriate character type for Wikidata P9071.<br><br>
+Character: Itachi Uchiha<br>
+Description: Itachi is first presented as a villain, but later revealed as a tragic figure who sacrificed his reputation and family bonds to prevent a larger conflict.
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Tabella comparativa dei modelli</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Character</th>
+                        <th>Tecnica</th>
+                        <th>GPT Output</th>
+                        <th>Claude/Gemini Output</th>
+                        <th>Valutazione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monkey D. Luffy</td>
+                        <td>Zero-shot</td>
+                        <td>shonen protagonist</td>
+                        <td>adventurous hero</td>
+                        <td>GPT è più vicino al lessico anime; Claude/Gemini è più generico.</td>
+                    </tr>
+                    <tr>
+                        <td>Sasuke Uchiha</td>
+                        <td>Few-shot</td>
+                        <td>rival / antihero</td>
+                        <td>lone wolf / tragic rival</td>
+                        <td>Entrambi corretti, ma serve normalizzazione RDF.</td>
+                    </tr>
+                    <tr>
+                        <td>Itachi Uchiha</td>
+                        <td>CoT</td>
+                        <td>tragic antihero</td>
+                        <td>tragic hero with antagonist framing</td>
+                        <td>Il CoT aiuta a evitare la classificazione superficiale come villain.</td>
+                    </tr>
+                    <tr>
+                        <td>L</td>
+                        <td>Few-shot</td>
+                        <td>detective foil</td>
+                        <td>eccentric detective / rival</td>
+                        <td>Buona analisi narrativa, ma nessun QID va accettato senza verifica.</td>
+                    </tr>
+                    <tr>
+                        <td>Misa Amane</td>
+                        <td>Zero-shot</td>
+                        <td>yandere / obsessive love interest</td>
+                        <td>devoted sidekick</td>
+                        <td>Il termine yandere e culturalmente utile ma difficile da mappare in Wikidata.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="report-section">
+            <h2>Criteri di validazione</h2>
+            <p>Un output LLM è stato considerato valido solo quando rispettava quattro condizioni:</p>
+            <ul>
+                <li>era coerente con la descrizione testuale fornita;</li>
+                <li>distingueva archetipo, ruolo narrativo e tratto psicologico;</li>
+                <li>non inventava QID Wikidata;</li>
+                <li>poteva essere trasformato in una tripla RDF con <code>wdt:P9071</code>.</li>
+            </ul>
+        </section>
     </main>
+
+    <script>
+        const cleanText = (value) => {
+            if (!value) return "";
+            return value
+                .replace(/<br\s*\/?>/gi, "\n")
+                .replace(/<\/?[^>]+(>|$)/g, "")
+                .replace(/\s+/g, " ")
+                .trim();
+        };
+
+        const shorten = (value, maxLength = 900) => {
+            const text = cleanText(value);
+            return text.length > maxLength ? text.slice(0, maxLength).trim() + "..." : text;
+        };
+
+        async function fetchJikan(characterName) {
+            const searchUrl = `https://api.jikan.moe/v4/characters?q=${encodeURIComponent(characterName)}&limit=1`;
+            const searchResponse = await fetch(searchUrl);
+            const searchJson = await searchResponse.json();
+            const first = searchJson.data && searchJson.data[0];
+            if (!first) return "";
+
+            const detailResponse = await fetch(`https://api.jikan.moe/v4/characters/${first.mal_id}/full`);
+            const detailJson = await detailResponse.json();
+            return shorten(detailJson.data && detailJson.data.about);
+        }
+
+        async function fetchAniList(characterName) {
+            const query = `
+                query ($search: String) {
+                    Character(search: $search) {
+                        name { full }
+                        description(asHtml: false)
+                    }
+                }
+            `;
+            const response = await fetch("https://graphql.anilist.co", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query, variables: { search: characterName } })
+            });
+            const json = await response.json();
+            return shorten(json.data && json.data.Character && json.data.Character.description);
+        }
+
+        async function fetchWikipedia(characterName) {
+            const title = encodeURIComponent(characterName.replace(/\s+/g, "_"));
+            const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
+            const response = await fetch(url);
+            if (!response.ok) return "";
+            const json = await response.json();
+            return shorten(json.extract);
+        }
+
+        async function fetchWikidataContext(qid) {
+            if (!qid) return "";
+            const entity = qid.trim().replace(/^wd:/i, "");
+            const query = `
+                PREFIX wd: <http://www.wikidata.org/entity/>
+                PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+                PREFIX schema: <http://schema.org/>
+                PREFIX wikibase: <http://wikiba.se/ontology#>
+                PREFIX bd: <http://www.bigdata.com/rdf#>
+
+                SELECT ?character ?characterLabel ?description ?workLabel ?universeLabel ?genderLabel ?characterTypeLabel
+                WHERE {
+                    BIND(wd:${entity} AS ?character)
+                    OPTIONAL {
+                        ?character schema:description ?description .
+                        FILTER(LANG(?description) = "en")
+                    }
+                    OPTIONAL { ?character wdt:P1441 ?work . }
+                    OPTIONAL { ?character wdt:P1080 ?universe . }
+                    OPTIONAL { ?character wdt:P21 ?gender . }
+                    OPTIONAL { ?character wdt:P9071 ?characterType . }
+                    SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
+                }
+                LIMIT 20
+            `;
+            const url = `https://query.wikidata.org/sparql?query=${encodeURIComponent(query)}&format=json`;
+            const response = await fetch(url, {
+                headers: { "Accept": "application/sparql-results+json" }
+            });
+            if (!response.ok) return "";
+            const json = await response.json();
+            const rows = json.results && json.results.bindings ? json.results.bindings : [];
+            if (!rows.length) return "";
+
+            const first = rows[0];
+            const values = (key) => [...new Set(rows.map(row => row[key] && row[key].value).filter(Boolean))];
+            return [
+                `QID: ${entity}`,
+                `Label: ${first.characterLabel ? first.characterLabel.value : ""}`,
+                `Description: ${first.description ? first.description.value : ""}`,
+                `Present in work: ${values("workLabel").join(", ") || "not available"}`,
+                `Narrative universe: ${values("universeLabel").join(", ") || "not available"}`,
+                `Sex or gender: ${values("genderLabel").join(", ") || "not available"}`,
+                `Existing P9071: ${values("characterTypeLabel").join(", ") || "not available"}`
+            ].join("\n");
+        }
+
+        function buildPrompts() {
+            const character = document.getElementById("characterName").value.trim();
+            const anime = document.getElementById("animeName").value.trim();
+            const wikidataContext = document.getElementById("wikidataContext").value.trim();
+            const description = document.getElementById("selectedDescription").value.trim();
+            const contextBlock = wikidataContext ? `\nWikidata context for entity verification:\n${wikidataContext}\n` : "";
+
+            const zero = `You are a knowledge engineer and narratology expert.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nTask: identify the most appropriate character type for Wikidata property P9071. Use Wikidata context only for entity verification and existing structured data. Use the source-based description to infer the narrative archetype. Do not invent Wikidata QIDs.\nReturn valid JSON with: character_name, narrative_role, character_type, wikidata_or_local_mapping, confidence, evidence.`;
+
+            const few = `Classify anime and manga characters into narrative archetypes for Wikidata P9071.\n\nExample 1:\nCharacter: Naruto Uzumaki\nDescription: excluded orphan who seeks recognition and grows through perseverance.\nAnswer: shonen protagonist / underdog hero.\n\nExample 2:\nCharacter: Light Yagami\nDescription: brilliant student corrupted by supernatural power and positioned as the central moral threat.\nAnswer: villain protagonist / antihero.\n\nNow classify:\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nUse Wikidata context only for entity verification. Return valid JSON only.`;
+
+            const cot = `Analyze the character description step by step internally, but return only the final structured answer.\n\nSteps to consider:\n1. Identify the character's function in the plot.\n2. Identify motivations and recurring behaviors.\n3. Separate narrative role from psychological trait.\n4. Choose a character type suitable for Wikidata P9071 or a local animanga: namespace.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nReturn valid JSON with evidence. Do not invent Wikidata QIDs.`;
+
+            document.getElementById("zeroPrompt").value = zero;
+            document.getElementById("fewPrompt").value = few;
+            document.getElementById("cotPrompt").value = cot;
+        }
+
+        document.getElementById("fetchDescriptions").addEventListener("click", async () => {
+            const status = document.getElementById("apiStatus");
+            const character = document.getElementById("characterName").value.trim();
+            const qid = document.getElementById("wikidataQid").value.trim();
+            status.textContent = "Recupero descrizioni in corso...";
+            try {
+                const [wikidata, jikan, anilist, wikipedia] = await Promise.allSettled([
+                    fetchWikidataContext(qid),
+                    fetchJikan(character),
+                    fetchAniList(character),
+                    fetchWikipedia(character)
+                ]);
+                const wikidataText = wikidata.status === "fulfilled" ? wikidata.value : "";
+                const jikanText = jikan.status === "fulfilled" ? jikan.value : "";
+                const anilistText = anilist.status === "fulfilled" ? anilist.value : "";
+                const wikipediaText = wikipedia.status === "fulfilled" ? wikipedia.value : "";
+                document.getElementById("wikidataContext").value = wikidataText;
+                document.getElementById("jikanDescription").value = jikanText;
+                document.getElementById("anilistDescription").value = anilistText;
+                document.getElementById("wikipediaDescription").value = wikipediaText;
+                document.getElementById("selectedDescription").value = jikanText || anilistText || wikipediaText;
+                const available = [
+                    wikidataText ? "Wikidata" : "",
+                    jikanText ? "Jikan/MyAnimeList" : "",
+                    anilistText ? "AniList" : "",
+                    wikipediaText ? "Wikipedia" : ""
+                ].filter(Boolean);
+                status.textContent = available.length
+                    ? `Descrizioni recuperate da: ${available.join(", ")}. Seleziona o modifica la parafrasi prima di generare i prompt.`
+                    : "Nessuna descrizione recuperata. Da file locale alcune API possono bloccare le richieste: prova tramite GitHub Pages o un server locale.";
+            } catch (error) {
+                status.textContent = "Errore imprevisto nella demo. Prova tramite GitHub Pages o un server locale invece di aprire il file direttamente.";
+            }
+        });
+
+        document.getElementById("generatePrompts").addEventListener("click", buildPrompts);
+    </script>
 
 </body>
 </html>

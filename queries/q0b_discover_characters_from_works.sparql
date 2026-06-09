@@ -1,0 +1,28 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?character ?characterLabel ?work ?workLabel
+WHERE {
+  VALUES ?work {
+    wd:Q710324    # One Piece
+    wd:Q25929253  # Naruto
+    wd:Q718624    # Death Note
+  }
+
+  {
+    ?character wdt:P1441 ?work .
+  }
+  UNION
+  {
+    ?character wdt:P1080 ?work .
+  }
+
+  ?work rdfs:label ?workLabel .
+  ?character rdfs:label ?characterLabel .
+
+  FILTER(LANG(?workLabel) = "en")
+  FILTER(LANG(?characterLabel) = "en")
+}
+ORDER BY ?workLabel ?characterLabel
+LIMIT 100

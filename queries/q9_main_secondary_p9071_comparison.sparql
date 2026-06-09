@@ -1,0 +1,31 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT ?group
+       (COUNT(DISTINCT ?character) AS ?characters)
+       (COUNT(DISTINCT ?characterWithType) AS ?charactersWithP9071)
+WHERE {
+  VALUES (?character ?group) {
+    (wd:Q477948 "main character")
+    (wd:Q931 "main character")
+    (wd:Q843545 "main character")
+    (wd:Q858432 "secondary character")
+    (wd:Q877964 "secondary character")
+    (wd:Q1061765 "secondary character")
+    (wd:Q1190653 "secondary character")
+    (wd:Q1740 "secondary character")
+    (wd:Q203240 "secondary character")
+    (wd:Q1767 "secondary character")
+    (wd:Q1043344 "secondary character")
+    (wd:Q52863 "secondary character")
+    (wd:Q687038 "secondary character")
+    (wd:Q2328583 "secondary character")
+    (wd:Q138008 "secondary character")
+  }
+
+  OPTIONAL {
+    ?character wdt:P9071 ?characterType .
+    BIND(?character AS ?characterWithType)
+  }
+}
+GROUP BY ?group

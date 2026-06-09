@@ -1,0 +1,29 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?character ?characterLabel ?characterType ?characterTypeLabel
+WHERE {
+  VALUES ?character {
+    wd:Q477948   # Monkey D. Luffy
+    wd:Q858432   # Roronoa Zoro
+    wd:Q877964   # Nami
+    wd:Q1061765  # Sanji
+    wd:Q1190653  # Nico Robin
+    wd:Q931      # Naruto Uzumaki
+    wd:Q1740     # Sasuke Uchiha
+    wd:Q203240   # Sakura Haruno
+    wd:Q1767     # Kakashi Hatake
+    wd:Q1043344  # Itachi Uchiha
+    wd:Q843545   # Light Yagami
+    wd:Q52863    # L, Death Note
+    wd:Q687038   # Misa Amane
+    wd:Q2328583  # Ryuk
+    wd:Q138008   # Near
+  }
+
+  OPTIONAL { ?character wdt:P9071 ?characterType . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
+}
+ORDER BY ?characterLabel ?characterTypeLabel
