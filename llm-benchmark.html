@@ -100,7 +100,98 @@ Bleach,Ichigo Kurosaki,Q222006,5,5
         </section>
 
         <section class="report-section">
-            <h2>Frontend demo: descrizione e prompt</h2>
+            <h2>Generazione script demo: descrizione e prompt</h2>
+            <p>
+                La demo LLM parte da un contesto Wikidata strutturato. Per ogni personaggio, il modello riceve non soltanto il nome, ma anche proprietà selezionate per descrivere ruolo narrativo, appartenenza e caratterizzazione, che abbiamo definito nella sezione SPARQL. Questo permette di rendere la scelta dell'archetipo più motivata e meno dipendente da una semplice somiglianza lessicale. Il menu permette di scegliere uno dei personaggi selezionati dal progetto e compila automaticamente anime/manga e QID Wikidata.
+            </p>
+            <p>
+                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da Jikan/MyAnimeList, AniList, Wikipedia e Personality Database, permette di selezionare o modificare il testo e genera i tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
+            </p>
+
+            <div class="api-demo">
+                <div class="form-row">
+                    <label for="characterSelect2">Personaggio senza character type</label>
+                    <select id="characterSelect2">
+                        <option value="zoro">Roronoa Zoro</option>
+                        <option value="nami">Nami</option>
+                        <option value="sanji">Sanji</option>
+                        <option value="nicoRobin">Nico Robin</option>
+                        <option value="sakura">Sakura Haruno</option>
+                        <option value="kakashi">Kakashi Hatake</option>
+                        <option value="itachi">Itachi Uchiha</option>
+                        <option value="l">L</option>
+                        <option value="misa">Misa Amane</option>
+                        <option value="ryuk">Ryuk</option>
+                        <option value="near">Near</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="characterName2">Personaggio</label>
+                    <input id="characterName2" type="text" value="Roronoa Zoro" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="animeName2">Anime/Manga</label>
+                    <input id="animeName2" type="text" value="One Piece" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="wikidataQid2">Wikidata QID</label>
+                    <input id="wikidataQid2" type="text" value="Q858432" readonly>
+                </div>
+                <button id="fetchDescriptions2" class="primary-button" type="button">Recupera descrizioni</button>
+                <p id="apiStatus2" class="status-text">Scegli un personaggio senza character type e recupera contesto Wikidata e descrizioni dalle fonti pubbliche.</p>
+
+                <div class="source-grid">
+                    <div class="source-card">
+                        <h3>Wikidata context</h3>
+                        <textarea id="wikidataContext2" rows="8" placeholder="Contesto strutturato da Wikidata"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Jikan / MyAnimeList</h3>
+                        <textarea id="jikanDescription2" rows="8" placeholder="Descrizione da Jikan"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>AniList</h3>
+                        <textarea id="anilistDescription2" rows="8" placeholder="Descrizione da AniList"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Wikipedia</h3>
+                        <textarea id="wikipediaDescription2" rows="8" placeholder="Descrizione da Wikipedia"></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Personality Database</h3>
+                        <textarea id="personalityDescription2" rows="8" placeholder="Qui viene mostrato il link del profilo Personality Database recuperato tramite P10757."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="selectedDescription2">Descrizione selezionata/parafrasata</label>
+                    <textarea id="selectedDescription2" rows="7" placeholder="Qui viene inserita la descrizione scelta o una parafrasi breve."></textarea>
+                </div>
+
+                <button id="generatePrompts2" class="primary-button" type="button">Genera prompt</button>
+
+                <div class="source-grid">
+                    <div class="source-card">
+                        <h3>Zero-shot</h3>
+                        <textarea id="zeroPrompt2" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Few-shot</h3>
+                        <textarea id="fewPrompt2" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Chain-of-Thought</h3>
+                        <textarea id="cotPrompt2" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Frontend evoluzione demo</h2>
+            <p>
+                La demo LLM parte da un contesto Wikidata strutturato. Per ogni personaggio, il modello riceve non soltanto il nome, ma anche proprietà selezionate per descrivere ruolo narrativo, appartenenza e caratterizzazione. Questo permette di rendere la scelta dell'archetipo più motivata e meno dipendente da una semplice somiglianza lessicale.
+            </p>
             <p>
                 Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da Jikan/MyAnimeList, AniList e Wikipedia, permette di selezionare o modificare il testo e genera i tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
             </p>
@@ -300,9 +391,12 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 .trim();
         };
 
-        const shorten = (value, maxLength = 900) => {
-            const text = cleanText(value);
-            return text.length > maxLength ? text.slice(0, maxLength).trim() + "..." : text;
+        const stripSourceLinks = (value) => {
+            return (value || "")
+                .split("\n")
+                .filter(line => !/^(Jikan API URL|MyAnimeList URL|AniList URL|Wikipedia URL|Profile URL|Personality Database profile ID)/.test(line.trim()))
+                .join("\n")
+                .trim();
         };
 
         async function fetchJikan(characterName) {
@@ -312,17 +406,20 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             const first = searchJson.data && searchJson.data[0];
             if (!first) return "";
 
-            const detailResponse = await fetch(`https://api.jikan.moe/v4/characters/${first.mal_id}/full`);
-            const detailJson = await detailResponse.json();
-            return shorten(detailJson.data && detailJson.data.about);
+            const detailUrl = `https://api.jikan.moe/v4/characters/${first.mal_id}/full`;
+            const myAnimeListUrl = first.url || `https://myanimelist.net/character/${first.mal_id}`;
+            return [
+                `Jikan API URL: ${detailUrl}`,
+                `MyAnimeList URL: ${myAnimeListUrl}`
+            ].join("\n");
         }
 
         async function fetchAniList(characterName) {
             const query = `
                 query ($search: String) {
                     Character(search: $search) {
+                        id
                         name { full }
-                        description(asHtml: false)
                     }
                 }
             `;
@@ -332,7 +429,11 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 body: JSON.stringify({ query, variables: { search: characterName } })
             });
             const json = await response.json();
-            return shorten(json.data && json.data.Character && json.data.Character.description);
+            const character = json.data && json.data.Character;
+            if (!character) return "";
+            return [
+                `AniList URL: https://anilist.co/character/${character.id}`
+            ].join("\n");
         }
 
         async function fetchWikipedia(characterName) {
@@ -341,7 +442,9 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             const response = await fetch(url);
             if (!response.ok) return "";
             const json = await response.json();
-            return shorten(json.extract);
+            return [
+                `Wikipedia URL: ${json.content_urls && json.content_urls.desktop ? json.content_urls.desktop.page : `https://en.wikipedia.org/wiki/${title}`}`
+            ].join("\n");
         }
 
         async function fetchWikidataContext(qid) {
@@ -354,17 +457,22 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 PREFIX wikibase: <http://wikiba.se/ontology#>
                 PREFIX bd: <http://www.bigdata.com/rdf#>
 
-                SELECT ?character ?characterLabel ?description ?workLabel ?universeLabel ?genderLabel ?characterTypeLabel
+                SELECT ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?memberOfLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId
                 WHERE {
                     BIND(wd:${entity} AS ?character)
                     OPTIONAL {
                         ?character schema:description ?description .
                         FILTER(LANG(?description) = "en")
                     }
+                    OPTIONAL { ?character wdt:P31 ?instanceOf . }
                     OPTIONAL { ?character wdt:P1441 ?work . }
                     OPTIONAL { ?character wdt:P1080 ?universe . }
+                    OPTIONAL { ?character wdt:P463 ?memberOf . }
+                    OPTIONAL { ?character wdt:P106 ?occupation . }
+                    OPTIONAL { ?character wdt:P170 ?creator . }
                     OPTIONAL { ?character wdt:P21 ?gender . }
                     OPTIONAL { ?character wdt:P9071 ?characterType . }
+                    OPTIONAL { ?character wdt:P10757 ?personalityDatabaseId . }
                     SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
                 }
                 LIMIT 20
@@ -384,39 +492,160 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 `QID: ${entity}`,
                 `Label: ${first.characterLabel ? first.characterLabel.value : ""}`,
                 `Description: ${first.description ? first.description.value : ""}`,
+                `Instance of: ${values("instanceOfLabel").join(", ") || "not available"}`,
                 `Present in work: ${values("workLabel").join(", ") || "not available"}`,
                 `Narrative universe: ${values("universeLabel").join(", ") || "not available"}`,
+                `Member of: ${values("memberOfLabel").join(", ") || "not available"}`,
+                `Occupation: ${values("occupationLabel").join(", ") || "not available"}`,
+                `Creator: ${values("creatorLabel").join(", ") || "not available"}`,
                 `Sex or gender: ${values("genderLabel").join(", ") || "not available"}`,
-                `Existing P9071: ${values("characterTypeLabel").join(", ") || "not available"}`
+                `Existing P9071: ${values("characterTypeLabel").join(", ") || "not available"}`,
+                `Personality Database ID (P10757): ${values("personalityDatabaseId").join(", ") || "not available"}`
             ].join("\n");
         }
 
-        function buildPrompts() {
-            const character = document.getElementById("characterName").value.trim();
-            const anime = document.getElementById("animeName").value.trim();
-            const wikidataContext = document.getElementById("wikidataContext").value.trim();
-            const description = document.getElementById("selectedDescription").value.trim();
+        const selectedStockCharacters = [
+            {
+                qid: "wd:Q113946608",
+                label: "The Chosen One",
+                description: "Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale."
+            },
+            {
+                qid: "wd:Q4904967",
+                label: "Big Bad",
+                description: "Antagonista principale che guida o rappresenta la minaccia piu importante della storia."
+            },
+            {
+                qid: "wd:Q1018644",
+                label: "Byronic hero",
+                description: "Figura eroica tormentata, carismatica e moralmente ambigua."
+            },
+            {
+                qid: "wd:Q2755065",
+                label: "Dark Lord",
+                description: "Villain dominante, spesso associato a potere, oscurita e controllo."
+            },
+            {
+                qid: "wd:Q65934439",
+                label: "Lone Cowboy",
+                description: "Personaggio indipendente, solitario e guidato da un codice personale."
+            },
+            {
+                qid: "wd:Q17145824",
+                label: "Lovable rogue",
+                description: "Personaggio furbo e irregolare, ma simpatico e spesso moralmente recuperabile."
+            },
+            {
+                qid: "wd:Q1254327",
+                label: "Mary Sue",
+                description: "Personaggio idealizzato, dotato di qualita eccezionali e pochi difetti narrativi."
+            }
+        ];
+
+        const stockCharacterVocabulary = selectedStockCharacters
+            .map(item => `- ${item.label} (${item.qid}): ${item.description}`)
+            .join("\n");
+
+        function buildPromptsForDemo(ids) {
+            const character = document.getElementById(ids.characterName).value.trim();
+            const anime = document.getElementById(ids.animeName).value.trim();
+            const wikidataContext = document.getElementById(ids.wikidataContext).value.trim();
+            const description = document.getElementById(ids.selectedDescription).value.trim();
+            const personalityDescription = ids.personalityDescription
+                ? document.getElementById(ids.personalityDescription).value.trim()
+                : "";
             const contextBlock = wikidataContext ? `\nWikidata context for entity verification:\n${wikidataContext}\n` : "";
+            const personalityBlock = personalityDescription ? `\nPersonality Database profile link:\n${personalityDescription}\n` : "";
+            const stockCharacterBlock = `\nControlled stock character candidates:\n${stockCharacterVocabulary}\n`;
 
-            const zero = `You are a knowledge engineer and narratology expert.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nTask: identify the most appropriate character type for Wikidata property P9071. Use Wikidata context only for entity verification and existing structured data. Use the source-based description to infer the narrative archetype. Do not invent Wikidata QIDs.\nReturn valid JSON with: character_name, narrative_role, character_type, wikidata_or_local_mapping, confidence, evidence.`;
+            const zero = `You are a knowledge engineer and narratology expert.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nTask: identify the most appropriate character type for Wikidata property P9071. Prefer one of the controlled stock character candidates when it fits the evidence. Use a local animanga: archetype only if none of the candidates is suitable. Use Wikidata context only for entity verification and existing structured data. Use the source-based description to infer the narrative archetype. Treat Personality Database only as an external profile link, not as an official source. Do not invent Wikidata QIDs.\nReturn valid JSON with: character_name, narrative_role, character_type, wikidata_or_local_mapping, confidence, evidence.`;
 
-            const few = `Classify anime and manga characters into narrative archetypes for Wikidata P9071.\n\nExample 1:\nCharacter: Naruto Uzumaki\nDescription: excluded orphan who seeks recognition and grows through perseverance.\nAnswer: shonen protagonist / underdog hero.\n\nExample 2:\nCharacter: Light Yagami\nDescription: brilliant student corrupted by supernatural power and positioned as the central moral threat.\nAnswer: villain protagonist / antihero.\n\nNow classify:\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nUse Wikidata context only for entity verification. Return valid JSON only.`;
+            const few = `Classify anime and manga characters into narrative archetypes for Wikidata P9071.\n\nExample 1:\nCharacter: Naruto Uzumaki\nDescription: excluded orphan who seeks recognition and grows through perseverance.\nAnswer: shonen protagonist / underdog hero.\n\nExample 2:\nCharacter: Light Yagami\nDescription: brilliant student corrupted by supernatural power and positioned as the central moral threat.\nAnswer: villain protagonist / antihero.\n\nNow classify:\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nPrefer one of the controlled stock character candidates when it fits the evidence. Use Wikidata context only for entity verification. Treat Personality Database only as an external profile link. Return valid JSON only.`;
 
-            const cot = `Analyze the character description step by step internally, but return only the final structured answer.\n\nSteps to consider:\n1. Identify the character's function in the plot.\n2. Identify motivations and recurring behaviors.\n3. Separate narrative role from psychological trait.\n4. Choose a character type suitable for Wikidata P9071 or a local animanga: namespace.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}\nSource-based description: ${description}\n\nReturn valid JSON with evidence. Do not invent Wikidata QIDs.`;
+            const cot = `Analyze the character description step by step internally, but return only the final structured answer.\n\nSteps to consider:\n1. Identify the character's function in the plot.\n2. Identify motivations and recurring behaviors.\n3. Separate narrative role from psychological trait.\n4. Compare the character with the controlled stock character candidates.\n5. Use Personality Database only as an external profile link, if present.\n6. Choose a character type suitable for Wikidata P9071 or a local animanga: namespace.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nReturn valid JSON with evidence. Do not invent Wikidata QIDs.`;
 
-            document.getElementById("zeroPrompt").value = zero;
-            document.getElementById("fewPrompt").value = few;
-            document.getElementById("cotPrompt").value = cot;
+            document.getElementById(ids.zeroPrompt).value = zero;
+            document.getElementById(ids.fewPrompt).value = few;
+            document.getElementById(ids.cotPrompt).value = cot;
         }
 
-        document.getElementById("fetchDescriptions").addEventListener("click", async () => {
-            const status = document.getElementById("apiStatus");
-            const character = document.getElementById("characterName").value.trim();
-            const qid = document.getElementById("wikidataQid").value.trim();
+        function buildPrompts() {
+            buildPromptsForDemo({
+                characterName: "characterName",
+                animeName: "animeName",
+                wikidataContext: "wikidataContext",
+                selectedDescription: "selectedDescription",
+                zeroPrompt: "zeroPrompt",
+                fewPrompt: "fewPrompt",
+                cotPrompt: "cotPrompt"
+            });
+        }
+
+        function buildPrompts2() {
+            buildPromptsForDemo({
+                characterName: "characterName2",
+                animeName: "animeName2",
+                wikidataContext: "wikidataContext2",
+                selectedDescription: "selectedDescription2",
+                personalityDescription: "personalityDescription2",
+                zeroPrompt: "zeroPrompt2",
+                fewPrompt: "fewPrompt2",
+                cotPrompt: "cotPrompt2"
+            });
+        }
+
+        const prova2Characters = {
+            zoro: { character: "Roronoa Zoro", anime: "One Piece", qid: "Q858432" },
+            nami: { character: "Nami", anime: "One Piece", qid: "Q877964" },
+            sanji: { character: "Sanji", anime: "One Piece", qid: "Q1061765" },
+            nicoRobin: { character: "Nico Robin", anime: "One Piece", qid: "Q1190653" },
+            sakura: { character: "Sakura Haruno", anime: "Naruto", qid: "Q203240" },
+            kakashi: { character: "Kakashi Hatake", anime: "Naruto", qid: "Q1767" },
+            itachi: { character: "Itachi Uchiha", anime: "Naruto", qid: "Q1043344" },
+            l: { character: "L", anime: "Death Note", qid: "Q52863" },
+            misa: { character: "Misa Amane", anime: "Death Note", qid: "Q687038" },
+            ryuk: { character: "Ryuk", anime: "Death Note", qid: "Q2328583" },
+            near: { character: "Near", anime: "Death Note", qid: "Q138008" }
+        };
+
+        function updateProva2Character() {
+            const selected = document.getElementById("characterSelect2").value;
+            const data = prova2Characters[selected];
+            document.getElementById("characterName2").value = data.character;
+            document.getElementById("animeName2").value = data.anime;
+            document.getElementById("wikidataQid2").value = data.qid;
+            [
+                "wikidataContext2",
+                "jikanDescription2",
+                "anilistDescription2",
+                "wikipediaDescription2",
+                "personalityDescription2",
+                "selectedDescription2",
+                "zeroPrompt2",
+                "fewPrompt2",
+                "cotPrompt2"
+            ].forEach(id => {
+                document.getElementById(id).value = "";
+            });
+            document.getElementById("apiStatus2").textContent = "Scegli un personaggio senza character type e recupera contesto Wikidata e descrizioni dalle fonti pubbliche.";
+        }
+
+        async function fetchDescriptionsForDemo(ids) {
+            const status = document.getElementById(ids.status);
+            const qid = document.getElementById(ids.wikidataQid).value.trim();
             status.textContent = "Recupero descrizioni in corso...";
             try {
+                if (!/^Q\d+$/i.test(qid.replace(/^wd:/i, ""))) {
+                    status.textContent = "Inserisci un QID Wikidata valido, per esempio Q1740.";
+                    return;
+                }
+
+                const wikidataAttempt = await Promise.allSettled([fetchWikidataContext(qid)]);
+                const wikidataResult = wikidataAttempt[0].status === "fulfilled" ? wikidataAttempt[0].value : "";
+
+                const character = document.getElementById(ids.characterName).value.trim();
                 const [wikidata, jikan, anilist, wikipedia] = await Promise.allSettled([
-                    fetchWikidataContext(qid),
+                    Promise.resolve(wikidataResult),
                     fetchJikan(character),
                     fetchAniList(character),
                     fetchWikipedia(character)
@@ -425,11 +654,18 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 const jikanText = jikan.status === "fulfilled" ? jikan.value : "";
                 const anilistText = anilist.status === "fulfilled" ? anilist.value : "";
                 const wikipediaText = wikipedia.status === "fulfilled" ? wikipedia.value : "";
-                document.getElementById("wikidataContext").value = wikidataText;
-                document.getElementById("jikanDescription").value = jikanText;
-                document.getElementById("anilistDescription").value = anilistText;
-                document.getElementById("wikipediaDescription").value = wikipediaText;
-                document.getElementById("selectedDescription").value = jikanText || anilistText || wikipediaText;
+                document.getElementById(ids.wikidataContext).value = wikidataText;
+                document.getElementById(ids.jikanDescription).value = jikanText;
+                document.getElementById(ids.anilistDescription).value = anilistText;
+                document.getElementById(ids.wikipediaDescription).value = wikipediaText;
+                document.getElementById(ids.selectedDescription).value = stripSourceLinks(jikanText || anilistText || wikipediaText);
+                if (ids.personalityDescription) {
+                    const pdbMatch = wikidataText.match(/Personality Database ID \(P10757\):\s*(.+)/);
+                    const pdbId = pdbMatch && pdbMatch[1] !== "not available" ? pdbMatch[1].trim() : "";
+                    document.getElementById(ids.personalityDescription).value = pdbId
+                        ? `Personality Database profile ID from Wikidata: ${pdbId}\nProfile URL: https://www.personality-database.com/profile/${pdbId}`
+                        : "";
+                }
                 const available = [
                     wikidataText ? "Wikidata" : "",
                     jikanText ? "Jikan/MyAnimeList" : "",
@@ -442,9 +678,38 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             } catch (error) {
                 status.textContent = "Errore imprevisto nella demo. Prova tramite GitHub Pages o un server locale invece di aprire il file direttamente.";
             }
+        }
+
+        document.getElementById("fetchDescriptions").addEventListener("click", async () => {
+            await fetchDescriptionsForDemo({
+                status: "apiStatus",
+                characterName: "characterName",
+                wikidataQid: "wikidataQid",
+                wikidataContext: "wikidataContext",
+                jikanDescription: "jikanDescription",
+                anilistDescription: "anilistDescription",
+                wikipediaDescription: "wikipediaDescription",
+                selectedDescription: "selectedDescription"
+            });
         });
 
+        document.getElementById("fetchDescriptions2").addEventListener("click", async () => {
+            await fetchDescriptionsForDemo({
+                status: "apiStatus2",
+                characterName: "characterName2",
+                wikidataQid: "wikidataQid2",
+                wikidataContext: "wikidataContext2",
+                jikanDescription: "jikanDescription2",
+                anilistDescription: "anilistDescription2",
+                wikipediaDescription: "wikipediaDescription2",
+                personalityDescription: "personalityDescription2",
+                selectedDescription: "selectedDescription2"
+            });
+        });
+
+        document.getElementById("characterSelect2").addEventListener("change", updateProva2Character);
         document.getElementById("generatePrompts").addEventListener("click", buildPrompts);
+        document.getElementById("generatePrompts2").addEventListener("click", buildPrompts2);
     </script>
 
 </body>

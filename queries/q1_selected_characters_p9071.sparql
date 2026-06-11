@@ -3,8 +3,9 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
 
-SELECT ?character ?characterLabel ?characterType ?characterTypeLabel
+SELECT ?anime ?animeLabel ?character ?characterLabel ?characterType ?characterTypeLabel
 WHERE {
+  VALUES ?anime { wd:Q710324 wd:Q25929253 wd:Q718624 }
   VALUES ?character {
     wd:Q477948   # Monkey D. Luffy
     wd:Q858432   # Roronoa Zoro
@@ -23,7 +24,15 @@ WHERE {
     wd:Q138008   # Near
   }
 
+  {
+    ?character wdt:P1441 ?anime .
+  }
+  UNION
+  {
+    ?character wdt:P1080 ?anime .
+  }
+
   OPTIONAL { ?character wdt:P9071 ?characterType . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
 }
-ORDER BY ?characterLabel ?characterTypeLabel
+ORDER BY ?animeLabel ?characterLabel ?characterTypeLabel
