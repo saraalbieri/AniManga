@@ -462,3 +462,33 @@ p {
     color: #64748b;
     border-top: 1px solid #e2e8f0;
 }
+
+/* ==========================================================================
+   9. GRAFO
+   ========================================================================== */
+.line-limit {
+    /* Imposta l'altezza esatta per 5 righe (es. 24px di altezza riga * 5 = 120px) */
+    max-height: 120px;
+    line-height: 24px;
+    overflow: hidden;
+    /* Opzionale: aggiunge una sfumatura per far capire che il testo continua */
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+
+#animanga-core-graph {
+    width: 100%;
+    height: 500px;
+    border: 2px solid lightgray;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+#animanga-onto-graph {
+    width: 100%;
+    height: 500px;
+    border: 2px dashed #9c27b0; /* Bordo tratteggiato viola per distinguere che è uno schema */
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+

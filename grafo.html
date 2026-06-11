@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>AniManga O-KG - Grafo</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script type="text/javascript" src="./script/script.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="./index.html">Home</a>
+            <a href="./metodologia.html">Metodologia</a>
+            <a href="./sparql.html">SPARQL</a>
+            <a href="./llm-benchmark.html">LLM Results</a>
+            <a href="./conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+    <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
+    <p>Questo grafo interattivo visualizza le relazioni estratte da Wikidata e arricchite tramite LLM (Archetipi e Ruoli Narrativi).</p>
+
+    <p>Usiamo la libreria Vis.js, molto semplice da configurare. Legge nativamente i dati in formato JSON, quindi dobbiamo "tradurre" 
+        le nostre triple RDF in una struttura a grafo fatta di nodi (soggetti/oggetti) e archi (predicati).</p>
+
+    <p>Alcuni dettagli tecnici di questa visualizzazione:</p>
+    <ul>
+        <li>Stile degli archi (Edges): Noterai nel codice che ho impostato gli archi generati dall'LLM (i collegamenti agli archetipi) con il parametro dashes: true (linee tratteggiate arancioni), mentre quelli provenienti da Wikidata (es. le serie) sono linee continue. Questo permette di distinguere visivamente i dati estratti dai dati inferiti dall'IA, un principio di trasparenza fondamentale nell'ingegneria della conoscenza.</li>
+        <li>Gruppi e Classi: La libreria suddivide visivamente le ontologie in groups cromatici (Personaggio, Serie, Archetipo), rendendo immediatamente chiara l'architettura logica a colpo d'occhio.</li>
+    </ul>
+
+    <div id="core_graph">
+        <p>Core Graph</p>
+        <div id="animanga-core-graph" class="animanga-graph"></div>
+    </div>
+
+    <div id="onto_graph">
+        <h3>Metamodello Ontologico</h3>
+        <p>Abbiamo astratto il grafo creando un'Ontologia formale (uno schema concettuale) che vale per qualsiasi personaggio di qualsiasi opera, passata o futura.</p>
+        <p>Sostituiamo i nomi specifici con le Classi (owl:Class) e definiamo per ogni proprietà chi è il Soggetto ammesso (rdfs:domain) e chi è l'Oggetto ammesso (rdfs:range).</p>
+        <p>il processo per inserire un qualsiasi altro personaggio (ad esempio Goku di Dragon Ball o Edward Elric di Fullmetal Alchemist) diventa una semplice compilazione a variabili (uno shaping).</p>
+        <p><pre># TEMPLATE GENERALE PER ISTANZIARE UN NUOVO PERSONAGGIO
+            <URI_PERSONAGGIO> a am:Character ;
+                rdfs:label "<NOME_PERSONAGGIO>"@it ;
+                wdt:P21 <URI_GENERE_SESSUALE> ;
+                am:appearsIn <URI_SERIE> ;
+                am:hasNarrativeRole <URI_RUOLO_NARRATIVO> ;
+                
+                # --- Parte Generata dall'LLM ---
+                am:hasArchetype <URI_ARCHETIPO_1> , <URI_ARCHETIPO_2> .
+
+            <URI_PERSONAGGIO> prov:wasGeneratedBy <URI_ATTIVITA_LLM> .</pre>
+        </p>
+        <div id="animanga-onto-graph" class="animanga-graph"></div>
+    </div>
+
+    </main>
+</body>
+</html>
