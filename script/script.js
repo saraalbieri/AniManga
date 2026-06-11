@@ -163,8 +163,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // 4. Inizializzazione della rete Core
-    var network_core = new vis.Network(container_core, data_core, options_core);
+    // 4. Inizializzazione della rete Core (SOLO se il div esiste)
+    var container_core = document.getElementById('animanga-core-graph');
+    if (container_core) {
+        var network_core = new vis.Network(container_core, data_core, options_core);
+    }
 
 
     // ==========================================
@@ -237,7 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
         physics: false
     };
 
-    // 4. Inizializzazione della rete Ontologica
-    var network_onto = new vis.Network(container_onto, data_onto, options_onto);
+   // 4. Inizializzazione della rete Ontologica (SOLO se il div esiste)
+    var container_onto = document.getElementById('animanga-onto-graph');
+    if (container_onto) {
+        var network_onto = new vis.Network(container_onto, data_onto, options_onto);
+    }
 
 });

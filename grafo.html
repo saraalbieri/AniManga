@@ -24,40 +24,54 @@
     <main class="container">
 
     <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
-    <p>Questo grafo interattivo visualizza le relazioni estratte da Wikidata e arricchite tramite LLM (Archetipi e Ruoli Narrativi).</p>
+    <p>Questa sezione offre una rappresentazione visiva interattiva delle reti semantiche costruite durante il progetto. Il grafo mappa sia le relazioni enciclopediche fattuali estratte da Wikidata, sia gli arricchimenti narratologici (archetipi e ruoli) inferiti dalla pipeline LLM.</p>
 
-    <p>Usiamo la libreria Vis.js, molto semplice da configurare. Legge nativamente i dati in formato JSON, quindi dobbiamo "tradurre" 
-        le nostre triple RDF in una struttura a grafo fatta di nodi (soggetti/oggetti) e archi (predicati).</p>
+    <p>Per l'interfaccia frontend è stata integrata la libreria Vis.js. Poiché l'architettura nativa di Vis.js richiede strutture dati in formato JSON, è stato implementato un livello di trasformazione che traduce le triple RDF (Soggetto-Predicato-Oggetto) in un modello a rete relazionale composto da nodi (entità) e archi (predicati).</p>
 
-    <p>Alcuni dettagli tecnici di questa visualizzazione:</p>
+    <p>Nella configurazione della visualizzazione sono state applicate precise scelte di design per garantire la trasparenza e la leggibilità semantica:</p>
     <ul>
-        <li>Stile degli archi (Edges): Noterai nel codice che ho impostato gli archi generati dall'LLM (i collegamenti agli archetipi) con il parametro dashes: true (linee tratteggiate arancioni), mentre quelli provenienti da Wikidata (es. le serie) sono linee continue. Questo permette di distinguere visivamente i dati estratti dai dati inferiti dall'IA, un principio di trasparenza fondamentale nell'ingegneria della conoscenza.</li>
-        <li>Gruppi e Classi: La libreria suddivide visivamente le ontologie in groups cromatici (Personaggio, Serie, Archetipo), rendendo immediatamente chiara l'architettura logica a colpo d'occhio.</li>
+        <li><strong>Provenienza del Dato (Data Provenance):</strong> Un principio fondamentale nell'ingegneria della conoscenza è la chiara distinzione tra i dati estratti da fonti consolidate e quelli inferiti dall'Intelligenza Artificiale. Per questo motivo, gli archi che rappresentano relazioni provenienti da Wikidata (es. l'appartenenza a una serie) sono tracciati con linee continue, mentre i collegamenti agli archetipi generati dall'LLM sono evidenziati tramite linee tratteggiate.</li>
+        <li><strong>Clustering Semantico:</strong> Le entità sono suddivise visivamente in gruppi cromatici basati sulle rispettive classi (Personaggio, Serie, Archetipo). Questa tematizzazione cromatica permette di decodificare l'architettura logica dell'ontologia a colpo d'occhio.</li>
     </ul>
 
+    <h3>Procedura di Costruzione del Grafo</h3>
+    <p>La topologia di questa rete non è stata disegnata manualmente, ma rappresenta il risultato dinamico della nostra intera pipeline di estrazione e arricchimento semantico. Il processo di costruzione si articola in quattro fasi principali:</p>
+    
+    <ol class="step-list">
+        <li>
+            <div><strong>Estrazione dell'Ossatura Base (SPARQL)</strong><br/>
+            Il primo step ha definito i nodi di partenza interrogando l'endpoint di Wikidata. Abbiamo estratto le entità relative alle 
+            tre opere analizzate (<em>One Piece</em>, <em>Naruto</em>, <em>Death Note</em>) e i personaggi a esse collegati tramite 
+            le proprietà <code>wdt:P1441</code> (present in work) o <code>wdt:P1080</code> (from narrative universe).
+            </div>
+        </li>
+        <li>
+            <div><strong>Identificazione del Gap e Inferenza (LLM)</strong><br/>
+            Sui nodi dei personaggi estratti, abbiamo verificato sistematicamente l'assenza della proprietà <code>wdt:P9071</code> 
+            (character type). Per colmare il vuoto semantico, le API di fonti esterne (come Jikan/MyAnimeList e AniList) 
+            hanno fornito il contesto testuale grezzo. I Large Language Models hanno analizzato questi testi classificando ogni 
+            personaggio all'interno di un vocabolario di archetipi controllato.
+            </div>
+        </li>
+        <li>
+            <div><strong>Formalizzazione RDF</strong><br/>
+            Gli archetipi generati dall'Intelligenza Artificiale, una volta superata la validazione umana, sono stati convertiti in 
+            triple formali. Se l'archetipo esisteva in Wikidata (es. <em>Byronic hero</em>), il grafo crea un arco verso il suo 
+            QID nativo; se assente, genera un nodo locale appoggiandosi al namespace <code>animanga:</code>.
+            </div>
+        </li>
+        <li>
+            <div><strong>Rendering Visivo (Vis.js)</strong><br/>
+            Le triple Turtle sono state infine convertite nella struttura JSON richiesta da Vis.js. Le linee continue della rete 
+            mappano i dati fattuali originariamente estratti da Wikidata (Soggetto-Opera), mentre le linee tratteggiate mappano le 
+            relazioni inferite dal modello generativo (Soggetto-Archetipo).
+            </div>
+        </li>
+    </ol>
+
     <div id="core_graph">
-        <p>Core Graph</p>
+        <p><strong>Grafo</strong></p>
         <div id="animanga-core-graph" class="animanga-graph"></div>
-    </div>
-
-    <div id="onto_graph">
-        <h3>Metamodello Ontologico</h3>
-        <p>Abbiamo astratto il grafo creando un'Ontologia formale (uno schema concettuale) che vale per qualsiasi personaggio di qualsiasi opera, passata o futura.</p>
-        <p>Sostituiamo i nomi specifici con le Classi (owl:Class) e definiamo per ogni proprietà chi è il Soggetto ammesso (rdfs:domain) e chi è l'Oggetto ammesso (rdfs:range).</p>
-        <p>il processo per inserire un qualsiasi altro personaggio (ad esempio Goku di Dragon Ball o Edward Elric di Fullmetal Alchemist) diventa una semplice compilazione a variabili (uno shaping).</p>
-        <p><pre># TEMPLATE GENERALE PER ISTANZIARE UN NUOVO PERSONAGGIO
-            <URI_PERSONAGGIO> a am:Character ;
-                rdfs:label "<NOME_PERSONAGGIO>"@it ;
-                wdt:P21 <URI_GENERE_SESSUALE> ;
-                am:appearsIn <URI_SERIE> ;
-                am:hasNarrativeRole <URI_RUOLO_NARRATIVO> ;
-                
-                # --- Parte Generata dall'LLM ---
-                am:hasArchetype <URI_ARCHETIPO_1> , <URI_ARCHETIPO_2> .
-
-            <URI_PERSONAGGIO> prov:wasGeneratedBy <URI_ATTIVITA_LLM> .</pre>
-        </p>
-        <div id="animanga-onto-graph" class="animanga-graph"></div>
     </div>
 
     </main>

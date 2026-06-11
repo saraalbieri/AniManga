@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>AniManga O-KG - Grafo Metamodello Ontologico</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script type="text/javascript" src="./script/script.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">AniManga O-KG</a>
+        <div class="navbar-menu">
+            <a href="./index.html">Home</a>
+            <a href="./metodologia.html">Metodologia</a>
+            <a href="./sparql.html">SPARQL</a>
+            <a href="./llm-benchmark.html">LLM Results</a>
+            <a href="./conclusioni.html">Conclusioni</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <h3>Metamodello Ontologico ---- Metterei la descrizione ed il template nella metodologia e qui solo il grafo</h3>
+        <p>Oltre a mappare i singoli personaggi analizzati, il grafo è stato astratto per definire un'Ontologia formale e scalabile: uno schema concettuale di base applicabile a qualsiasi entità narrativa, passata o futura.</p>
+        
+        <p>Sostituendo le entità specifiche con le rispettive Classi (<code>owl:Class</code>), sono stati formalizzati i vincoli relazionali del sistema. Per ogni proprietà ontologica è stato rigorosamente stabilito il Soggetto ammesso (<code>rdfs:domain</code>) e l'Oggetto ammesso (<code>rdfs:range</code>).</p>
+        
+        <p>Grazie a questo framework di <em>shaping</em> ontologico, l'istanza di un nuovo personaggio all'interno del Knowledge Graph (come Goku di <em>Dragon Ball</em> o Edward Elric di <em>Fullmetal Alchemist</em>) si riduce a una standardizzata compilazione di variabili. Il seguente template RDF illustra come i dati enciclopedici si integrino con la componente semantica generata dall'LLM, garantendo al contempo la tracciabilità dell'operazione generativa tramite <code>prov:wasGeneratedBy</code>:</p>
+        
+        <pre class="code-block"><code># TEMPLATE GENERALE PER ISTANZIARE UN NUOVO PERSONAGGIO
+                &lt;URI_PERSONAGGIO&gt; a am:Character ;
+                    rdfs:label "&lt;NOME_PERSONAGGIO&gt;"@it ;
+                    wdt:P21 &lt;URI_GENERE_SESSUALE&gt; ;
+                    am:appearsIn &lt;URI_SERIE&gt; ;
+                    am:hasNarrativeRole &lt;URI_RUOLO_NARRATIVO&gt; ;
+                    
+                    # --- Parte Generata dall'LLM ---
+                    am:hasArchetype &lt;URI_ARCHETIPO_1&gt; , &lt;URI_ARCHETIPO_2&gt; .
+
+                &lt;URI_PERSONAGGIO&gt; prov:wasGeneratedBy &lt;URI_ATTIVITA_LLM&gt; .</code></pre>
+        
+
+        <div id="onto_graph">
+            <p><strong>Grafo</strong></p>
+            <div id="animanga-onto-graph" class="animanga-graph"></div>
+        </div>
+
+    </main>
+</body>
+</html>

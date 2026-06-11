@@ -147,32 +147,80 @@ wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
         </main>
 
         <aside class="sidebar-visual">
-            <div class="side-card">
-                <img class="side-img" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=500&auto=format&fit=crop" alt="Graph Diagram">
-                <h4>Struttura del Grafo</h4>
-                <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra i nodi.</p>
-            </div>
-            <div class="side-card">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="180" style="background-color: #0f172a; border-radius: 8px; margin-bottom: 15px;">
-                    <line x1="200" y1="100" x2="100" y2="50" stroke="#475569" stroke-width="2"/>
-                    <line x1="200" y1="100" x2="100" y2="150" stroke="#475569" stroke-width="2"/>
-                    <line x1="200" y1="100" x2="300" y2="50" stroke="#f43f5e" stroke-width="2"/> <line x1="200" y1="100" x2="300" y2="150" stroke="#475569" stroke-width="2"/>
-                    <line x1="300" y1="50" x2="360" y2="90" stroke="#f43f5e" stroke-width="2"/>
-                    <line x1="100" y1="50" x2="40" y2="80" stroke="#475569" stroke-width="2"/>
-                    
-                    <circle cx="200" cy="100" r="14" fill="#38bdf8"/> <circle cx="100" cy="50" r="8" fill="#94a3b8"/>
-                    <circle cx="100" cy="150" r="8" fill="#94a3b8"/>
-                    <circle cx="300" cy="50" r="12" fill="#f43f5e"/> <circle cx="300" cy="150" r="8" fill="#94a3b8"/>
-                    <circle cx="360" cy="90" r="6" fill="#f43f5e"/>
-                    <circle cx="40" cy="80" r="6" fill="#94a3b8"/>
-                    
-                    <text x="200" y="135" fill="#cbd5e1" font-size="14" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">Personaggio</text>
-                    <text x="300" y="30" fill="#f43f5e" font-size="14" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">Archetipo</text>
-                </svg>
+            <a href="./grafo.html" >
+                <div class="side-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="180" style="background-color: #0f172a; border-radius: 8px; margin-bottom: 15px;">
+                        
+                        <defs>
+                            <marker id="arrow-grey" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+                            </marker>
+                            <marker id="arrow-pink" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f43f5e" />
+                            </marker>
+                        </defs>
 
-                <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Grafo</h4>
-                <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra le entità narrative estratte e le classi ontologiche.</p>
-            </div>
+                        <text x="15" y="25" fill="#475569" font-size="12" font-family="monospace" font-weight="bold">&lt;rdf:Graph&gt;</text>
+
+                        <line x1="200" y1="100" x2="100" y2="50" stroke="#475569" stroke-width="2" marker-end="url(#arrow-grey)"/>
+                        <line x1="200" y1="100" x2="100" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#arrow-grey)"/>
+                        
+                        <line x1="200" y1="100" x2="300" y2="50" stroke="#f43f5e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-pink)"/> 
+                        <line x1="200" y1="100" x2="300" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#arrow-grey)"/>
+                        
+                        <text x="135" y="65" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(26, 135, 65)">wdt:P1441</text>
+                        <text x="260" y="65" fill="#f43f5e" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(-26, 260, 65)">wdt:P9071</text>
+
+                        <circle cx="200" cy="100" r="14" fill="#38bdf8"/> <circle cx="100" cy="50" r="10" fill="#94a3b8"/>  <circle cx="100" cy="150" r="8" fill="#94a3b8"/>  
+                        <circle cx="300" cy="50" r="12" fill="#f43f5e"/>  <circle cx="300" cy="150" r="8" fill="#94a3b8"/>  
+                        
+                        <text x="200" y="130" fill="#e2e8f0" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">wd:Q1740</text>
+                        <text x="200" y="145" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="middle">(Sasuke Uchiha)</text>
+                        
+                        <text x="315" y="45" fill="#f43f5e" font-size="11" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="start">am:LoneCowboy</text>
+                        <text x="85" y="45" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="end">wd:Q25929253</text>
+                    </svg>
+
+                    <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Grafo</h4>
+                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra le entità narrative estratte e le classi ontologiche.</p>
+                </div>
+            </a>
+
+            <a href="./grafo_metamodello.html" >
+                <div class="side-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="180" style="background-color: #0f172a; border-radius: 8px; margin-bottom: 15px;">
+                        
+                        <text x="15" y="25" fill="#475569" font-size="12" font-family="monospace" font-weight="bold">&lt;owl:Ontology&gt;</text>
+
+                        <line x1="200" y1="110" x2="80" y2="110" stroke="#475569" stroke-width="2"/>
+                        <line x1="200" y1="110" x2="200" y2="40" stroke="#475569" stroke-width="2"/>
+                        <line x1="200" y1="110" x2="320" y2="110" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
+
+                        <text x="140" y="100" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="middle">wdt:P1441</text>
+                        <text x="260" y="100" fill="#f43f5e" font-size="10" font-family="monospace" text-anchor="middle">wdt:P9071</text>
+                        <text x="205" y="80" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="start">am:role</text>
+
+                        <circle cx="200" cy="110" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+                        <circle cx="200" cy="110" r="5" fill="#38bdf8"/>
+                        <text x="200" y="145" fill="#cbd5e1" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:Character</text>
+                        
+                        <circle cx="80" cy="110" r="14" fill="#0f172a" stroke="#94a3b8" stroke-width="3"/>
+                        <circle cx="80" cy="110" r="4" fill="#94a3b8"/>
+                        <text x="80" y="145" fill="#94a3b8" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">wd:Work</text>
+
+                        <circle cx="320" cy="110" r="14" fill="#0f172a" stroke="#f43f5e" stroke-width="3"/>
+                        <circle cx="320" cy="110" r="4" fill="#f43f5e"/>
+                        <text x="320" y="145" fill="#f43f5e" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:Archetype</text>
+
+                        <circle cx="200" cy="40" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="3"/>
+                        <circle cx="200" cy="40" r="4" fill="#94a3b8"/>
+                        <text x="200" y="20" fill="#94a3b8" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:Role</text>
+                    </svg>
+
+                    <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Metamodello</h4>
+                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione del grafo astratto per definire un'ontologia formale e scalabile.</p>
+                </div>
+            </a>
         </aside>
     </div>
 
