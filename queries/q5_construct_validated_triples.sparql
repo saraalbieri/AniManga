@@ -2,10 +2,13 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX animanga: <https://w3id.org/animanga/archetype/>
 
+# Obiettivo: trasformare classificazioni validate in triple RDF.
+# Usiamo CONSTRUCT per produrre nuove triple con la proprieta P9071.
 CONSTRUCT {
   ?character wdt:P9071 ?archetype .
 }
 WHERE {
+# Ogni coppia associa un personaggio Wikidata a un archetipo locale validato.
   VALUES (?character ?archetype) {
     (wd:Q477948 animanga:ShonenProtagonist)
     (wd:Q858432 animanga:LoyalRival)

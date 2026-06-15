@@ -1,0 +1,34 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+# Obiettivo: cercare i personaggi principali tramite REGEX e controllare solo P9071.
+# P9071 corrisponde a character type, cioe la proprieta utile per gli archetipi narrativi.
+SELECT DISTINCT ?character ?characterLabel ?characterType ?characterTypeLabel ?characterTypeDescription
+WHERE {
+  ?character rdfs:label ?characterLabel .
+
+# Cerchiamo i tre personaggi principali usati nella fase esplorativa.
+  FILTER(LANG(?characterLabel) = "en")
+  FILTER(REGEX(?characterLabel, "Monkey D. Luffy|Naruto Uzumaki|Light Yagami", "i"))
+
+# Limitiamo i risultati a entita dichiarate come anime character.
+  ?character wdt:P31 wd:Q80447738 .
+
+# Recuperiamo solo P9071 = character type.
+  ?character wdt:P9071 ?characterType .
+
+# Recuperiamo la descrizione inglese del character type, se disponibile.
+  OPTIONAL {
+    ?characterType schema:description ?characterTypeDescription .
+    FILTER(LANG(?characterTypeDescription) = "en")
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+ORDER BY ?characterLabel ?characterTypeLabel

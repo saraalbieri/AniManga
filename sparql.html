@@ -23,78 +23,68 @@
         <h1>Validazione tramite SPARQL Queries</h1>
         <p>Le query SPARQL sono state usate prima per esplorare il dominio anime/manga in Wikidata e solo successivamente per verificare la proprietà <code>wdt:P9071</code>. In questo modo il gap sugli archetipi narrativi non è stato assunto in partenza, ma individuato progressivamente confrontando le proprietà disponibili sui personaggi.</p>
 
+        <!-- Fase preliminare: ricerca testuale con REGEX prima della scelta dei QID definitivi. -->
         <div class="query-box">
-            <h3>Fase esplorativa 1: trovare le opere su Wikidata</h3>
-            <p>La prima operazione è stata cercare le entità Wikidata relative alle tre opere scelte: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Questa query serve a verificare che il dominio sia già rappresentato nel Knowledge Graph.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> schema: &lt;http://schema.org/&gt;<br>
-                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
-                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
-                <span class="keyword">SELECT DISTINCT</span> ?work ?workLabel ?description<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?work schema:description ?description . <span class="keyword">FILTER</span>(LANG(?description) = "en") }<br>
-                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?workLabel
-            </div>
-            <p><strong>Perché è utile:</strong> mostra che le opere sono già presenti in Wikidata e possono essere usate come punto di partenza per esplorare i personaggi collegati.</p>
+            <h3>Fase esplorativa 0: cercare opere candidate con REGEX</h3>
+            <p>Prima di fissare i QID definitivi, abbiamo usato una query esplorativa basata sulle label testuali. Il filtro <code>REGEX</code> cerca i nomi delle tre opere nella label (<em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>), ignorando maiuscole e minuscole. Per evitare risultati troppo generici, la query usa anche <code>P31</code> (<em>instance of</em>) e limita i risultati alle entità classificate come <em>anime television series</em>.</p>
+            <iframe class="query-embed" src="./queries/q0_regex_find_candidate_works.sparql" title="Query salvata q0_regex_find_candidate_works.sparql"></iframe>
+            <p><strong>Perché è utile:</strong> questa query documenta la fase di ricerca iniziale per nome e mostra l'uso di <code>REGEX</code>, richiesto dalle linee guida del progetto. Dopo questa verifica, la query successiva usa direttamente i QID confermati delle tre opere.</p>
         </div>
 
+        <!-- Fase esplorativa: verifica che le tre opere scelte esistano in Wikidata. -->
         <div class="query-box">
-            <h3>Fase esplorativa 2: recuperare i personaggi collegati alle opere</h3>
-            <p>Dopo aver individuato le opere, abbiamo cercato i personaggi collegati. La query usa <code>UNION</code> perché Wikidata può rappresentare il legame personaggio-opera con proprietà diverse, come <code>P1441</code> e <code>P1080</code>, e filtra i risultati al tipo <code>anime character</code>.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
-                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?work ?workLabel<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
-                &nbsp;&nbsp;{ ?character wdt:P1441 ?work . }<br>
-                &nbsp;&nbsp;<span class="keyword">UNION</span><br>
-                &nbsp;&nbsp;{ ?character wdt:P1080 ?work . }<br>
-                &nbsp;&nbsp;?work rdfs:label ?workLabel .<br>
-                &nbsp;&nbsp;?character rdfs:label ?characterLabel .<br>
-                &nbsp;&nbsp;?character wdt:P31 wd:Q80447738 . <span class="comment"># anime character</span><br>
-                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?workLabel) = "en")<br>
-                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?characterLabel) = "en")<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?workLabel ?characterLabel<br>
-                <span class="keyword">LIMIT</span> 100
-            </div>
-            <p><strong>Perché è utile:</strong> questa query ci ha permesso di vedere che Wikidata contiene già numerosi personaggi delle tre opere, quindi il problema non è l'assenza delle entità.</p>
+            <h3>Fase esplorativa: trovare le opere su Wikidata</h3>
+            <p>La prima operazione è stata cercare le entità Wikidata relative alle tre opere scelte: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Questa query serve a verificare che il dominio sia già rappresentato nel Knowledge Graph. Abbiamo scelto di utilizzare i QID verificati per assicurarci che le opere fossero correttamente identificate. In particolare sono stati scelti quelli relativi alla versione anime.</p>
+            <!-- La query viene incorporata dal file salvato, così il codice SPARQL non è duplicato nell'HTML. -->
+            <iframe class="query-embed" src="./queries/q0a_find_anime_entities.sparql" title="Query salvata q0a_find_anime_entities.sparql"></iframe>
+            <!-- Risultati riportati manualmente dopo l'esecuzione della query su Wikidata Query Service. -->
+            <table class="results-table">
+                <thead>
+                    <tr><th>Entità Wikidata</th><th>Opera</th><th>Description estratta da Wikidata</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>wd:Q718624</td><td>Death Note</td><td>Japanese anime television series</td></tr>
+                    <tr><td>wd:Q25929253</td><td>Naruto</td><td>Japanese anime television series</td></tr>
+                    <tr><td>wd:Q710324</td><td>One Piece</td><td>Japanese anime television series</td></tr>
+                </tbody>
+            </table>
         </div>
 
+        <!-- Fase esplorativa: recupero dei personaggi collegati alle opere tramite P1441/P1080. -->
+        <div class="query-box">
+            <h3> recuperare i personaggi collegati alle opere</h3>
+            <p>Dopo aver individuato le opere, abbiamo cercato le entità dei personaggi collegate a <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. In Wikidata questo collegamento non è sempre modellato nello stesso modo: alcuni personaggi sono collegati direttamente all'opera con <code>P1441</code> (<em>present in work</em>), mentre altri possono essere collegati tramite <code>P1080</code> (<em>from narrative universe</em>). Per questo la query usa <code>UNION</code>, cioè combina entrambe le possibilità in un'unica ricerca. Infine, il filtro su <code>anime character</code> serve a limitare i risultati ai personaggi e a ridurre entità non pertinenti.</p>
+            <iframe class="query-embed" src="./queries/q0b_discover_characters_from_works.sparql" title="Query salvata q0b_discover_characters_from_works.sparql"></iframe>
+            <p><strong>Perché è utile:</strong> questa query ci ha permesso di vedere che Wikidata contiene già numerosi personaggi delle tre opere.</p>
+        </div>
+
+        <!-- Sintesi metodologica: dal controllo delle proprieta emerge il gap su P9071. -->
         <div class="query-box">
             <h3>Dal confronto delle proprietà al gap</h3>
             <p>
-                Dopo aver confrontato personaggi principali e secondari, abbiamo cercato una proprietà adatta a rappresentare gli archetipi narrativi. La proprietà individuata è <code>wdt:P9071</code>, <em>character type</em>. Il passaggio successivo è stato quindi verificare se questa proprietà fosse effettivamente valorizzata nei personaggi analizzati.
-            </p>
+                Dopo aver confrontato personaggi principali (Monkey D. Luffy, Naruto Uzumaki, Light Yagami), abbiamo cercato una proprietà adatta a rappresentare gli archetipi narrativi. La proprietà individuata è <code>wdt:P9071</code>, <em>character type</em>. 
+            <p>La query seguente documenta questa fase esplorativa: cerca i tre personaggi principali tramite <code>REGEX</code>, filtra le entità dichiarate come <em>anime character</em> e controlla solo <code>P9071</code>, cioè la proprietà Wikidata usata per rappresentare il <em>character type</em>.</p>
+            <iframe class="query-embed" src="./queries/q1a_regex_main_characters_properties.sparql" title="Query salvata q1a_regex_main_characters_properties.sparql"></iframe>
+            <h4>Risultati ottenuti</h4>
+            <table class="results-table">
+                <thead>
+                    <tr><th>Personaggio</th><th>Character type (P9071)</th><th>Descrizione estratta</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Monkey D. Luffy</td><td>The Chosen One</td><td>Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale.</td></tr>
+                    <tr><td>Naruto Uzumaki</td><td>The Chosen One</td><td>Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale.</td></tr>
+                    <tr><td>Light Yagami</td><td>antihero; villain</td><td>Personaggio moralmente ambiguo o antagonista centrale, utile per mostrare che <code>P9071</code> può contenere più valori.</td></tr>
+                </tbody>
+            </table>
             <p><strong>Conclusione della fase esplorativa:</strong> il vocabolario esiste, ma il dato manca o è incompleto. Questo è il gap semantico su cui si basa il progetto.</p>
         </div>
 
+        <!-- Query di controllo: mostra sia personaggi con P9071 sia personaggi senza P9071. -->
         <div class="query-box">
-            <h3>Query 1: personaggi selezionati e valori P9071</h3>
-            <p>Questa query usa i QID verificati dei 15 personaggi e controlla, tramite <code>OPTIONAL</code>, se esiste un valore per <code>wdt:P9071</code>.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
-                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
-                <span class="keyword">SELECT</span> ?anime ?animeLabel ?character ?characterLabel ?characterType ?characterTypeLabel<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?anime { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
-                &nbsp;&nbsp;{ ?character wdt:P1441 ?anime . }<br>
-                &nbsp;&nbsp;<span class="keyword">UNION</span><br>
-                &nbsp;&nbsp;{ ?character wdt:P1080 ?anime . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P9071 ?characterType . }<br>
-                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?animeLabel ?characterLabel ?characterTypeLabel
-            </div>
+            <h3>personaggi selezionati e valori P9071</h3>
+            <p>Il passaggio successivo è stato quindi verificare se questa proprietà fosse effettivamente valorizzata anche in altri personaggi analizzati. Abbiamo individuato 15 personaggi principali (5 per opera) e verificato i loro QID, per poi controllare se esistesse un valore per <code>P9071</code>.
+            </p>Questa query usa i QID verificati dei 15 personaggi e controlla, tramite <code>OPTIONAL</code>, se esiste un valore per <code>wdt:P9071</code>.</p>
+            <iframe class="query-embed" src="./queries/q1_selected_characters_p9071.sparql" title="Query salvata q1_selected_characters_p9071.sparql"></iframe>
 
             <h4>Risultati ottenuti</h4>
             <table class="results-table">
@@ -121,88 +111,39 @@
             </table>
         </div>
 
+        <!-- Query di gap analysis: isola solo i personaggi che non hanno character type. -->
         <div class="query-box">
-            <h3>Query 2: personaggi collegati ai tre anime</h3>
-            <p>Questa query usa <code>UNION</code> perché Wikidata può collegare i personaggi alle opere attraverso proprietà diverse. Le tre opere sono selezionate tramite QID verificati e i risultati sono limitati alle entità dichiarate come <code>anime character</code>, così evitiamo ambiguità dovute alle label.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;<br><br>
-                <span class="keyword">SELECT DISTINCT</span> ?character ?characterLabel ?work ?workLabel<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }<br>
-                &nbsp;&nbsp;{ ?character wdt:P1441 ?work . }<br>
-                &nbsp;&nbsp;<span class="keyword">UNION</span><br>
-                &nbsp;&nbsp;{ ?character wdt:P1080 ?work . }<br>
-                &nbsp;&nbsp;?work rdfs:label ?workLabel .<br>
-                &nbsp;&nbsp;?character rdfs:label ?characterLabel .<br>
-                &nbsp;&nbsp;?character wdt:P31 wd:Q80447738 . <span class="comment"># anime character</span><br>
-                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?workLabel) = "en")<br>
-                &nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?characterLabel) = "en")<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?workLabel ?characterLabel<br>
-                <span class="keyword">LIMIT</span> 100
-            </div>
-        </div>
-
-        <div class="query-box">
-            <h3>Query 3: personaggi senza P9071</h3>
-            <p>Questa query usa <code>FILTER NOT EXISTS</code> per isolare i personaggi del campione privi di archetipo narrativo strutturato.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
-                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
-                <span class="keyword">SELECT</span> ?character ?characterLabel<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }<br>
-                &nbsp;&nbsp;<span class="keyword">FILTER NOT EXISTS</span> { ?character wdt:P9071 ?characterType . }<br>
-                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?characterLabel
-            </div>
+            <h3>personaggi senza P9071</h3>
+            <p>Questa query usa <code>FILTER NOT EXISTS</code> per isolare i personaggi del campione privi di archetipo narrativo strutturato. Il risultato è stato usato come base per il menu a tendina della demo LLM: per ogni personaggio sono stati mantenuti nome, opera e QID Wikidata, necessari per recuperare automaticamente il contesto e le descrizioni.</p>
+            <iframe class="query-embed" src="./queries/q2_missing_p9071_in_sample.sparql" title="Query salvata q2_missing_p9071_in_sample.sparql"></iframe>
             <h4>Risultati ottenuti</h4>
             <table class="results-table">
                 <thead>
-                    <tr><th>Personaggio</th><th>Stato P9071</th></tr>
+                    <tr><th>Opera</th><th>Personaggio</th><th>QID Wikidata</th><th>Stato P9071</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Roronoa Zoro</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Nami</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Sanji</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Nico Robin</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Sakura Haruno</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Kakashi Hatake</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Itachi Uchiha</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>L</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Misa Amane</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Ryuk</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Near</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>One Piece</td><td>Roronoa Zoro</td><td>wd:Q858432</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>One Piece</td><td>Nami</td><td>wd:Q877964</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>One Piece</td><td>Sanji</td><td>wd:Q1061765</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>One Piece</td><td>Nico Robin</td><td>wd:Q1190653</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Naruto</td><td>Sakura Haruno</td><td>wd:Q203240</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Naruto</td><td>Kakashi Hatake</td><td>wd:Q1767</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Naruto</td><td>Itachi Uchiha</td><td>wd:Q1043344</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Death Note</td><td>L</td><td>wd:Q52863</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Death Note</td><td>Misa Amane</td><td>wd:Q687038</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Death Note</td><td>Ryuk</td><td>wd:Q2328583</td><td>Nessun valore P9071</td></tr>
+                    <tr><td>Death Note</td><td>Near</td><td>wd:Q138008</td><td>Nessun valore P9071</td></tr>
                 </tbody>
             </table>
             <p><strong>Interpretazione:</strong> 11 personaggi su 15 non hanno un valore <code>P9071</code>. Questa query fornisce la prova quantitativa del nostro gap.</p>
         </div>
 
+        <!-- Vocabolario controllato: stock character Wikidata usati come candidati per gli archetipi. -->
         <div class="query-box">
-            <h3>Query 4: stock character come vocabolario per l'IA</h3>
-            <p>Questa query estrae da Wikidata gli archetipi classificati come <code>stock character</code> (<code>wd:Q636497</code>). Questo insieme viene usato come vocabolario controllato da fornire all'intelligenza artificiale: il modello non sceglie liberamente un archetipo, ma confronta il personaggio con una lista di candidati già presenti in Wikidata.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> schema: &lt;http://schema.org/&gt;<br>
-                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
-                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
-                <span class="keyword">SELECT</span> ?stockCharacter ?stockCharacterLabel ?description<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;?stockCharacter wdt:P31 wd:Q636497 . <span class="comment"># stock character</span><br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> {<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;?stockCharacter schema:description ?description .<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?description) = "en")<br>
-                &nbsp;&nbsp;}<br>
-                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
-                }<br>
-                <span class="keyword">ORDER BY</span> ?stockCharacterLabel
-            </div>
+            <h3>stock character come vocabolario per l'IA</h3>
+            <p>Dopo aver osservato che alcuni personaggi avevano già un valore per <code>P9071</code>, abbiamo analizzato uno di questi valori: <em>The Chosen One</em> (<code>wd:Q113946608</code>). In Wikidata questa entità è classificata come istanza di <code>stock character</code> (<code>wd:Q636497</code>). Da qui abbiamo usato la classe <code>stock character</code> come punto di accesso per trovare altri ruoli e archetipi narrativi già presenti nel Knowledge Graph.</p>
+            <p>Questa query estrae quindi da Wikidata gli archetipi classificati come <code>stock character</code>. Il risultato diventa una lista di riferimento: nella fase successiva, quando analizziamo un personaggio con l'intelligenza artificiale, possiamo confrontarlo con archetipi già esistenti in Wikidata invece di inventare categorie nuove da zero.</p>
+            <iframe class="query-embed" src="./queries/q3_stock_character_vocabulary.sparql" title="Query salvata q3_stock_character_vocabulary.sparql"></iframe>
             <p>Per ogni candidato vengono recuperati QID, label e descrizione. La descrizione è importante perché permette all'IA di motivare la scelta confrontando i tratti del personaggio con il significato dell'archetipo.</p>
             <p>Dopo l'estrazione, abbiamo usato un'interrogazione a ChatGPT come supporto metodologico per capire quali categorie fossero più adatte al dominio anime/manga e al nostro corpus. Da questa selezione è nata la lista ristretta di stock character da usare nei prompt.</p>
             <table class="results-table">
@@ -221,37 +162,14 @@
             </table>
         </div>
 
+        <!-- Contesto LLM: dati strutturati da Wikidata da inserire nel prompt. -->
         <div class="query-box">
-            <h3>Query 4b: contesto Wikidata per il prompt LLM</h3>
+            <h3>contesto Wikidata per il prompt LLM</h3>
             <p>Questa query estrae il contesto strutturato che viene fornito al modello LLM prima della scelta dell'archetipo. Le proprietà selezionate descrivono appartenenza, ruolo e caratterizzazione del personaggio, rendendo la classificazione più motivata e meno dipendente dalla sola label.</p>
-            <div class="code-block">
-                <span class="keyword">PREFIX</span> wd: &lt;http://www.wikidata.org/entity/&gt;<br>
-                <span class="keyword">PREFIX</span> wdt: &lt;http://www.wikidata.org/prop/direct/&gt;<br>
-                <span class="keyword">PREFIX</span> schema: &lt;http://schema.org/&gt;<br>
-                <span class="keyword">PREFIX</span> wikibase: &lt;http://wikiba.se/ontology#&gt;<br>
-                <span class="keyword">PREFIX</span> bd: &lt;http://www.bigdata.com/rdf#&gt;<br><br>
-                <span class="keyword">SELECT</span> ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?memberOfLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId<br>
-                <span class="keyword">WHERE</span> {<br>
-                &nbsp;&nbsp;<span class="keyword">VALUES</span> ?character { wd:Q1740 } <span class="comment"># esempio: Sasuke Uchiha</span><br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> {<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;?character schema:description ?description .<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">FILTER</span>(LANG(?description) = "en")<br>
-                &nbsp;&nbsp;}<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P31 ?instanceOf . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P1441 ?work . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P1080 ?universe . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P463 ?memberOf . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P106 ?occupation . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P170 ?creator . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P21 ?gender . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P9071 ?characterType . }<br>
-                &nbsp;&nbsp;<span class="keyword">OPTIONAL</span> { ?character wdt:P10757 ?personalityDatabaseId . }<br>
-                &nbsp;&nbsp;SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }<br>
-                }<br>
-                <span class="keyword">LIMIT</span> 20
-            </div>
+            <iframe class="query-embed" src="./queries/q4_wikidata_context_for_llm.sparql" title="Query salvata q4_wikidata_context_for_llm.sparql"></iframe>
             <h4>Risultato ottenuto</h4>
             <p>La query può restituire più righe quando una proprietà ha più valori. Nella tabella seguente il risultato per <code>wd:Q1740</code> è riportato in forma sintetica, come contesto leggibile da passare al prompt.</p>
+            <p><strong>Personality Database</strong> è una piattaforma esterna in cui gli utenti discutono e votano profili psicologici e tipologie di personaggi. In questo progetto viene considerata solo come collegamento esterno recuperabile da Wikidata tramite <code>P10757</code>, non come fonte ufficiale per assegnare un archetipo.</p>
             <table class="results-table">
                 <thead>
                     <tr><th>Proprietà</th><th>Valore</th></tr>
@@ -267,7 +185,7 @@
                     <tr><td>Creator</td><td>Masashi Kishimoto</td></tr>
                     <tr><td>Sex or gender</td><td>male</td></tr>
                     <tr><td>Existing P9071</td><td>Lone Cowboy</td></tr>
-                    <tr><td>Personality Database ID (P10757)</td><td>Non usato come fonte ufficiale; recuperabile come link esterno se presente.</td></tr>
+                    <tr><td>Personality Database ID (P10757)</td><td>Identificativo del profilo su Personality Database; usato solo come riferimento esterno, non come fonte ufficiale.</td></tr>
                 </tbody>
             </table>
             <p><strong>Uso metodologico:</strong> il risultato viene trasformato in un blocco di contesto nel prompt LLM. In questo modo il modello può usare dati strutturati verificabili, come opera, universo narrativo, gruppo, occupazione e valori P9071 già presenti.</p>

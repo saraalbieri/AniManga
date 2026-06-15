@@ -23,13 +23,14 @@
         <h1>LLM Experimentation</h1>
         <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando tre tecniche: Zero-shot, Few-shot e Chain-of-Thought.</p>
 
+        <!-- Descrive da quali fonti recuperiamo il testo usato come input degli LLM. -->
         <section class="report-section">
             <h2>Acquisizione automatica delle descrizioni</h2>
             <p>
-                Wikidata è stato usato per identificare i personaggi tramite QID e verificare la presenza o assenza di <code>wdt:P9071</code>. Tuttavia, quando <code>P9071</code> è assente, Wikidata non fornisce abbastanza informazioni narrative per dedurre l'archetipo. Per questo motivo abbiamo previsto un secondo livello della pipeline: il recupero automatico di descrizioni testuali da API e fonti pubbliche dedicate ad anime, manga e cultura generale.
+                Wikidata è stato usato come punto di partenza per identificare i personaggi tramite QID e verificare la presenza o assenza della proprietà <code>wdt:P9071</code> (<em>character type</em>). Quando questa proprietà è assente, però, Wikidata non contiene sempre abbastanza informazioni narrative per dedurre un archetipo. Per questo motivo la demo recupera automaticamente un contesto aggiuntivo da fonti pubbliche dedicate ad anime, manga e cultura generale.
             </p>
             <p>
-                Le descrizioni recuperate non vengono copiate direttamente nel sito, ma usate come input di lavoro per gli LLM e poi sintetizzate in parafrasi brevi, con citazione della fonte. Questo ci permette di mantenere tracciabilità metodologica senza trasformare il progetto in una raccolta di testi copiati.
+                Il recupero parte dal personaggio selezionato nella demo: il sistema usa il QID per interrogare Wikidata e raccoglie descrizioni da Jikan/MyAnimeList, AniList e Wikipedia. Se Wikidata contiene anche l'identificativo <code>P10757</code>, viene mostrato il collegamento a Personality Database, trattato solo come riferimento esterno e non come fonte ufficiale. Le descrizioni recuperate servono come input di lavoro per gli LLM e vengono poi sintetizzate in parafrasi brevi.
             </p>
 
             <table class="results-table">
@@ -42,6 +43,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>Wikidata SPARQL</td>
+                        <td>recupero del contesto strutturato tramite QID</td>
+                        <td>fornisce dati verificabili: opera, universo narrativo, ruolo, genere e P9071 se presente</td>
+                        <td>non sempre contiene informazioni narrative sufficienti per classificare l'archetipo</td>
+                    </tr>
                     <tr>
                         <td><a href="https://jikan.moe/" target="_blank">Jikan / MyAnimeList</a></td>
                         <td>recupero descrizioni e metadati dei personaggi</td>
@@ -60,17 +67,25 @@
                         <td>utile per parafrasi sintetiche e disambiguazione</td>
                         <td>non sempre descrive archetipi narrativi in modo esplicito</td>
                     </tr>
+                    <tr>
+                        <td>Personality Database</td>
+                        <td>eventuale link esterno recuperato tramite <code>P10757</code></td>
+                        <td>può offrire un riferimento pubblico aggiuntivo sul personaggio</td>
+                        <td>non è una fonte ufficiale e non viene usata per assegnare direttamente l'archetipo</td>
+                    </tr>
                 </tbody>
             </table>
 
-            <h3>Pipeline automatizzata proposta</h3>
+            <h3>Pipeline della demo</h3>
             <div class="code-block">
-characters_seed.csv<br>
-&nbsp;&nbsp;↓ QID + MAL/AniList ID<br>
-Wikidata SPARQL check<br>
-&nbsp;&nbsp;↓ verifica P9071<br>
-Jikan / AniList / Wikipedia API<br>
-&nbsp;&nbsp;↓ descrizione testuale<br>
+Personaggio selezionato nella demo<br>
+&nbsp;&nbsp;↓ nome, opera e QID Wikidata<br>
+Wikidata SPARQL context<br>
+&nbsp;&nbsp;↓ verifica P9071 e recupero proprietà utili<br>
+Jikan / AniList / Wikipedia<br>
+&nbsp;&nbsp;↓ descrizioni testuali pubbliche<br>
+Personality Database<br>
+&nbsp;&nbsp;↓ link esterno, se presente in Wikidata<br>
 LLM prompt builder<br>
 &nbsp;&nbsp;↓ Zero-shot / Few-shot / CoT<br>
 JSON output validation<br>
@@ -84,13 +99,8 @@ Turtle RDF generation
 
             <h3>Estensione a nuovi personaggi</h3>
             <p>
-                La pipeline è pensata per essere estendibile. Per aggiungere un personaggio già scelto dal gruppo, è sufficiente inserire una nuova riga nel file <code>characters_seed.csv</code> con nome del personaggio, QID Wikidata e identificativi delle fonti Jikan/MyAnimeList e AniList. Lo script recupera automaticamente le descrizioni, controlla se <code>P9071</code> è già presente e prepara l'input per i prompt.
+                La pipeline è pensata per essere estendibile. Per aggiungere un nuovo personaggio è necessario verificare prima il QID Wikidata corretto, inserirlo nella demo insieme al nome e all'opera, e poi usare il pulsante di recupero per ottenere contesto Wikidata e descrizioni dalle fonti pubbliche.
             </p>
-            <div class="code-block">
-anime,character_name,wikidata_qid,mal_id,anilist_id<br>
-Naruto,Kakashi Hatake,Q1767,85,121<br>
-Bleach,Ichigo Kurosaki,Q222006,5,5
-            </div>
             <p>
                 La stessa logica può essere usata anche per personaggi non inclusi nel corpus iniziale. A partire dal titolo di un anime, la pipeline può recuperare una lista di personaggi principali da Jikan/MyAnimeList o AniList, tentare l'allineamento con Wikidata, verificare la presenza di <code>P9071</code> e generare descrizioni normalizzate per gli esperimenti LLM.
             </p>
@@ -99,18 +109,20 @@ Bleach,Ichigo Kurosaki,Q222006,5,5
             </p>
         </section>
 
+        <!-- Demo principale: personaggi del campione senza P9071, selezionabili dal menu. -->
         <section class="report-section">
             <h2>Generazione script demo: descrizione e prompt</h2>
             <p>
-                La demo LLM parte da un contesto Wikidata strutturato. Per ogni personaggio, il modello riceve non soltanto il nome, ma anche proprietà selezionate per descrivere ruolo narrativo, appartenenza e caratterizzazione, che abbiamo definito nella sezione SPARQL. Questo permette di rendere la scelta dell'archetipo più motivata e meno dipendente da una semplice somiglianza lessicale. Il menu permette di scegliere uno dei personaggi selezionati dal progetto e compila automaticamente anime/manga e QID Wikidata.
+                La demo LLM utilizza come punto di partenza i personaggi individuati nella Query 2 della sezione SPARQL, cioè i personaggi del campione che non hanno un valore per <code>P9071</code> (<em>character type</em>). Il risultato della query è stato trasformato in una lista interna alla pagina: per ogni personaggio sono stati salvati nome, opera di appartenenza e QID Wikidata. Questa lista alimenta il menu a tendina <em>Personaggio senza character type</em>.
             </p>
             <p>
-                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da Jikan/MyAnimeList, AniList, Wikipedia e Personality Database, permette di selezionare o modificare il testo e genera i tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
+                Quando si seleziona un personaggio, la demo compila automaticamente i campi <em>Anime/Manga</em> e <em>Wikidata QID</em>. Il pulsante <em>Recupera descrizioni</em> interroga Wikidata usando la logica della Query 4 della sezione SPARQL, cioè la query che recupera il contesto strutturato del personaggio: descrizione, opera, universo narrativo, gruppo, occupazione, genere, eventuale <code>P9071</code> e collegamento a Personality Database tramite <code>P10757</code>. Per le altre fonti pubbliche, come Jikan/MyAnimeList, AniList, Wikipedia e Personality Database, la demo mostra soprattutto i link: in questo modo possiamo aprire le fonti, scegliere manualmente quali parti del contenuto sono utili e inserirle o parafrasarle nel campo della descrizione selezionata. A partire da questi dati, la pagina genera tre prompt da testare manualmente con modelli come GPT, Claude o Gemini; nessuna API LLM viene chiamata direttamente dal browser.
             </p>
 
             <div class="api-demo">
                 <div class="form-row">
                     <label for="characterSelect2">Personaggio senza character type</label>
+                    <!-- Lista basata sui risultati della query q2_missing_p9071_in_sample.sparql. -->
                     <select id="characterSelect2">
                         <option value="zoro">Roronoa Zoro</option>
                         <option value="nami">Nami</option>
@@ -140,6 +152,7 @@ Bleach,Ichigo Kurosaki,Q222006,5,5
                 <button id="fetchDescriptions2" class="primary-button" type="button">Recupera descrizioni</button>
                 <p id="apiStatus2" class="status-text">Scegli un personaggio senza character type e recupera contesto Wikidata e descrizioni dalle fonti pubbliche.</p>
 
+                <!-- Ogni textarea mostra una fonte diversa usata per costruire il prompt. -->
                 <div class="source-grid">
                     <div class="source-card">
                         <h3>Wikidata context</h3>
@@ -187,6 +200,7 @@ Bleach,Ichigo Kurosaki,Q222006,5,5
             </div>
         </section>
 
+        <!-- Demo libera: consente di testare manualmente un personaggio/QID scelto dall'utente. -->
         <section class="report-section">
             <h2>Frontend evoluzione demo</h2>
             <p>
@@ -382,6 +396,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
     </main>
 
     <script>
+        // Normalizza testo HTML proveniente da API esterne prima di usarlo nel prompt.
         const cleanText = (value) => {
             if (!value) return "";
             return value
@@ -391,6 +406,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 .trim();
         };
 
+        // Rimuove URL e riferimenti tecnici dalla descrizione scelta per il prompt.
         const stripSourceLinks = (value) => {
             return (value || "")
                 .split("\n")
@@ -399,6 +415,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 .trim();
         };
 
+        // Jikan/MyAnimeList: cerca il personaggio e restituisce i link alla scheda pubblica/API.
         async function fetchJikan(characterName) {
             const searchUrl = `https://api.jikan.moe/v4/characters?q=${encodeURIComponent(characterName)}&limit=1`;
             const searchResponse = await fetch(searchUrl);
@@ -414,6 +431,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             ].join("\n");
         }
 
+        // AniList: usa GraphQL per trovare il personaggio e produrre il link alla scheda.
         async function fetchAniList(characterName) {
             const query = `
                 query ($search: String) {
@@ -436,6 +454,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             ].join("\n");
         }
 
+        // Wikipedia: recupera la pagina riassuntiva quando esiste una corrispondenza diretta.
         async function fetchWikipedia(characterName) {
             const title = encodeURIComponent(characterName.replace(/\s+/g, "_"));
             const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
@@ -447,6 +466,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             ].join("\n");
         }
 
+        // Wikidata: costruisce una query SPARQL dinamica a partire dal QID scelto nella demo.
         async function fetchWikidataContext(qid) {
             if (!qid) return "";
             const entity = qid.trim().replace(/^wd:/i, "");
@@ -486,6 +506,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             const rows = json.results && json.results.bindings ? json.results.bindings : [];
             if (!rows.length) return "";
 
+            // Aggrega valori multipli, per esempio piu gruppi o piu ruoli, in una singola riga leggibile.
             const first = rows[0];
             const values = (key) => [...new Set(rows.map(row => row[key] && row[key].value).filter(Boolean))];
             return [
@@ -504,6 +525,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             ].join("\n");
         }
 
+        // Sottoinsieme di stock character selezionati come candidati controllati per i prompt.
         const selectedStockCharacters = [
             {
                 qid: "wd:Q113946608",
@@ -546,6 +568,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             .map(item => `- ${item.label} (${item.qid}): ${item.description}`)
             .join("\n");
 
+        // Costruisce le tre varianti di prompt usando contesto Wikidata, descrizione e vocabolario.
         function buildPromptsForDemo(ids) {
             const character = document.getElementById(ids.characterName).value.trim();
             const anime = document.getElementById(ids.animeName).value.trim();
@@ -569,6 +592,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             document.getElementById(ids.cotPrompt).value = cot;
         }
 
+        // Wrapper per la demo libera.
         function buildPrompts() {
             buildPromptsForDemo({
                 characterName: "characterName",
@@ -581,6 +605,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             });
         }
 
+        // Wrapper per la demo sui personaggi senza P9071.
         function buildPrompts2() {
             buildPromptsForDemo({
                 characterName: "characterName2",
@@ -594,7 +619,8 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             });
         }
 
-        const prova2Characters = {
+        // Personaggi senza P9071 ricavati dalla query q2 e inseriti nella demo con QID verificato.
+        const charactersWithoutType = {
             zoro: { character: "Roronoa Zoro", anime: "One Piece", qid: "Q858432" },
             nami: { character: "Nami", anime: "One Piece", qid: "Q877964" },
             sanji: { character: "Sanji", anime: "One Piece", qid: "Q1061765" },
@@ -608,9 +634,10 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             near: { character: "Near", anime: "Death Note", qid: "Q138008" }
         };
 
-        function updateProva2Character() {
+        // Aggiorna i campi readonly quando cambia il personaggio selezionato nel menu.
+        function updateCharacterWithoutType() {
             const selected = document.getElementById("characterSelect2").value;
-            const data = prova2Characters[selected];
+            const data = charactersWithoutType[selected];
             document.getElementById("characterName2").value = data.character;
             document.getElementById("animeName2").value = data.anime;
             document.getElementById("wikidataQid2").value = data.qid;
@@ -630,6 +657,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             document.getElementById("apiStatus2").textContent = "Scegli un personaggio senza character type e recupera contesto Wikidata e descrizioni dalle fonti pubbliche.";
         }
 
+        // Recupera tutte le fonti disponibili e compila le textarea della demo.
         async function fetchDescriptionsForDemo(ids) {
             const status = document.getElementById(ids.status);
             const qid = document.getElementById(ids.wikidataQid).value.trim();
@@ -707,7 +735,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             });
         });
 
-        document.getElementById("characterSelect2").addEventListener("change", updateProva2Character);
+        document.getElementById("characterSelect2").addEventListener("change", updateCharacterWithoutType);
         document.getElementById("generatePrompts").addEventListener("click", buildPrompts);
         document.getElementById("generatePrompts2").addEventListener("click", buildPrompts2);
     </script>

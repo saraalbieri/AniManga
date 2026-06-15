@@ -4,10 +4,14 @@ PREFIX schema: <http://schema.org/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
 
+# Obiettivo: costruire un vocabolario di archetipi presenti in Wikidata.
+# Siamo partiti da The Chosen One e abbiamo visto che e istanza di stock character.
 SELECT ?stockCharacter ?stockCharacterLabel ?description
 WHERE {
+# Q636497 = stock character.
   ?stockCharacter wdt:P31 wd:Q636497 . # stock character
 
+# La descrizione aiuta a capire il significato dell'archetipo.
   OPTIONAL {
     ?stockCharacter schema:description ?description .
     FILTER(LANG(?description) = "en")

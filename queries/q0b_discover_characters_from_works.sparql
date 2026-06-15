@@ -2,22 +2,27 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
+# Obiettivo: trovare personaggi anime collegati alle tre opere selezionate.
 SELECT DISTINCT ?character ?characterLabel ?work ?workLabel
 WHERE {
+# Limitiamo la ricerca al corpus del progetto.
   VALUES ?work {
     wd:Q710324    # One Piece
     wd:Q25929253  # Naruto
     wd:Q718624    # Death Note
   }
 
+# P1441 = present in work. Alcuni personaggi sono collegati direttamente all'opera.
   {
     ?character wdt:P1441 ?work .
   }
   UNION
+# P1080 = from narrative universe. Serve quando Wikidata usa l'universo narrativo.
   {
     ?character wdt:P1080 ?work .
   }
 
+# Recuperiamo label inglesi e teniamo solo entita dichiarate come anime character.
   ?work rdfs:label ?workLabel .
   ?character rdfs:label ?characterLabel .
   ?character wdt:P31 wd:Q80447738 . # anime character

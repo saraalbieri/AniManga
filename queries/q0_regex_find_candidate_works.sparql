@@ -1,0 +1,30 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+# Obiettivo: cercare le opere per nome e limitare i risultati alle serie anime televisive.
+SELECT DISTINCT ?entity ?entityLabel ?description ?instanceOf ?instanceOfLabel
+WHERE {
+  ?entity rdfs:label ?entityLabel .
+  ?entity wdt:P31 wd:Q63952888 . # instance of: anime television series
+
+# REGEX cerca i nomi delle opere nella label, ignorando maiuscole/minuscole.
+  FILTER(LANG(?entityLabel) = "en")
+  FILTER(REGEX(?entityLabel, "One Piece|Naruto|Death Note", "i"))
+
+  OPTIONAL {
+    ?entity schema:description ?description .
+    FILTER(LANG(?description) = "en")
+  }
+
+  BIND(wd:Q63952888 AS ?instanceOf)
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+ORDER BY ?entityLabel
+LIMIT 50

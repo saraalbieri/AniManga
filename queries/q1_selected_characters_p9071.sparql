@@ -3,9 +3,12 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
 
+# Obiettivo: controllare se i 15 personaggi del campione hanno gia P9071.
 SELECT ?anime ?animeLabel ?character ?characterLabel ?characterType ?characterTypeLabel
 WHERE {
+# Opere del corpus.
   VALUES ?anime { wd:Q710324 wd:Q25929253 wd:Q718624 }
+# Personaggi scelti manualmente: 5 per ogni opera.
   VALUES ?character {
     wd:Q477948   # Monkey D. Luffy
     wd:Q858432   # Roronoa Zoro
@@ -24,6 +27,7 @@ WHERE {
     wd:Q138008   # Near
   }
 
+# Colleghiamo personaggio e opera usando entrambe le proprieta trovate in Wikidata.
   {
     ?character wdt:P1441 ?anime .
   }
@@ -32,6 +36,7 @@ WHERE {
     ?character wdt:P1080 ?anime .
   }
 
+# P9071 = character type. OPTIONAL permette di vedere anche i personaggi senza valore.
   OPTIONAL { ?character wdt:P9071 ?characterType . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en,it". }
 }

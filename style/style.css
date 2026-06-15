@@ -372,6 +372,16 @@ p {
     border: 1px solid #334155;
 }
 
+.query-embed {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
 .keyword {
     color: #f43f5e;
     font-weight: bold;
@@ -491,4 +501,3 @@ p {
     background-color: #fafafa;
     border-radius: 8px;
 }
-
