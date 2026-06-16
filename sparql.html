@@ -28,7 +28,20 @@
             <h3>Fase esplorativa 0: cercare opere candidate con REGEX</h3>
             <p>Prima di fissare i QID definitivi, abbiamo usato una query esplorativa basata sulle label testuali. Il filtro <code>REGEX</code> cerca i nomi delle tre opere nella label (<em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>), ignorando maiuscole e minuscole. Per evitare risultati troppo generici, la query usa anche <code>P31</code> (<em>instance of</em>) e limita i risultati alle entità classificate come <em>anime television series</em>.</p>
             <iframe class="query-embed" src="./queries/q0_regex_find_candidate_works.sparql" title="Query salvata q0_regex_find_candidate_works.sparql"></iframe>
-            <p><strong>Perché è utile:</strong> questa query documenta la fase di ricerca iniziale per nome. Dopo questa verifica, la query successiva usa direttamente i QID confermati delle tre opere.</p>
+            <h4>Risultati ottenuti</h4>
+            <table class="results-table">
+                <thead>
+                    <tr><th>Entità Wikidata</th><th>Label</th><th>Description estratta da Wikidata</th><th>Instance of</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>wd:Q718624</td><td>Death Note</td><td>Japanese anime television series</td><td>anime television series</td></tr>
+                    <tr><td>wd:Q25929253</td><td>Naruto</td><td>Japanese anime television series</td><td>anime television series</td></tr>
+                    <tr><td>wd:Q12500134</td><td>Naruto: Shippūden</td><td>Japanese anime television series</td><td>anime television series</td></tr>
+                    <tr><td>wd:Q710324</td><td>One Piece</td><td>Japanese anime television series</td><td>anime television series</td></tr>
+                    <tr><td>wd:Q123893209</td><td>The One Piece</td><td>upcoming Japanese anime series</td><td>anime television series</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Perché è utile:</strong> questa query documenta la fase di ricerca iniziale per nome e per categoria anime. Il risultato mostra le versioni dell'anime ne scegliamo solo 3 che sono di nostro interesse.Dopo questa verifica, la query successiva usa direttamente i QID confermati delle tre opere.</p>
         </div>
 
         <!-- Fase esplorativa: verifica che le tre opere scelte esistano in Wikidata. -->
@@ -181,7 +194,6 @@
                     <tr><td>Instance of</td><td>anime character; manga character</td></tr>
                     <tr><td>Present in work</td><td>Naruto</td></tr>
                     <tr><td>Narrative universe</td><td>Naruto universe</td></tr>
-                    <tr><td>Member of</td><td>Team 7; Uchiha clan</td></tr>
                     <tr><td>Occupation</td><td>ninja</td></tr>
                     <tr><td>Creator</td><td>Masashi Kishimoto</td></tr>
                     <tr><td>Sex or gender</td><td>male</td></tr>

@@ -6,7 +6,7 @@ PREFIX bd: <http://www.bigdata.com/rdf#>
 
 # Obiettivo: recuperare un contesto strutturato da passare al prompt LLM.
 # L'esempio usa Sasuke Uchiha, ma il QID puo essere sostituito.
-SELECT ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?memberOfLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId
+SELECT ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId
 WHERE {
   VALUES ?character { wd:Q1740 } # esempio: Sasuke Uchiha
 
@@ -19,7 +19,6 @@ WHERE {
   OPTIONAL { ?character wdt:P31 ?instanceOf . }
   OPTIONAL { ?character wdt:P1441 ?work . }
   OPTIONAL { ?character wdt:P1080 ?universe . }
-  OPTIONAL { ?character wdt:P463 ?memberOf . }
   OPTIONAL { ?character wdt:P106 ?occupation . }
   OPTIONAL { ?character wdt:P170 ?creator . }
   OPTIONAL { ?character wdt:P21 ?gender . }

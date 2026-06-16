@@ -21,16 +21,16 @@
 
     <main class="container">
         <h1>LLM Experimentation</h1>
-        <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando tre tecniche: Zero-shot, Few-shot e Chain-of-Thought.</p>
+        <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando quattro tecniche: Zero-shot, Few-shot, Zero-shot Chain-of-Thought e Few-shot Chain-of-Thought.</p>
 
         <!-- Descrive da quali fonti recuperiamo il testo usato come input degli LLM. -->
         <section class="report-section">
             <h2>Acquisizione automatica delle descrizioni</h2>
             <p>
-                Wikidata è stato usato come punto di partenza per identificare i personaggi tramite QID e verificare la presenza o assenza della proprietà <code>wdt:P9071</code> (<em>character type</em>). Quando questa proprietà è assente, però, Wikidata non contiene sempre abbastanza informazioni narrative per dedurre un archetipo. Per questo motivo la demo recupera automaticamente un contesto aggiuntivo da fonti pubbliche dedicate ad anime, manga e cultura generale.
+                Wikidata è stato usato come punto di partenza per identificare i personaggi tramite QID e verificare la presenza o assenza della proprietà <code>wdt:P9071</code> (<em>character type</em>). Quando questa proprietà è assente, però, Wikidata non contiene sempre abbastanza informazioni narrative per dedurre un archetipo. Per questo motivo la demo recupera automaticamente un contesto aggiuntivo da fonti pubbliche dedicate ad anime e manga.
             </p>
             <p>
-                Il recupero parte dal personaggio selezionato nella demo: il sistema usa il QID per interrogare Wikidata e raccoglie descrizioni da Jikan/MyAnimeList, AniList e Wikipedia. Se Wikidata contiene anche l'identificativo <code>P10757</code>, viene mostrato il collegamento a Personality Database, trattato solo come riferimento esterno e non come fonte ufficiale. Le descrizioni recuperate servono come input di lavoro per gli LLM e vengono poi sintetizzate in parafrasi brevi.
+                Il recupero parte dal personaggio selezionato nella demo: il sistema usa il QID per interrogare Wikidata e raccoglie descrizioni da AniList. Se Wikidata contiene anche l'identificativo <code>P10757</code>, viene mostrato il collegamento a Personality Database, trattato solo come riferimento esterno e non come fonte ufficiale. Le descrizioni recuperate servono come input di lavoro per gli LLM e vengono poi sintetizzate in parafrasi brevi.
             </p>
 
             <table class="results-table">
@@ -50,22 +50,10 @@
                         <td>non sempre contiene informazioni narrative sufficienti per classificare l'archetipo</td>
                     </tr>
                     <tr>
-                        <td><a href="https://jikan.moe/" target="_blank">Jikan / MyAnimeList</a></td>
-                        <td>recupero descrizioni e metadati dei personaggi</td>
-                        <td>semplice, JSON, non richiede OAuth</td>
-                        <td>API non ufficiale; serve rispettare rate limit e caching</td>
-                    </tr>
-                    <tr>
                         <td><a href="https://anilist.gitbook.io/anilist-apiv2-docs" target="_blank">AniList GraphQL API</a></td>
                         <td>fonte alternativa per descrizioni e media collegati</td>
                         <td>GraphQL, buona copertura anime/manga/personaggi</td>
                         <td>richiede query GraphQL e normalizzazione HTML/testo</td>
-                    </tr>
-                    <tr>
-                        <td><a href="https://www.wikipedia.org/" target="_blank">Wikipedia REST API</a></td>
-                        <td>fonte enciclopedica di controllo e contesto</td>
-                        <td>utile per parafrasi sintetiche e disambiguazione</td>
-                        <td>non sempre descrive archetipi narrativi in modo esplicito</td>
                     </tr>
                     <tr>
                         <td>Personality Database</td>
@@ -82,7 +70,7 @@ Personaggio selezionato nella demo<br>
 &nbsp;&nbsp;↓ nome, opera e QID Wikidata<br>
 Wikidata SPARQL context<br>
 &nbsp;&nbsp;↓ verifica P9071 e recupero proprietà utili<br>
-Jikan / AniList / Wikipedia<br>
+AniList<br>
 &nbsp;&nbsp;↓ descrizioni testuali pubbliche<br>
 Personality Database<br>
 &nbsp;&nbsp;↓ link esterno, se presente in Wikidata<br>
@@ -102,7 +90,7 @@ Turtle RDF generation
                 La pipeline è pensata per essere estendibile. Per aggiungere un nuovo personaggio è necessario verificare prima il QID Wikidata corretto, inserirlo nella demo insieme al nome e all'opera, e poi usare il pulsante di recupero per ottenere contesto Wikidata e descrizioni dalle fonti pubbliche.
             </p>
             <p>
-                La stessa logica può essere usata anche per personaggi non inclusi nel corpus iniziale. A partire dal titolo di un anime, la pipeline può recuperare una lista di personaggi principali da Jikan/MyAnimeList o AniList, tentare l'allineamento con Wikidata, verificare la presenza di <code>P9071</code> e generare descrizioni normalizzate per gli esperimenti LLM.
+                La stessa logica può essere usata anche per personaggi non inclusi nel corpus iniziale. A partire dal titolo di un anime, la pipeline può recuperare una lista di personaggi principali da AniList, tentare l'allineamento con Wikidata, verificare la presenza di <code>P9071</code> e generare descrizioni normalizzate per gli esperimenti LLM.
             </p>
             <p>
                 Tuttavia, i personaggi scoperti automaticamente richiedono sempre una validazione manuale prima della generazione RDF. In particolare, il QID Wikidata deve essere controllato dal gruppo, perché nomi brevi o ambigui, come <em>L</em>, possono produrre corrispondenze errate.
@@ -116,7 +104,7 @@ Turtle RDF generation
                 La demo LLM utilizza come punto di partenza i personaggi individuati nella Query 2 della sezione SPARQL, cioè i personaggi del campione che non hanno un valore per <code>P9071</code> (<em>character type</em>). Il risultato della query è stato trasformato in una lista interna alla pagina: per ogni personaggio sono stati salvati nome, opera di appartenenza e QID Wikidata. Questa lista alimenta il menu a tendina <em>Personaggio senza character type</em>.
             </p>
             <p>
-                Quando si seleziona un personaggio, la demo compila automaticamente i campi <em>Anime/Manga</em> e <em>Wikidata QID</em>. Il pulsante <em>Recupera descrizioni</em> interroga Wikidata usando la logica della Query 4 della sezione SPARQL, cioè la query che recupera il contesto strutturato del personaggio: descrizione, opera, universo narrativo, gruppo, occupazione, genere, eventuale <code>P9071</code> e collegamento a Personality Database tramite <code>P10757</code>. Per le altre fonti pubbliche, come Jikan/MyAnimeList, AniList, Wikipedia e Personality Database, la demo mostra soprattutto i link: in questo modo possiamo aprire le fonti, scegliere manualmente quali parti del contenuto sono utili e inserirle o parafrasarle nel campo della descrizione selezionata. A partire da questi dati, la pagina genera tre prompt da testare manualmente con modelli come GPT, Claude o Gemini; nessuna API LLM viene chiamata direttamente dal browser.
+                Quando si seleziona un personaggio, la demo compila automaticamente i campi <em>Anime/Manga</em> e <em>Wikidata QID</em>. Il pulsante <em>Recupera descrizioni</em> interroga Wikidata usando la logica della Query 4 della sezione SPARQL, cioè la query che recupera il contesto strutturato del personaggio: descrizione, opera, universo narrativo, gruppo, occupazione, genere, eventuale <code>P9071</code> e collegamento a Personality Database tramite <code>P10757</code>. Per le altre fonti pubbliche, come AniList e Personality Database, la demo mostra soprattutto i link: in questo modo possiamo aprire le fonti, scegliere manualmente quali parti del contenuto sono utili e inserirle o parafrasarle nel campo della descrizione selezionata. A partire da questi dati, la pagina genera quattro prompt da testare manualmente con modelli come GPT, Claude o Gemini; nessuna API LLM viene chiamata direttamente dal browser.
             </p>
 
             <div class="api-demo">
@@ -159,16 +147,8 @@ Turtle RDF generation
                         <textarea id="wikidataContext2" rows="8" placeholder="Contesto strutturato da Wikidata"></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Jikan / MyAnimeList</h3>
-                        <textarea id="jikanDescription2" rows="8" placeholder="Descrizione da Jikan"></textarea>
-                    </div>
-                    <div class="source-card">
                         <h3>AniList</h3>
                         <textarea id="anilistDescription2" rows="8" placeholder="Descrizione da AniList"></textarea>
-                    </div>
-                    <div class="source-card">
-                        <h3>Wikipedia</h3>
-                        <textarea id="wikipediaDescription2" rows="8" placeholder="Descrizione da Wikipedia"></textarea>
                     </div>
                     <div class="source-card">
                         <h3>Personality Database</h3>
@@ -193,8 +173,12 @@ Turtle RDF generation
                         <textarea id="fewPrompt2" rows="10" readonly></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Chain-of-Thought</h3>
+                        <h3>Zero-shot CoT</h3>
                         <textarea id="cotPrompt2" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Few-shot CoT</h3>
+                        <textarea id="fewCotPrompt2" rows="10" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -207,7 +191,7 @@ Turtle RDF generation
                 La demo LLM parte da un contesto Wikidata strutturato. Per ogni personaggio, il modello riceve non soltanto il nome, ma anche proprietà selezionate per descrivere ruolo narrativo, appartenenza e caratterizzazione. Questo permette di rendere la scelta dell'archetipo più motivata e meno dipendente da una semplice somiglianza lessicale.
             </p>
             <p>
-                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da Jikan/MyAnimeList, AniList e Wikipedia, permette di selezionare o modificare il testo e genera i tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
+                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da AniList, permette di selezionare o modificare il testo e genera quattro prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
             </p>
 
             <div class="api-demo">
@@ -232,16 +216,8 @@ Turtle RDF generation
                         <textarea id="wikidataContext" rows="8" placeholder="Contesto strutturato da Wikidata"></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Jikan / MyAnimeList</h3>
-                        <textarea id="jikanDescription" rows="8" placeholder="Descrizione da Jikan"></textarea>
-                    </div>
-                    <div class="source-card">
                         <h3>AniList</h3>
                         <textarea id="anilistDescription" rows="8" placeholder="Descrizione da AniList"></textarea>
-                    </div>
-                    <div class="source-card">
-                        <h3>Wikipedia</h3>
-                        <textarea id="wikipediaDescription" rows="8" placeholder="Descrizione da Wikipedia"></textarea>
                     </div>
                 </div>
 
@@ -262,8 +238,12 @@ Turtle RDF generation
                         <textarea id="fewPrompt" rows="10" readonly></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Chain-of-Thought</h3>
+                        <h3>Zero-shot CoT</h3>
                         <textarea id="cotPrompt" rows="10" readonly></textarea>
+                    </div>
+                    <div class="source-card">
+                        <h3>Few-shot CoT</h3>
+                        <textarea id="fewCotPrompt" rows="10" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -272,29 +252,27 @@ Turtle RDF generation
         <div class="prompt-split-grid">
             <div class="prompt-pane">
                 <span class="pane-title system-bg">Zero-shot Prompt</span>
-                <div class="prompt-text">You are a knowledge engineer and narratology expert.
+                <div class="prompt-text">Sei un esperto di knowledge engineering e narratologia.
 
-Given the following character description, identify:
-1. the most appropriate narrative archetype;
-2. the narrative role;
-3. whether the archetype can be mapped to Wikidata property P9071.
+Personaggio: Monkey D. Luffy
+Opera: One Piece
 
-Return valid JSON only.
+Descrizione basata sulle fonti:
+Luffy è il capitano ottimista dei Pirati di Cappello di Paglia. È impulsivo, idealista, profondamente leale verso i suoi amici e guidato dal sogno di diventare Re dei Pirati.
 
-Character: Monkey D. Luffy
-Description: Luffy is the optimistic captain of the Straw Hat Pirates. He is impulsive, idealistic, deeply loyal to his friends and constantly driven by the dream of becoming Pirate King.</div>
+Compito:
+Classifica il personaggio individuando l'archetipo narrativo più adatto per la proprietà Wikidata P9071.
+
+Regole:
+- Usa la descrizione basata sulle fonti per inferire l'archetipo narrativo.
+- Non inventare QID Wikidata.
+
+Restituisci solo il nome dell'archetipo scelto.</div>
             </div>
 
             <div class="prompt-pane">
                 <span class="pane-title user-bg">Output atteso</span>
-                <div class="prompt-text">
-{
-  "character_name": "Monkey D. Luffy",
-  "narrative_archetype": "shonen protagonist",
-  "narrative_role": "main protagonist",
-  "p9071_mapping": "animanga:ShonenProtagonist",
-  "confidence_score": 0.92
-}</div>
+                <div class="prompt-text">shonen protagonist</div>
             </div>
         </div>
 
@@ -302,32 +280,67 @@ Description: Luffy is the optimistic captain of the Straw Hat Pirates. He is imp
             <h2>Few-shot Prompt</h2>
             <p>Il Few-shot prompting è stato usato per ridurre le classificazioni troppo generiche. Abbiamo fornito esempi di personaggi e archetipi prima di chiedere la classificazione del nuovo caso.</p>
             <div class="code-block">
-Example 1:<br>
-Character: Naruto Uzumaki<br>
-Description: orphaned boy, socially excluded, wants recognition, grows through perseverance.<br>
-Answer: shonen protagonist / underdog hero<br><br>
-Example 2:<br>
-Character: Light Yagami<br>
-Description: brilliant student who becomes morally corrupted by supernatural power.<br>
-Answer: villain protagonist / antihero<br><br>
-Now classify:<br>
-Character: Sasuke Uchiha<br>
-Description: survivor of clan massacre, motivated by revenge, rival of the protagonist, oscillates between ally and antagonist.
+Classifica personaggi anime e manga in archetipi narrativi per la proprietà Wikidata P9071.<br><br>
+Segui lo stesso formato degli esempi.<br><br>
+Esempio 1:<br>
+Personaggio: Naruto Uzumaki<br>
+Descrizione: orfano escluso socialmente, cerca riconoscimento, protegge la comunità e cresce attraverso perseveranza.<br>
+Archetipo: The Chosen One / underdog hero<br><br>
+Esempio 2:<br>
+Personaggio: Light Yagami<br>
+Descrizione: studente brillante corrotto da un potere soprannaturale e posto come minaccia morale centrale.<br>
+Archetipo: Big Bad<br><br>
+Ora classifica:<br>
+Personaggio: Sasuke Uchiha<br>
+Descrizione: sopravvissuto al massacro del clan, motivato dalla vendetta, rivale del protagonista e oscillante tra alleato e antagonista.<br><br>
+Restituisci solo il nome dell'archetipo scelto.
             </div>
         </section>
 
         <section class="report-section">
-            <h2>Chain-of-Thought Prompt</h2>
-            <p>La tecnica Chain-of-Thought è stata usata per i personaggi più ambigui, chiedendo al modello di distinguere tra personalità, ruolo narrativo e archetipo.</p>
+            <h2>Zero-shot Chain-of-Thought Prompt</h2>
+            <p>La tecnica Zero-shot Chain-of-Thought è stata usata per i personaggi più ambigui: non fornisce esempi, ma guida il modello con passaggi di ragionamento prima della scelta dell'archetipo.</p>
             <div class="code-block">
-Analyze the character description step by step, but return only the final structured answer.<br><br>
-Steps to consider:<br>
-1. Identify the character's function in the plot.<br>
-2. Identify recurring psychological traits.<br>
-3. Separate narrative role from personality trope.<br>
-4. Choose the most appropriate character type for Wikidata P9071.<br><br>
-Character: Itachi Uchiha<br>
-Description: Itachi is first presented as a villain, but later revealed as a tragic figure who sacrificed his reputation and family bonds to prevent a larger conflict.
+Analizza il personaggio passo per passo e mostra il ragionamento prima della risposta finale.<br><br>
+Passaggi da considerare:<br>
+1. Identifica la funzione del personaggio nella trama.<br>
+2. Identifica motivazioni e comportamenti ricorrenti.<br>
+3. Distingui ruolo narrativo, tratto psicologico e trope anime/manga.<br>
+4. Scegli l'archetipo narrativo più adatto.<br>
+5. Controlla di non inventare QID Wikidata.<br><br>
+Personaggio: Itachi Uchiha<br>
+Descrizione: Itachi viene inizialmente presentato come villain, ma in seguito emerge come figura tragica che sacrifica reputazione e legami familiari per evitare un conflitto più grande.<br><br>
+Restituisci l'output in questo formato:<br>
+Ragionamento:<br>
+1. ...<br>
+2. ...<br>
+3. ...<br><br>
+Archetipo: [nome dell'archetipo scelto]
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Few-shot Chain-of-Thought Prompt</h2>
+            <p>Il Few-shot Chain-of-Thought combina esempi e ragionamento guidato. È utile quando il personaggio è ambiguo e vogliamo far seguire al modello una struttura più stabile.</p>
+            <div class="code-block">
+Classifica il personaggio seguendo il modello degli esempi. Mostra il ragionamento e poi l'archetipo finale.<br><br>
+Esempio 1:<br>
+Personaggio: Itachi Uchiha<br>
+Ragionamento sintetico: è presentato come antagonista, ma le evidenze successive mostrano sacrificio, protezione e ambiguità morale.<br>
+Archetipo: Byronic hero<br><br>
+Esempio 2:<br>
+Personaggio: L<br>
+Ragionamento sintetico: agisce come oppositore intellettuale del protagonista, non come villain; la sua funzione è investigativa e di contrasto narrativo.<br>
+Archetipo: detective foil<br><br>
+Ora classifica:<br>
+Personaggio: Misa Amane<br>
+Descrizione: idol devota a Light, guidata da amore ossessivo, lealtà estrema e disponibilità a sacrificarsi per lui.<br><br>
+Restituisci l'output in questo formato:<br>
+Ragionamento:<br>
+1. ...<br>
+2. ...<br>
+3. ...<br><br>
+Archetipo: [nome dell'archetipo scelto]
             </div>
         </section>
 
@@ -410,26 +423,10 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
         const stripSourceLinks = (value) => {
             return (value || "")
                 .split("\n")
-                .filter(line => !/^(Jikan API URL|MyAnimeList URL|AniList URL|Wikipedia URL|Profile URL|Personality Database profile ID)/.test(line.trim()))
+                .filter(line => !/^(AniList URL|Profile URL|Personality Database profile ID)/.test(line.trim()))
                 .join("\n")
                 .trim();
         };
-
-        // Jikan/MyAnimeList: cerca il personaggio e restituisce i link alla scheda pubblica/API.
-        async function fetchJikan(characterName) {
-            const searchUrl = `https://api.jikan.moe/v4/characters?q=${encodeURIComponent(characterName)}&limit=1`;
-            const searchResponse = await fetch(searchUrl);
-            const searchJson = await searchResponse.json();
-            const first = searchJson.data && searchJson.data[0];
-            if (!first) return "";
-
-            const detailUrl = `https://api.jikan.moe/v4/characters/${first.mal_id}/full`;
-            const myAnimeListUrl = first.url || `https://myanimelist.net/character/${first.mal_id}`;
-            return [
-                `Jikan API URL: ${detailUrl}`,
-                `MyAnimeList URL: ${myAnimeListUrl}`
-            ].join("\n");
-        }
 
         // AniList: usa GraphQL per trovare il personaggio e produrre il link alla scheda.
         async function fetchAniList(characterName) {
@@ -454,18 +451,6 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             ].join("\n");
         }
 
-        // Wikipedia: recupera la pagina riassuntiva quando esiste una corrispondenza diretta.
-        async function fetchWikipedia(characterName) {
-            const title = encodeURIComponent(characterName.replace(/\s+/g, "_"));
-            const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`;
-            const response = await fetch(url);
-            if (!response.ok) return "";
-            const json = await response.json();
-            return [
-                `Wikipedia URL: ${json.content_urls && json.content_urls.desktop ? json.content_urls.desktop.page : `https://en.wikipedia.org/wiki/${title}`}`
-            ].join("\n");
-        }
-
         // Wikidata: costruisce una query SPARQL dinamica a partire dal QID scelto nella demo.
         async function fetchWikidataContext(qid) {
             if (!qid) return "";
@@ -477,7 +462,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 PREFIX wikibase: <http://wikiba.se/ontology#>
                 PREFIX bd: <http://www.bigdata.com/rdf#>
 
-                SELECT ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?memberOfLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId
+                SELECT ?character ?characterLabel ?description ?instanceOfLabel ?workLabel ?universeLabel ?occupationLabel ?creatorLabel ?genderLabel ?characterTypeLabel ?personalityDatabaseId
                 WHERE {
                     BIND(wd:${entity} AS ?character)
                     OPTIONAL {
@@ -487,7 +472,6 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                     OPTIONAL { ?character wdt:P31 ?instanceOf . }
                     OPTIONAL { ?character wdt:P1441 ?work . }
                     OPTIONAL { ?character wdt:P1080 ?universe . }
-                    OPTIONAL { ?character wdt:P463 ?memberOf . }
                     OPTIONAL { ?character wdt:P106 ?occupation . }
                     OPTIONAL { ?character wdt:P170 ?creator . }
                     OPTIONAL { ?character wdt:P21 ?gender . }
@@ -506,7 +490,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             const rows = json.results && json.results.bindings ? json.results.bindings : [];
             if (!rows.length) return "";
 
-            // Aggrega valori multipli, per esempio piu gruppi o piu ruoli, in una singola riga leggibile.
+            // Aggrega valori multipli, per esempio piu ruoli o piu opere, in una singola riga leggibile.
             const first = rows[0];
             const values = (key) => [...new Set(rows.map(row => row[key] && row[key].value).filter(Boolean))];
             return [
@@ -516,7 +500,6 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 `Instance of: ${values("instanceOfLabel").join(", ") || "not available"}`,
                 `Present in work: ${values("workLabel").join(", ") || "not available"}`,
                 `Narrative universe: ${values("universeLabel").join(", ") || "not available"}`,
-                `Member of: ${values("memberOfLabel").join(", ") || "not available"}`,
                 `Occupation: ${values("occupationLabel").join(", ") || "not available"}`,
                 `Creator: ${values("creatorLabel").join(", ") || "not available"}`,
                 `Sex or gender: ${values("genderLabel").join(", ") || "not available"}`,
@@ -568,7 +551,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             .map(item => `- ${item.label} (${item.qid}): ${item.description}`)
             .join("\n");
 
-        // Costruisce le tre varianti di prompt usando contesto Wikidata, descrizione e vocabolario.
+        // Costruisce le quattro varianti di prompt usando contesto Wikidata, descrizione e vocabolario.
         function buildPromptsForDemo(ids) {
             const character = document.getElementById(ids.characterName).value.trim();
             const anime = document.getElementById(ids.animeName).value.trim();
@@ -577,19 +560,22 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             const personalityDescription = ids.personalityDescription
                 ? document.getElementById(ids.personalityDescription).value.trim()
                 : "";
-            const contextBlock = wikidataContext ? `\nWikidata context for entity verification:\n${wikidataContext}\n` : "";
-            const personalityBlock = personalityDescription ? `\nPersonality Database profile link:\n${personalityDescription}\n` : "";
-            const stockCharacterBlock = `\nControlled stock character candidates:\n${stockCharacterVocabulary}\n`;
+            const contextBlock = wikidataContext ? `\nContesto Wikidata per la verifica dell'entità:\n${wikidataContext}\n` : "";
+            const personalityBlock = personalityDescription ? `\nLink al profilo Personality Database:\n${personalityDescription}\n` : "";
+            const stockCharacterBlock = `\nCandidati controllati per character type:\n${stockCharacterVocabulary}\n`;
 
-            const zero = `You are a knowledge engineer and narratology expert.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nTask: identify the most appropriate character type for Wikidata property P9071. Prefer one of the controlled stock character candidates when it fits the evidence. Use a local animanga: archetype only if none of the candidates is suitable. Use Wikidata context only for entity verification and existing structured data. Use the source-based description to infer the narrative archetype. Treat Personality Database only as an external profile link, not as an official source. Do not invent Wikidata QIDs.\nReturn valid JSON with: character_name, narrative_role, character_type, wikidata_or_local_mapping, confidence, evidence.`;
+            const zero = `Sei un esperto di knowledge engineering e narratologia.\n\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione basata sulle fonti: ${description}\n\nCompito:\nClassifica il personaggio individuando l'archetipo narrativo più adatto per la proprietà Wikidata P9071.\n\nRegole:\n- Usa il contesto Wikidata solo per verificare l'entità e i dati strutturati già disponibili.\n- Usa la descrizione basata sulle fonti per inferire l'archetipo narrativo.\n- Tratta Personality Database solo come link esterno, non come fonte ufficiale.\n- Non inventare QID Wikidata.\n\nRestituisci solo il nome dell'archetipo scelto.`;
 
-            const few = `Classify anime and manga characters into narrative archetypes for Wikidata P9071.\n\nExample 1:\nCharacter: Naruto Uzumaki\nDescription: excluded orphan who seeks recognition and grows through perseverance.\nAnswer: shonen protagonist / underdog hero.\n\nExample 2:\nCharacter: Light Yagami\nDescription: brilliant student corrupted by supernatural power and positioned as the central moral threat.\nAnswer: villain protagonist / antihero.\n\nNow classify:\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nPrefer one of the controlled stock character candidates when it fits the evidence. Use Wikidata context only for entity verification. Treat Personality Database only as an external profile link. Return valid JSON only.`;
+            const few = `Classifica personaggi anime e manga in archetipi narrativi per la proprietà Wikidata P9071.\n\nSegui lo stesso formato degli esempi.\n\nEsempio 1:\nPersonaggio: Naruto Uzumaki\nDescrizione: orfano escluso socialmente, cerca riconoscimento, protegge la comunità e cresce attraverso perseveranza.\nArchetipo: The Chosen One / underdog hero\n\nEsempio 2:\nPersonaggio: Light Yagami\nDescrizione: studente brillante corrotto da un potere soprannaturale e posto come minaccia morale centrale.\nArchetipo: Big Bad\n\nOra classifica:\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci solo il nome dell'archetipo scelto. Non inventare QID Wikidata.`;
 
-            const cot = `Analyze the character description step by step internally, but return only the final structured answer.\n\nSteps to consider:\n1. Identify the character's function in the plot.\n2. Identify motivations and recurring behaviors.\n3. Separate narrative role from psychological trait.\n4. Compare the character with the controlled stock character candidates.\n5. Use Personality Database only as an external profile link, if present.\n6. Choose a character type suitable for Wikidata P9071 or a local animanga: namespace.\n\nCharacter: ${character}\nWork: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nSource-based description: ${description}\n\nReturn valid JSON with evidence. Do not invent Wikidata QIDs.`;
+            const cot = `Analizza il personaggio passo per passo e mostra il ragionamento prima della risposta finale.\n\nPassaggi da considerare:\n1. Identifica la funzione del personaggio nella trama.\n2. Identifica motivazioni e comportamenti ricorrenti.\n3. Distingui ruolo narrativo, tratto psicologico e trope anime/manga.\n4. Usa Personality Database solo come link esterno, se presente.\n5. Scegli l'archetipo narrativo più adatto.\n6. Controlla di non inventare QID Wikidata.\n\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci l'output in questo formato:\nRagionamento:\n1. ...\n2. ...\n3. ...\n\nArchetipo: [nome dell'archetipo scelto]`;
+
+            const fewCot = `Classifica il personaggio seguendo il modello degli esempi. Mostra il ragionamento e poi l'archetipo finale.\n\nEsempio 1:\nPersonaggio: Itachi Uchiha\nRagionamento sintetico: è presentato come antagonista, ma le evidenze successive mostrano sacrificio, protezione e ambiguità morale.\nArchetipo: Byronic hero\n\nEsempio 2:\nPersonaggio: L\nRagionamento sintetico: agisce come oppositore intellettuale del protagonista, non come villain; la sua funzione è investigativa e di contrasto narrativo.\nArchetipo: detective foil\n\nOra classifica:\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci l'output in questo formato:\nRagionamento:\n1. ...\n2. ...\n3. ...\n\nArchetipo: [nome dell'archetipo scelto]\n\nNon inventare QID Wikidata.`;
 
             document.getElementById(ids.zeroPrompt).value = zero;
             document.getElementById(ids.fewPrompt).value = few;
             document.getElementById(ids.cotPrompt).value = cot;
+            document.getElementById(ids.fewCotPrompt).value = fewCot;
         }
 
         // Wrapper per la demo libera.
@@ -601,7 +587,8 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 selectedDescription: "selectedDescription",
                 zeroPrompt: "zeroPrompt",
                 fewPrompt: "fewPrompt",
-                cotPrompt: "cotPrompt"
+                cotPrompt: "cotPrompt",
+                fewCotPrompt: "fewCotPrompt"
             });
         }
 
@@ -615,7 +602,8 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 personalityDescription: "personalityDescription2",
                 zeroPrompt: "zeroPrompt2",
                 fewPrompt: "fewPrompt2",
-                cotPrompt: "cotPrompt2"
+                cotPrompt: "cotPrompt2",
+                fewCotPrompt: "fewCotPrompt2"
             });
         }
 
@@ -643,14 +631,13 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
             document.getElementById("wikidataQid2").value = data.qid;
             [
                 "wikidataContext2",
-                "jikanDescription2",
                 "anilistDescription2",
-                "wikipediaDescription2",
                 "personalityDescription2",
                 "selectedDescription2",
                 "zeroPrompt2",
                 "fewPrompt2",
-                "cotPrompt2"
+                "cotPrompt2",
+                "fewCotPrompt2"
             ].forEach(id => {
                 document.getElementById(id).value = "";
             });
@@ -672,21 +659,15 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 const wikidataResult = wikidataAttempt[0].status === "fulfilled" ? wikidataAttempt[0].value : "";
 
                 const character = document.getElementById(ids.characterName).value.trim();
-                const [wikidata, jikan, anilist, wikipedia] = await Promise.allSettled([
+                const [wikidata, anilist] = await Promise.allSettled([
                     Promise.resolve(wikidataResult),
-                    fetchJikan(character),
-                    fetchAniList(character),
-                    fetchWikipedia(character)
+                    fetchAniList(character)
                 ]);
                 const wikidataText = wikidata.status === "fulfilled" ? wikidata.value : "";
-                const jikanText = jikan.status === "fulfilled" ? jikan.value : "";
                 const anilistText = anilist.status === "fulfilled" ? anilist.value : "";
-                const wikipediaText = wikipedia.status === "fulfilled" ? wikipedia.value : "";
                 document.getElementById(ids.wikidataContext).value = wikidataText;
-                document.getElementById(ids.jikanDescription).value = jikanText;
                 document.getElementById(ids.anilistDescription).value = anilistText;
-                document.getElementById(ids.wikipediaDescription).value = wikipediaText;
-                document.getElementById(ids.selectedDescription).value = stripSourceLinks(jikanText || anilistText || wikipediaText);
+                document.getElementById(ids.selectedDescription).value = stripSourceLinks(anilistText);
                 if (ids.personalityDescription) {
                     const pdbMatch = wikidataText.match(/Personality Database ID \(P10757\):\s*(.+)/);
                     const pdbId = pdbMatch && pdbMatch[1] !== "not available" ? pdbMatch[1].trim() : "";
@@ -696,9 +677,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 }
                 const available = [
                     wikidataText ? "Wikidata" : "",
-                    jikanText ? "Jikan/MyAnimeList" : "",
-                    anilistText ? "AniList" : "",
-                    wikipediaText ? "Wikipedia" : ""
+                    anilistText ? "AniList" : ""
                 ].filter(Boolean);
                 status.textContent = available.length
                     ? `Descrizioni recuperate da: ${available.join(", ")}. Seleziona o modifica la parafrasi prima di generare i prompt.`
@@ -714,9 +693,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 characterName: "characterName",
                 wikidataQid: "wikidataQid",
                 wikidataContext: "wikidataContext",
-                jikanDescription: "jikanDescription",
                 anilistDescription: "anilistDescription",
-                wikipediaDescription: "wikipediaDescription",
                 selectedDescription: "selectedDescription"
             });
         });
@@ -727,9 +704,7 @@ Description: Itachi is first presented as a villain, but later revealed as a tra
                 characterName: "characterName2",
                 wikidataQid: "wikidataQid2",
                 wikidataContext: "wikidataContext2",
-                jikanDescription: "jikanDescription2",
                 anilistDescription: "anilistDescription2",
-                wikipediaDescription: "wikipediaDescription2",
                 personalityDescription: "personalityDescription2",
                 selectedDescription: "selectedDescription2"
             });
