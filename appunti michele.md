@@ -231,3 +231,24 @@ shorten()
 Queste funzioni non servivano piu dopo aver deciso che nella Frontend evoluzione demo i campi Personaggio, Anime/Manga e Wikidata QID restano manuali e che le fonti esterne mostrano solo link, non descrizioni testuali.
 
 E stato anche rimosso il valore hardcoded del profilo Personality Database di Zoro dal campo iniziale della demo. Ora il campo Personality Database parte vuoto e viene compilato solo dopo il recupero dei dati, se Wikidata restituisce un valore per `P10757`.
+
+
+15 giugno 
+
+Nella pagina SPARQL abbiamo:
+sistemato le query salvate nella cartella queries/;
+inserito le query nella pagina tramite file .sparql, evitando trascrizioni manuali inline;
+aggiunto una query preliminare con REGEX per cercare le opere per nome;
+aggiunto una query con REGEX sui personaggi principali: Monkey D. Luffy, Naruto Uzumaki e Light Yagami;
+fatto in modo che questa query recuperi solo P9071 / character type, con descrizione del valore;
+chiarito meglio l’uso di P1441, P1080, P31, P9071 e P10757;
+aggiunto o migliorato tabelle di risultati, incluse quelle sui personaggi senza P9071;
+commentato le query .sparql per spiegare cosa fa ogni passaggio.
+Nella pagina LLM Results abbiamo:
+chiarito che il menu “Personaggio senza character type” deriva dai risultati della Query 2;
+rinominato prova2Characters in charactersWithoutType;
+spiegato che il contesto strutturato usato dalla demo corrisponde alla Query 4;
+chiarito che da Jikan/MyAnimeList, AniList, Wikipedia e Personality Database usiamo soprattutto i link, per scegliere manualmente quali parti del contenuto usare;
+aggiornato il testo della pipeline LLM;
+commentato il codice della demo per rendere più leggibile il recupero dati e la costruzione dei prompt.
+Abbiamo anche confrontato le query con le linee guida del progetto e individuato che mancava REGEX; ora è coperto. L’unico suggerimento ancora aperto è mostrare anche la Query 5 nella pagina SPARQL, perché rappresenta il passaggio finale: dalle classificazioni validate alle triple R
