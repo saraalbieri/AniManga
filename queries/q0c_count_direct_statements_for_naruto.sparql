@@ -1,0 +1,29 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+ 
+SELECT distinct ?item ?descrizione (COUNT(?item) AS ?numeroDiitem) #?proprieta ?valore ?valoreLabel
+WHERE {
+ # 1. Troviamo il nodo di partenza
+ ?item rdfs:label "Naruto"@en .
+ 
+ # 1b. NUOVO: Estraiamo la descrizione dell'item (in italiano)
+ OPTIONAL {
+   ?item schema:description ?descrizione .
+   FILTER(LANG(?descrizione) = "en") # Cambia in "en" se la preferisci in inglese
+ }
+ 
+ # 2. Troviamo le relazioni e i valori
+ ?item ?uriProprieta ?valore .
+ ?proprieta wikibase:directClaim ?uriProprieta .
+ 
+ # 3. Label Service di Wikidata (sostituisce gli OPTIONAL)
+ # Imposta le lingue di preferenza: prima inglese, poi italiano come fallback
+ SERVICE wikibase:label {
+   bd:serviceParam wikibase:language "en".
+ }
+}
+GROUP BY ?item ?descrizione
+Order by desc(?numeroDiitem)

@@ -23,6 +23,31 @@
         <h1>Validazione tramite SPARQL Queries</h1>
         <p>Le query SPARQL sono state usate prima per esplorare il dominio anime/manga in Wikidata e solo successivamente per verificare la proprietà <code>wdt:P9071</code>. In questo modo il gap sugli archetipi narrativi non è stato assunto in partenza, ma individuato progressivamente confrontando le proprietà disponibili sui personaggi.</p>
 
+        <!-- Prime query esplorative: confronto tra anime, manga e franchise di Naruto. -->
+        <div class="query-box">
+            <h3>Query 1: contare le dichiarazioni dirette delle entità Naruto</h3>
+            <p>Questa query cerca le entità che hanno esattamente la label inglese <em>Naruto</em>, recupera la loro descrizione inglese e conta quante righe vengono trovate per ciascun item attraverso le proprietà dirette di Wikidata.</p>
+            <iframe class="query-embed" src="./queries/q0c_count_direct_statements_for_naruto.sparql" title="Query salvata q0c_count_direct_statements_for_naruto.sparql"></iframe>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 2: confrontare le proprietà delle entità Naruto</h3>
+            <p>La seconda query usa i QID <code>wd:Q25929253</code>, <code>wd:Q26971382</code> e <code>wd:Q642</code> per recuperare le proprietà dirette delle tre entità. Raggruppa i risultati per proprietà e label inglese, mostrando quante volte ciascuna proprietà compare complessivamente.</p>
+            <iframe class="query-embed" src="./queries/q0d_compare_direct_properties_across_naruto_entities.sparql" title="Query salvata q0d_compare_direct_properties_across_naruto_entities.sparql"></iframe>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 3: elencare tutte le dichiarazioni dirette</h3>
+            <p>Questa query espande il confronto precedente e restituisce tutte le dichiarazioni dirette delle tre entità Naruto. Per ogni riga mostra l'entità di partenza, la proprietà e il valore, aggiungendo le rispettive label inglesi quando disponibili. È una vista diagnostica utile per osservare nel dettaglio come Wikidata descrive anime, manga e franchise e per individuare proprietà rilevanti per le analisi successive.</p>
+            <iframe class="query-embed" src="./queries/q0e_list_direct_statements_for_naruto_entities.sparql" title="Query salvata q0e_list_direct_statements_for_naruto_entities.sparql"></iframe>
+        </div>
+
+        <div class="query-box">
+            <h3>Query 4: trovare i personaggi Naruto univoci</h3>
+            <p>L'ultima query esplorativa seleziona soltanto la proprietà <code>P674</code> (<em>characters</em>) nelle tre entità indicate. <code>DISTINCT</code> elimina le righe duplicate e il risultato mostra proprietà, personaggio e rispettive label inglesi, ordinando alfabeticamente i valori.</p>
+            <iframe class="query-embed" src="./queries/q0f_list_unique_characters_across_naruto_entities.sparql" title="Query salvata q0f_list_unique_characters_across_naruto_entities.sparql"></iframe>
+        </div>
+
         <!-- Fase preliminare: ricerca testuale con REGEX prima della scelta dei QID definitivi. -->
         <div class="query-box">
             <h3>Fase esplorativa 0: cercare opere candidate con REGEX</h3>
