@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+
+
     // ==========================================
     // PARTE 1: GRAFO CORE (AniManga O-KG)
     // ==========================================
@@ -345,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==========================================
-    // PARTE 2: GRAFO DINAMICO DA JSON (Lightbox 3)
+    // PARTE 5: GRAFO DINAMICO DA JSON (Lightbox 3)
     // ==========================================
     
     function loadGraphFromJSON() {
@@ -441,5 +443,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // ==========================================
+    // PARTE 6: CARICAMENTO DINAMICO QUERY SPARQL
+    // ==========================================
+    
+    // Trova TUTTI i tag <pre> della pagina che possiedono l'attributo data-src
+    const queryBlocks = document.querySelectorAll('pre[data-src]');
+    
+    queryBlocks.forEach(block => {
+        // Per ogni blocco, legge quale file deve scaricare
+        const fileUrl = block.getAttribute('data-src');
+        const codeElement = block.querySelector('code');
+        
+        // Esegue la fetch (il download del testo) per quel file specifico
+        fetch(fileUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('File non trovato: ' + response.status);
+                }
+                return response.text();
+            })
+            .then(text => {
+                // Inserisce il testo della query nel blocco code corrispondente
+                codeElement.textContent = text;
+            })
+            .catch(error => {
+                console.error("Impossibile caricare la query da " + fileUrl + ":", error);
+                codeElement.textContent = "Errore: impossibile caricare il file " + fileUrl;
+                codeElement.style.color = "#f43f5e"; // Usa il colore rosso/fucsia del tuo tema per l'errore
+            });
+    });
 
 });
