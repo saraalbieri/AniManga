@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-
     // ==========================================
     // PARTE 1: GRAFO CORE (AniManga O-KG)
     // ==========================================
@@ -169,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var network_core = new vis.Network(container_core, data_core, options_core);
     }
 
-
     // ==========================================
     // PARTE 2: GRAFO ONTOLOGICO (Schema)
     // ==========================================
@@ -244,6 +242,204 @@ document.addEventListener('DOMContentLoaded', function() {
     var container_onto = document.getElementById('animanga-onto-graph');
     if (container_onto) {
         var network_onto = new vis.Network(container_onto, data_onto, options_onto);
+    }
+
+
+    // ==========================================
+    // PARTE 3: TABELLE DEI RISULTATI (DINAMICO)
+    // ==========================================
+    // Trova tutti i bottoni che hanno un ID che inizia con "toggleBtn-"
+    const toggleButtons = document.querySelectorAll('[id^="toggleBtn-"]');
+    
+    toggleButtons.forEach(bottone => {
+        // Estrapola il numero dall'ID (es. da "toggleBtn-2" prende "2")
+        const idNumber = bottone.id.split('-')[1];
+        
+        // Cerca la tabella corrispondente a quel numero
+        const tabella = document.getElementById(`results-table-${idNumber}`);
+        
+        // Se la tabella non esiste, salta al prossimo bottone
+        if (!tabella) return; 
+
+        // Legge il limite impostato dallo sviluppatore nell'HTML (data-limit)
+        // Se per qualche motivo ti dimentichi di metterlo nell'HTML, usa 5 come fallback di sicurezza
+        const limite = parseInt(tabella.getAttribute('data-limit'), 10) || 5;
+        
+        const righe = tabella.querySelectorAll('tbody tr');
+        let tutteVisibili = false;
+
+        function aggiornaVista() {
+            righe.forEach((riga, indice) => {
+                if (tutteVisibili) {
+                    riga.style.display = ''; // Mostra tutto
+                } else {
+                    // Nasconde le righe che superano il limite impostato nel data-limit
+                    riga.style.display = indice >= limite ? 'none' : ''; 
+                }
+            });
+
+            if (tutteVisibili) {
+                bottone.textContent = 'Mostra meno';
+            } else {
+                bottone.textContent = `Mostra tutte (${righe.length})`;
+            }
+        }
+
+        // 1. Inizializza la tabella al caricamento
+        aggiornaVista();
+
+        // 2. Gestisce il click sul bottone
+        bottone.addEventListener('click', function() {
+            tutteVisibili = !tutteVisibili;
+            aggiornaVista();
+        });
+    });
+
+    
+    // ==========================================
+    // PARTE 4: LIGHTBOX IMMAGINE GRAFICO (DINAMICO)
+    // ==========================================
+    
+    // Trova tutti i bottoni che hanno un ID che inizia con "chartBtn-"
+    const chartButtons = document.querySelectorAll('[id^="chartBtn-"]');
+    
+    chartButtons.forEach(chartBtn => {
+        // Estrapola il numero dall'ID
+        const idNumber = chartBtn.id.split('-')[1];
+        
+        // Cerca la lightbox corrispondente
+        const lightbox = document.getElementById(`lightbox-${idNumber}`);
+        
+        if (chartBtn && lightbox) {
+            const closeBtn = lightbox.querySelector('.lightbox-close');
+
+            // 1. Apri la lightbox
+            chartBtn.addEventListener('click', function() {
+                lightbox.style.display = 'flex'; 
+            });
+
+            // 2. Chiudi cliccando sulla "X"
+            closeBtn.addEventListener('click', function() {
+                lightbox.style.display = 'none';
+            });
+
+            // 3. Chiudi cliccando fuori dall'immagine
+            lightbox.addEventListener('click', function(event) {
+                if (event.target === lightbox) {
+                    lightbox.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // 4. Tasto Esc globale (chiude tutte le lightbox aperte)
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            const lightboxes = document.querySelectorAll('.lightbox-overlay');
+            lightboxes.forEach(lb => {
+                if (lb.style.display === 'flex') {
+                    lb.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // ==========================================
+    // PARTE 2: GRAFO DINAMICO DA JSON (Lightbox 3)
+    // ==========================================
+    
+    function loadGraphFromJSON() {
+        // Assicurati che il percorso del json sia quello corretto rispetto alla tua cartella
+        fetch('../queries/query_grafo_3.json') 
+            .then(response => response.json())
+            .then(data => {
+                let nodesArray = [];
+                let edgesArray = [];
+                let addedNodes = new Set(); // Per evitare di duplicare i nodi
+
+                data.results.bindings.forEach(row => {
+                    // --- Nodo Sorgente (Es. Entità Naruto: Anime o Manga) ---
+                    let sourceId = row.item.value;
+                    let sourceLabel = row.itemlabel ? row.itemlabel.value : sourceId.split('/').pop();
+                    
+                    if (!addedNodes.has(sourceId)) {
+                        nodesArray.push({ 
+                            id: sourceId, 
+                            label: sourceLabel, 
+                            group: 'source',
+                            color: { background: '#f43f5e', border: '#e11d48' },
+                            font: { color: 'white' },
+                            shape: 'box'
+                        });
+                        addedNodes.add(sourceId);
+                    }
+
+                    // --- Nodo Destinazione (Es. Personaggio, Genere, Autore) ---
+                    let targetId = row.valore.value;
+                    // Se non ha una label (es. un literal puro), usa l'estratto finale del valore
+                    let targetLabel = row.valorelabel ? row.valorelabel.value : (targetId.includes('/') ? decodeURIComponent(targetId.split('/').pop()) : targetId);
+
+                    if (!addedNodes.has(targetId)) {
+                        nodesArray.push({ 
+                            id: targetId, 
+                            label: targetLabel, 
+                            group: 'target',
+                            color: { background: '#1e1b4b', border: '#0f172a' },
+                            font: { color: 'white' }
+                        });
+                        addedNodes.add(targetId);
+                    }
+
+                    // --- Arco (La Proprietà Wikidata) ---
+                    let edgeLabel = row.proprietalabel ? row.proprietalabel.value : row.proprieta.value.split('/').pop();
+                    
+                    edgesArray.push({
+                        from: sourceId,
+                        to: targetId,
+                        label: edgeLabel,
+                        arrows: 'to',
+                        color: { color: '#cbd5e1', highlight: '#f43f5e' },
+                        font: { align: 'middle', size: 12, color: '#334155' }
+                    });
+                });
+
+                // Inizializza il grafo Vis.js
+                var container = document.getElementById('mynetwork-3');
+                var dataVis = {
+                    nodes: new vis.DataSet(nodesArray),
+                    edges: new vis.DataSet(edgesArray)
+                };
+                
+                var options = {
+                    physics: {
+                        stabilization: true,
+                        barnesHut: {
+                            gravitationalConstant: -3000,
+                            springConstant: 0.02,
+                            springLength: 200 // Rende il grafo ben distanziato
+                        }
+                    },
+                    interaction: {
+                        hover: true,
+                        tooltipDelay: 200
+                    }
+                };
+                
+                new vis.Network(container, dataVis, options);
+            })
+            .catch(error => console.error("Errore nel caricamento del JSON del grafo:", error));
+    }
+
+    // Facciamo in modo che il grafo venga generato al primo clic sul bottone per risparmiare risorse
+    const btnChart3 = document.getElementById('chartBtn-3');
+    if (btnChart3) {
+        let isGraphLoaded = false;
+        btnChart3.addEventListener('click', function() {
+            if (!isGraphLoaded) {
+                loadGraphFromJSON();
+                isGraphLoaded = true;
+            }
+        });
     }
 
 });

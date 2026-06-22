@@ -387,31 +387,6 @@ p {
     font-weight: bold;
 }
 
-.results-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.results-table th {
-    background-color: #1e1b4b;
-    color: #ffffff;
-    text-align: left;
-    padding: 12px;
-    font-size: 0.9em;
-}
-
-.results-table td {
-    padding: 12px;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 0.95em;
-    background-color: #ffffff;
-}
-
-.results-table tr:nth-child(even) td {
-    background-color: #f8fafc;
-}
-
 /* ==========================================================================
    7. LAYOUT COMPONENTE: LLM BENCHMARK
    ========================================================================== */
@@ -485,7 +460,6 @@ p {
     mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
-
 #animanga-core-graph {
     width: 100%;
     height: 500px;
@@ -500,4 +474,127 @@ p {
     border: 2px dashed #9c27b0; /* Bordo tratteggiato viola per distinguere che è uno schema */
     background-color: #fafafa;
     border-radius: 8px;
+}
+
+
+/* ==========================================================================
+   10. BOTTONI TABELLE E AZIONI
+   ========================================================================== */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.results-table th {
+    background-color: #1e1b4b;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
+    font-size: 0.9em;
+}
+
+.results-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95em;
+    background-color: #ffffff;
+}
+
+.results-table tr:nth-child(even) td {
+    background-color: #f8fafc;
+}
+
+.table-controls {
+    margin-top: 15px;
+    display: inline-flex;
+    gap: 12px;
+    position: relative; /* Utile per posizionare l'immagine del grafico in absolute */
+}
+
+.btn-action {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-family: inherit; /* Eredita il font di base (Segoe UI ecc.) */
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Animazione fluida al passaggio del mouse */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Stile Primario (Fucsia - in linea con la tua classe .primary-button) */
+.btn-action.primary {
+    background-color: #1e1b4b;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(244, 63, 94, 0.2);
+}
+
+.btn-action.primary:hover {
+    background-color: #1e1b4b;
+    box-shadow: 0 4px 6px rgba(244, 63, 94, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Stile Secondario (Outline Grigio/Blu - ottimo per azioni extra come "Chart") */
+.btn-action.secondary {
+    background-color: #1e1b4b;
+    color: #ffffff;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-action.secondary:hover {
+    background-color: #1e1b4b;
+    border-color: #1e1b4b;
+    color: #f43f5e; /* Il testo diventa fucsia al passaggio */
+}
+
+/* ==========================================================================
+   11. LIGHTBOX
+   ========================================================================== */
+.lightbox-overlay {
+    display: none; /* Nascosto di default */
+    position: fixed;
+    z-index: 9999; /* Si assicura che stia sopra a tutto, anche alla navbar */
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.85); /* Blu scuro del tuo tema con opacità */
+    backdrop-filter: blur(4px); /* Sfoca leggermente la pagina sotto */
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    border: 4px solid #ffffff;
+    animation: zoomIn 0.3s ease; /* Piccola animazione di entrata */
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 25px;
+    right: 40px;
+    color: #ffffff;
+    font-size: 45px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.lightbox-close:hover {
+    color: #f43f5e; /* Fucsia del tuo tema al passaggio del mouse */
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }

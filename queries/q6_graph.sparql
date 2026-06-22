@@ -1,0 +1,27 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT DISTINCT ?character ?characterLabel ?work ?workLabel
+WHERE {
+  # 1. Fissiamo le opere
+  VALUES ?work { wd:Q710324 wd:Q25929253 wd:Q718624 }
+  
+  # 2. Limitiamo ai 15 personaggi del nostro corpus di analisi
+  VALUES ?character { wd:Q477948 wd:Q858432 wd:Q877964 wd:Q1061765 wd:Q1190653 wd:Q931 wd:Q1740 wd:Q203240 wd:Q1767 wd:Q1043344 wd:Q843545 wd:Q52863 wd:Q687038 wd:Q2328583 wd:Q138008 }
+
+  # 3. La UNION per gestire la differenza di proprietà in Wikidata
+  { ?character wdt:P1441 ?work . }
+  UNION
+  { ?character wdt:P1080 ?work . }
+  
+  ?work rdfs:label ?workLabel .
+  ?character rdfs:label ?characterLabel .
+  
+  # 4. Verifica ontologica
+  ?character wdt:P31 wd:Q80447738 . # anime character
+  
+  FILTER(LANG(?workLabel) = "en")
+  FILTER(LANG(?characterLabel) = "en")
+}
+ORDER BY ?workLabel ?characterLabel

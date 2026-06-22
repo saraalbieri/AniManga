@@ -4,7 +4,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX schema: <http://schema.org/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
  
-SELECT distinct ?proprieta ?proprietalabel ?valore ?valorelabel
+SELECT DISTINCT ?proprieta ?proprietalabel ?valore ?valorelabel
 WHERE {
  
  # 1. Definiamo i nodi di partenza specifici tramite i loro ID

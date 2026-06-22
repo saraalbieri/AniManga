@@ -4,7 +4,7 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX schema: <http://schema.org/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
  
-SELECT distinct ?item ?descrizione (COUNT(?item) AS ?numeroDiitem) #?proprieta ?valore ?valoreLabel
+SELECT DISTINCT ?item ?descrizione (COUNT(?item) AS ?numeroDiitem) #?proprieta ?valore ?valoreLabel
 WHERE {
  # 1. Troviamo il nodo di partenza
  ?item rdfs:label "Naruto"@en .
