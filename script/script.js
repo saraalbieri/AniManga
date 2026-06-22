@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function loadGraphFromJSON() {
         // Assicurati che il percorso del json sia quello corretto rispetto alla tua cartella
-        fetch('../queries/query_grafo_3.json') 
+        fetch('./queries/query_grafo_3.json') 
             .then(response => response.json())
             .then(data => {
                 let nodesArray = [];
