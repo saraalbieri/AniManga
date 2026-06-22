@@ -1,0 +1,31 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+ 
+SELECT DISTINCT ?item ?titolo ?descrizione
+WHERE {
+  # 1. Specifichiamo i titoli multipli che vogliamo cercare
+  VALUES ?titolo { "Naruto"@en "One Piece"@en "Death Note"@en }
+ 
+  # 2. Troviamo il nodo di partenza che corrisponde ai titoli
+  ?item rdfs:label ?titolo .
+ 
+  # 3. Estraiamo la descrizione dell'item 
+  OPTIONAL {
+    ?item schema:description ?descrizione .
+    FILTER(LANG(?descrizione) = "en")
+  }
+ 
+  # 4. Filtriamo per la parola "Manga"
+  # La "i" finale rende la ricerca case-insensitive (trova "Manga", "manga", "MANGA", ecc.)
+  FILTER(REGEX(?descrizione, "manga | anime | film", "i")) 
+ 
+  # 5. Label Service di Wikidata
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en".
+  }
+}
+GROUP BY ?item ?titolo ?descrizione 
+ORDER BY DESC(?descrizione)
