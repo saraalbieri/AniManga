@@ -505,6 +505,133 @@ document.addEventListener('DOMContentLoaded', function() {
         caricaDatiDaJson();
     }
 
+    // ==========================================
+    // PARTE 9: GRAFO DINAMICO DA JSON (Query 7 - Lightbox 7)
+    // ==========================================
+    
+    function loadGraph7FromJSON() {
+        // Percorso del tuo file JSON
+        fetch('./queries/query_7.json') 
+            .then(response => response.json())
+            .then(data => {
+                let nodesArray = [];
+                let edgesArray = [];
+                let addedNodes = new Set(); 
+
+                data.results.bindings.forEach(row => {
+                    
+                    // --- 1. NODO OPERA (Nodo Centrale) ---
+                    // Estraiamo in modo sicuro le chiavi
+                    let operaId = row.opera.value;
+                    let operaLabel = row.operaLabel ? row.operaLabel.value : operaId.split('/').pop();
+                    let totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "";
+                    
+                    // Uniamo Titolo e Totale Personaggi in un'unica stringa per la label
+                    let finalOperaLabel = totalePersonaggi ? `${operaLabel}\n(${totalePersonaggi})` : operaLabel;
+
+                    if (!addedNodes.has(operaId)) {
+                        nodesArray.push({ 
+                            id: operaId, 
+                            label: finalOperaLabel, 
+                            group: 'opera',
+                            color: { background: '#10b981', border: '#047857' }, // Verde per le opere
+                            font: { color: 'white', size: 16, bold: true },
+                            shape: 'box'
+                        });
+                        addedNodes.add(operaId);
+                    }
+
+                    // --- 2. NODO PERSONAGGIO (Nodo Satellite) ---
+                    let charId = row.personaggio.value;
+                    let charLabel = row.personaggioLabel ? row.personaggioLabel.value : charId.split('/').pop();
+                    let ruolo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.toLowerCase() : "";
+
+                    if (!addedNodes.has(charId)) {
+                        // Assegnazione del colore in base al ruolo estratto
+                        let bgColor = '#3b82f6'; // Blu di default
+                        let borderColor = '#1e40af';
+                        
+                        if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
+                            bgColor = '#ef4444'; // Rosso per i cattivi (es. "villain" nel JSON)
+                            borderColor = '#991b1b';
+                        } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
+                            bgColor = '#eab308'; // Giallo per i protagonisti
+                            borderColor = '#854d0e';
+                        }
+
+                        nodesArray.push({ 
+                            id: charId, 
+                            label: charLabel, 
+                            group: 'personaggio',
+                            color: { background: bgColor, border: borderColor },
+                            font: { color: 'white' },
+                            shape: 'ellipse'
+                        });
+                        addedNodes.add(charId);
+                    }
+
+                    // --- 3. ARCO (Collegamento e Ruolo) ---
+                    // Usiamo la chiave tipoPersonaggioLabel (es. "villain") come etichetta della freccia
+                    let edgeLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : 'ruolo sconosciuto';
+                    
+                    edgesArray.push({
+                        from: charId,  // Il collegamento parte dal personaggio
+                        to: operaId,   // E punta all'opera
+                        label: edgeLabel,
+                        arrows: 'to',
+                        color: { color: '#94a3b8', highlight: '#f43f5e' },
+                        font: { align: 'middle', size: 11, color: '#475569', background: 'rgba(255,255,255,0.8)' }
+                    });
+                });
+
+                // Inizializza il grafo Vis.js
+                var container = document.getElementById('mynetwork-7'); 
+                
+                if (!container) {
+                    console.warn("Attenzione: div 'mynetwork-7' non trovato nell'HTML.");
+                    return; // Blocca l'esecuzione se manca il div
+                }
+
+                var dataVis = {
+                    nodes: new vis.DataSet(nodesArray),
+                    edges: new vis.DataSet(edgesArray)
+                };
+                
+                // Opzioni fisiche per far espandere bene i cluster di personaggi
+                var options = {
+                    physics: {
+                        stabilization: { iterations: 150 },
+                        forceAtlas2Based: {
+                            gravitationalConstant: -120,
+                            centralGravity: 0.01,
+                            springLength: 200,
+                            springConstant: 0.05
+                        },
+                        solver: 'forceAtlas2Based'
+                    },
+                    interaction: {
+                        hover: true,
+                        tooltipDelay: 200
+                    }
+                };
+                
+                new vis.Network(container, dataVis, options);
+            })
+            .catch(error => console.error("Errore nel caricamento del JSON della Query 7:", error));
+    }
+
+    // Collega l'evento al click per caricarlo solo quando serve
+    const btnChart7 = document.getElementById('chartBtn-7');
+    if (btnChart7) {
+        let isGraph7Loaded = false;
+        btnChart7.addEventListener('click', function() {
+            if (!isGraph7Loaded) {
+                loadGraph7FromJSON();
+                isGraph7Loaded = true;
+            }
+        });
+    }
+
 }); // <-- QUI FINISCE IL DOMContentLoaded
 
 
@@ -547,14 +674,14 @@ function renderizzaTabella() {
     righeDaMostrare.forEach(row => {
         const tr = document.createElement("tr");
 
-        const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "-");
+        const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "");
         const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
-        const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "-");
-        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "-";
+        const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "");
+        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "";
         const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
-        const operaLabel = row.operaLabel ? row.operaLabel.value : "-";
-        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "-";
-        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "-";
+        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
+        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
+        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
 
         /* 
             {"opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
