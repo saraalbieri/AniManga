@@ -364,30 +364,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     let sourceId = row.item.value;
                     let sourceLabel = row.itemlabel ? row.itemlabel.value : sourceId.split('/').pop();
                     
-                    if (!addedNodes.has(sourceId)) {
-                        nodesArray.push({ 
-                            id: sourceId, 
-                            label: sourceLabel, 
-                            group: 'source',
-                            color: { background: '#f43f5e', border: '#e11d48' },
-                            font: { color: 'white' },
-                            shape: 'box'
-                        });
-                        addedNodes.add(sourceId);
-                    }
-
                     // --- Nodo Destinazione (Es. Personaggio, Genere, Autore) ---
                     let targetId = row.valore.value;
-                    // Se non ha una label (es. un literal puro), usa l'estratto finale del valore
                     let targetLabel = row.valorelabel ? row.valorelabel.value : (targetId.includes('/') ? decodeURIComponent(targetId.split('/').pop()) : targetId);
 
                     if (!addedNodes.has(targetId)) {
+                        // Configurazione di base (es. Blu con testo bianco)
+                        let bgColor = '#1e1b4b'; 
+                        let borderColor = '#0f172a';
+                        let textColor = 'white'; 
+                        
+                        // Esempio di condizione: se la proprietà Wikidata è "autore" (P50) o "genere" (P136)
+                        let proprieta = row.proprieta.value; 
+                        if (proprieta.includes('P50') || targetLabel.toLowerCase().includes('autore')) {
+                            bgColor = '#eab308';   // Giallo per gli autori
+                            borderColor = '#854d0e';
+                            textColor = 'black';   // <-- TESTO NERO per lo sfondo giallo
+                        }
+
                         nodesArray.push({ 
                             id: targetId, 
                             label: targetLabel, 
                             group: 'target',
-                            color: { background: '#1e1b4b', border: '#0f172a' },
-                            font: { color: 'white' }
+                            color: { background: bgColor, border: borderColor },
+                            font: { color: textColor }, // <-- Applica la variabile del testo
+                            shape: 'ellipse'
                         });
                         addedNodes.add(targetId);
                     }
