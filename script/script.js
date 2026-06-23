@@ -548,7 +548,9 @@ function renderizzaTabella() {
         const tr = document.createElement("tr");
 
         const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "-");
+        const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
         const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "-");
+        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "-";
         const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
         const operaLabel = row.operaLabel ? row.operaLabel.value : "-";
         const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "-";
@@ -564,10 +566,10 @@ function renderizzaTabella() {
         */
 
         tr.innerHTML = `
-            <td>${opera}</td>
-            <td>${personaggio}</td>
-            <td>${totalePersonaggi}</td>
+            <td><a href="${opera} title="opera">${opera_soloQ}</a></td>
             <td>${operaLabel}</td>
+            <td>${totalePersonaggi}</td>
+            <td><a href="${personaggio} title="personaggio">${personaggio_soloQ}</a></td>
             <td>${personaggioLabel}</td>
             <td>${tipoPersonaggioLabel}</td>
         `;
