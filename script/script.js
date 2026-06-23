@@ -475,46 +475,118 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
+  // ==========================================
+    // PARTE 7: AVVIO CARICAMENTO DATI (Query 7)
     // ==========================================
-    // PARTE 7: IMPAGINAMENTO RISULTATI QUERY SPARQL (DINAMICO) QUERY 7
-    // ==========================================
+    // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
+    const urlFileJson = "./queries/query_7.json"; 
 
-    // 1. INSERISCI QUI IL PERCORSO DEL TUO FILE JSON
-    // Assicurati che il percorso sia corretto rispetto a dove si trova la tua pagina HTML
-    const urlFileJson = "../queries/query_7.json"; // Modifica questo percorso se necessario
-
-    // 2. Funzione per recuperare il file
     function caricaDatiDaJson() {
-        // Mostriamo un messaggio di caricamento mentre il file viene pescato
         const tbody = document.getElementById("tbody-query7");
+        if(!tbody) return; // Se la tabella non esiste nella pagina corrente, esce
+
         tbody.innerHTML = "<tr><td colspan='4'>Caricamento dati in corso...</td></tr>";
 
         fetch(urlFileJson)
             .then(response => {
-                // Controlliamo che il file esista e sia stato trovato
-                if (!response.ok) {
-                    throw new Error("Errore HTTP: " + response.status);
-                }
-                return response.json(); // Converte il file testuale in un oggetto JavaScript
+                if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+                return response.json();
             })
             .then(data => {
-                // 3. IL COLLEGAMENTO: 
-                // Passiamo i dati pronti alla funzione di paginazione che abbiamo scritto prima
-                gestisciRisultatiQuery7(data);
+                gestisciRisultatiQuery7(data); // Richiama la funzione globale definita in basso
             })
             .catch(error => {
-                // Gestione degli errori (es. file non trovato o JSON malformato)
                 console.error("Si è verificato un errore durante il caricamento del JSON:", error);
                 tbody.innerHTML = `<tr><td colspan='4' style='color:red;'>Errore nel caricamento dei dati: ${error.message}</td></tr>`;
             });
     }
 
-    // 4. Avvia il processo solo quando la pagina HTML è completamente caricata
-    document.addEventListener("DOMContentLoaded", () => {
-        // Solo se siamo sulla pagina corretta (controllando che esista la tabella)
-        if (document.getElementById("tbody-query7")) {
-            caricaDatiDaJson();
-        }
+    if (document.getElementById("tbody-query7")) {
+        caricaDatiDaJson();
+    }
+
+}); // <-- QUI FINISCE IL DOMContentLoaded
+
+
+// =========================================================================
+// PARTE 8: LOGICA DI IMPAGINAZIONE QUERY 7 (GLOBALE)
+// Queste funzioni devono stare FUORI dal DOMContentLoaded per poter essere 
+// chiamate dai pulsanti "onclick" presenti nel tuo file HTML.
+// =========================================================================
+
+let tuttiIResultati = []; 
+let paginaCorrente = 1;
+const righePerPagina = 25; 
+
+function gestisciRisultatiQuery7(data) {
+    if (data && data.results && data.results.bindings) {
+        tuttiIResultati = data.results.bindings; 
+        paginaCorrente = 1; 
+        renderizzaTabella();
+    } else {
+        console.error("Il file JSON non ha la struttura SPARQL prevista.");
+    }
+}
+
+function renderizzaTabella() {
+    const tbody = document.getElementById("tbody-query7");
+    const indicator = document.getElementById("page-indicator");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    const indiceInizio = (paginaCorrente - 1) * righePerPagina;
+    const indiceFine = Math.min(indiceInizio + righePerPagina, tuttiIResultati.length);
+    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
+
+    const righeDaMostrare = tuttiIResultati.slice(indiceInizio, indiceFine);
+
+    righeDaMostrare.forEach(row => {
+        const tr = document.createElement("tr");
+
+        const opera = row.operaLabel ? row.operaLabel.value : (row.opera ? row.opera.value : "-");
+        const totale = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
+        const personaggio = row.personaggioLabel ? row.personaggioLabel.value : (row.personaggio ? row.personaggio.value : "-");
+        const tipo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "<em>Non specificato</em>";
+
+        tr.innerHTML = `
+            <td>${opera}</td>
+            <td>${totale}</td>
+            <td>${personaggio}</td>
+            <td>${tipo}</td>
+        `;
+        tbody.appendChild(tr);
     });
 
-});
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrente} di ${totalePagine} (${tuttiIResultati.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrente === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrente === totalePagine);
+}
+
+function paginaPrecedente() {
+    if (paginaCorrente > 1) {
+        paginaCorrente--;
+        renderizzaTabella();
+        scrollareAInizioTabella();
+    }
+}
+
+function paginaSuccessiva() {
+    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
+    if (paginaCorrente < totalePagine) {
+        paginaCorrente++;
+        renderizzaTabella();
+        scrollareAInizioTabella();
+    }
+}
+
+function scrollareAInizioTabella() {
+    // Scrolla la pagina verso la tabella quando si cambia pagina
+    const tabella = document.getElementById("tbody-query7");
+    if(tabella) {
+        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
