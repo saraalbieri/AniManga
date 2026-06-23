@@ -548,15 +548,28 @@ function renderizzaTabella() {
         const tr = document.createElement("tr");
 
         const opera = row.operaLabel ? row.operaLabel.value : (row.opera ? row.opera.value : "-");
-        const totale = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
         const personaggio = row.personaggioLabel ? row.personaggioLabel.value : (row.personaggio ? row.personaggio.value : "-");
-        const tipo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "<em>Non specificato</em>";
+        const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
+        const operaLabel = row.operaLabel ? row.operaLabel.value : "-";
+        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "-";
+        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "-";
+
+        /* 
+            "opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
+            "personaggio":{"type":"uri","value":"http://www.wikidata.org/entity/Q843545"},
+            "totalePersonaggi":{"datatype":"http://www.w3.org/2001/XMLSchema#integer","type":"literal","value":"9"},
+            "operaLabel":{"xml:lang":"en","type":"literal","value":"Death Note"},
+            "personaggioLabel":{"xml:lang":"en","type":"literal","value":"Light Yagami"},
+            "tipoPersonaggioLabel":{"xml:lang":"en","type":"literal","value":"villain"}},
+        */
 
         tr.innerHTML = `
             <td>${opera}</td>
-            <td>${totale}</td>
             <td>${personaggio}</td>
-            <td>${tipo}</td>
+            <td>${totalePersonaggi}</td>
+            <td>${operaLabel}</td>
+            <td>${personaggioLabel}</td>
+            <td>${tipoPersonaggioLabel}</td>
         `;
         tbody.appendChild(tr);
     });
