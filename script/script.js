@@ -547,16 +547,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     let ruolo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.toLowerCase() : "";
 
                     if (!addedNodes.has(charId)) {
-                        // Assegnazione del colore in base al ruolo estratto
+                        // Configurazione di default (es. per i comprimari)
                         let bgColor = '#3b82f6'; // Blu di default
                         let borderColor = '#1e40af';
+                        let textColor = 'white'; // <-- Creiamo una variabile per il testo (bianco di default)
                         
                         if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
-                            bgColor = '#ef4444'; // Rosso per i cattivi (es. "villain" nel JSON)
+                            bgColor = '#ef4444'; // Rosso per i cattivi
                             borderColor = '#991b1b';
+                            textColor = 'white'; // Testo bianco su sfondo rosso
                         } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
                             bgColor = '#eab308'; // Giallo per i protagonisti
                             borderColor = '#854d0e';
+                            textColor = 'black'; // <-- Cambiamo il testo in NERO solo per lo sfondo giallo!
                         }
 
                         nodesArray.push({ 
@@ -564,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             label: charLabel, 
                             group: 'personaggio',
                             color: { background: bgColor, border: borderColor },
-                            font: { color: 'white' },
+                            font: { color: textColor }, // <-- Sostituiamo 'white' con la variabile textColor
                             shape: 'ellipse'
                         });
                         addedNodes.add(charId);
