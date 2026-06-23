@@ -555,7 +555,7 @@ function renderizzaTabella() {
         const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "-";
 
         /* 
-            "opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
+            {"opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
             "personaggio":{"type":"uri","value":"http://www.wikidata.org/entity/Q843545"},
             "totalePersonaggi":{"datatype":"http://www.w3.org/2001/XMLSchema#integer","type":"literal","value":"9"},
             "operaLabel":{"xml:lang":"en","type":"literal","value":"Death Note"},
