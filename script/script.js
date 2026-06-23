@@ -547,8 +547,8 @@ function renderizzaTabella() {
     righeDaMostrare.forEach(row => {
         const tr = document.createElement("tr");
 
-        const opera = row.operaLabel ? row.operaLabel.value : (row.opera ? row.opera.value : "-");
-        const personaggio = row.personaggioLabel ? row.personaggioLabel.value : (row.personaggio ? row.personaggio.value : "-");
+        const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "-");
+        const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "-");
         const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
         const operaLabel = row.operaLabel ? row.operaLabel.value : "-";
         const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "-";
