@@ -20,7 +20,7 @@ WHERE {
  
   # 4. Filtriamo per la parola "Manga"
   # La "i" finale rende la ricerca case-insensitive (trova "Manga", "manga", "MANGA", ecc.)
-  FILTER(REGEX(?descrizione, "manga | anime | film", "i")) 
+  FILTER(REGEX(?descrizione, "manga | anime | film | media franchise", "i")) 
  
   # 5. Label Service di Wikidata
   SERVICE wikibase:label {

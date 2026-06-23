@@ -475,4 +475,46 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
+    // ==========================================
+    // PARTE 7: IMPAGINAMENTO RISULTATI QUERY SPARQL (DINAMICO) QUERY 7
+    // ==========================================
+
+    // 1. INSERISCI QUI IL PERCORSO DEL TUO FILE JSON
+    // Assicurati che il percorso sia corretto rispetto a dove si trova la tua pagina HTML
+    const urlFileJson = "../queries/query_7.json"; // Modifica questo percorso se necessario
+
+    // 2. Funzione per recuperare il file
+    function caricaDatiDaJson() {
+        // Mostriamo un messaggio di caricamento mentre il file viene pescato
+        const tbody = document.getElementById("tbody-query7");
+        tbody.innerHTML = "<tr><td colspan='4'>Caricamento dati in corso...</td></tr>";
+
+        fetch(urlFileJson)
+            .then(response => {
+                // Controlliamo che il file esista e sia stato trovato
+                if (!response.ok) {
+                    throw new Error("Errore HTTP: " + response.status);
+                }
+                return response.json(); // Converte il file testuale in un oggetto JavaScript
+            })
+            .then(data => {
+                // 3. IL COLLEGAMENTO: 
+                // Passiamo i dati pronti alla funzione di paginazione che abbiamo scritto prima
+                gestisciRisultatiQuery7(data);
+            })
+            .catch(error => {
+                // Gestione degli errori (es. file non trovato o JSON malformato)
+                console.error("Si è verificato un errore durante il caricamento del JSON:", error);
+                tbody.innerHTML = `<tr><td colspan='4' style='color:red;'>Errore nel caricamento dei dati: ${error.message}</td></tr>`;
+            });
+    }
+
+    // 4. Avvia il processo solo quando la pagina HTML è completamente caricata
+    document.addEventListener("DOMContentLoaded", () => {
+        // Solo se siamo sulla pagina corretta (controllando che esista la tabella)
+        if (document.getElementById("tbody-query7")) {
+            caricaDatiDaJson();
+        }
+    });
+
 });
