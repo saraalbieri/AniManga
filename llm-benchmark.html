@@ -22,13 +22,13 @@
 
     <main class="container">
         <h1>LLM Experimentation</h1>
-        <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando quattro tecniche: Zero-shot, Few-shot, Zero-shot Chain-of-Thought e Few-shot Chain-of-Thought.</p>
+        <p>In questa sezione mostriamo come abbiamo usato i Large Language Models per inferire archetipi narrativi a partire da descrizioni testuali non strutturate. Per ogni test abbiamo confrontato almeno due modelli, usando tre tecniche: Zero-shot, Few-shot e Chain-of-Thought.</p>
 
         <!-- Descrive da quali fonti recuperiamo il testo usato come input degli LLM. -->
         <section class="report-section">
             <h2>Acquisizione automatica delle descrizioni</h2>
             <p>
-                Wikidata è stato usato come punto di partenza per identificare i personaggi tramite QID e verificare la presenza o assenza della proprietà <code>wdt:P9071</code> (<em>character type</em>). Quando questa proprietà è assente, però, Wikidata non contiene sempre abbastanza informazioni narrative per dedurre un archetipo. Per questo motivo la demo recupera automaticamente un contesto aggiuntivo da fonti pubbliche dedicate ad anime e manga.
+                Wikidata è stato usato come punto di partenza per identificare i personaggi tramite QID e verificare la presenza o assenza della proprietà <code>wdt:P9071</code> (<em>character type</em>). Quando questa proprietà è assente, però, Wikidata non contiene sempre abbastanza informazioni narrative per dedurre un archetipo. Per questo motivo la demo recupera un contesto aggiuntivo da fonti pubbliche dedicate ad anime e manga.
             </p>
             <p>
                 Il recupero parte dal personaggio selezionato nella demo: il sistema usa il QID per interrogare Wikidata e raccoglie descrizioni da AniList. Se Wikidata contiene anche l'identificativo <code>P10757</code>, viene mostrato il collegamento a Personality Database, trattato solo come riferimento esterno e non come fonte ufficiale. Le descrizioni recuperate servono come input di lavoro per gli LLM e vengono poi sintetizzate in parafrasi brevi.
@@ -105,7 +105,7 @@ Turtle RDF generation
                 La demo LLM utilizza come punto di partenza i personaggi individuati nella Query 2 della sezione SPARQL, cioè i personaggi del campione che non hanno un valore per <code>P9071</code> (<em>character type</em>). Il risultato della query è stato trasformato in una lista interna alla pagina: per ogni personaggio sono stati salvati nome, opera di appartenenza e QID Wikidata. Questa lista alimenta il menu a tendina <em>Personaggio senza character type</em>.
             </p>
             <p>
-                Quando si seleziona un personaggio, la demo compila automaticamente i campi <em>Anime/Manga</em> e <em>Wikidata QID</em>. Il pulsante <em>Recupera descrizioni</em> interroga Wikidata usando la logica della Query 4 della sezione SPARQL, cioè la query che recupera il contesto strutturato del personaggio: descrizione, opera, universo narrativo, gruppo, occupazione, genere, eventuale <code>P9071</code> e collegamento a Personality Database tramite <code>P10757</code>. Per le altre fonti pubbliche, come AniList e Personality Database, la demo mostra soprattutto i link: in questo modo possiamo aprire le fonti, scegliere manualmente quali parti del contenuto sono utili e inserirle o parafrasarle nel campo della descrizione selezionata. A partire da questi dati, la pagina genera quattro prompt da testare manualmente con modelli come GPT, Claude o Gemini; nessuna API LLM viene chiamata direttamente dal browser.
+                Quando si seleziona un personaggio, la demo compila automaticamente i campi <em>Anime/Manga</em> e <em>Wikidata QID</em>. Il pulsante <em>Recupera descrizioni</em> interroga Wikidata usando la logica della Query 4 della sezione SPARQL, cioè la query che recupera il contesto strutturato del personaggio: descrizione, opera, universo narrativo, gruppo, occupazione, genere, eventuale <code>P9071</code> e collegamento a Personality Database tramite <code>P10757</code>. Per le altre fonti pubbliche, come AniList e Personality Database, la demo mostra soprattutto i link: in questo modo possiamo aprire le fonti, scegliere manualmente quali parti del contenuto sono utili e inserirle o parafrasarle nel campo della descrizione selezionata. A partire da questi dati, la pagina genera tre prompt da testare manualmente con modelli come GPT, Claude o Gemini; nessuna API LLM viene chiamata direttamente dal browser.
             </p>
 
             <div class="api-demo">
@@ -174,12 +174,8 @@ Turtle RDF generation
                         <textarea id="fewPrompt2" rows="10" readonly></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Zero-shot CoT</h3>
+                        <h3>Chain-of-Thought</h3>
                         <textarea id="cotPrompt2" rows="10" readonly></textarea>
-                    </div>
-                    <div class="source-card">
-                        <h3>Few-shot CoT</h3>
-                        <textarea id="fewCotPrompt2" rows="10" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -192,7 +188,7 @@ Turtle RDF generation
                 La demo LLM parte da un contesto Wikidata strutturato. Per ogni personaggio, il modello riceve non soltanto il nome, ma anche proprietà selezionate per descrivere ruolo narrativo, appartenenza e caratterizzazione. Questo permette di rendere la scelta dell'archetipo più motivata e meno dipendente da una semplice somiglianza lessicale.
             </p>
             <p>
-                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da AniList, permette di selezionare o modificare il testo e genera quattro prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
+                Poiché il sito è pensato per GitHub Pages, le API pubbliche possono essere interrogate direttamente dal frontend. La demo seguente recupera descrizioni da AniList, permette di selezionare o modificare il testo e genera tre prompt da testare manualmente su GPT, Claude o Gemini. Le API degli LLM non vengono chiamate dal browser, così non vengono esposte chiavi private.
             </p>
 
             <div class="api-demo">
@@ -239,12 +235,8 @@ Turtle RDF generation
                         <textarea id="fewPrompt" rows="10" readonly></textarea>
                     </div>
                     <div class="source-card">
-                        <h3>Zero-shot CoT</h3>
+                        <h3>Chain-of-Thought</h3>
                         <textarea id="cotPrompt" rows="10" readonly></textarea>
-                    </div>
-                    <div class="source-card">
-                        <h3>Few-shot CoT</h3>
-                        <textarea id="fewCotPrompt" rows="10" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -299,8 +291,8 @@ Restituisci solo il nome dell'archetipo scelto.
         </section>
 
         <section class="report-section">
-            <h2>Zero-shot Chain-of-Thought Prompt</h2>
-            <p>La tecnica Zero-shot Chain-of-Thought è stata usata per i personaggi più ambigui: non fornisce esempi, ma guida il modello con passaggi di ragionamento prima della scelta dell'archetipo.</p>
+            <h2>Chain-of-Thought Prompt</h2>
+            <p>La tecnica Chain-of-Thought è stata usata per i personaggi più ambigui: guida il modello con passaggi di ragionamento prima della scelta dell'archetipo.</p>
             <div class="code-block">
 Analizza il personaggio passo per passo e mostra il ragionamento prima della risposta finale.<br><br>
 Passaggi da considerare:<br>
@@ -311,31 +303,6 @@ Passaggi da considerare:<br>
 5. Controlla di non inventare QID Wikidata.<br><br>
 Personaggio: Itachi Uchiha<br>
 Descrizione: Itachi viene inizialmente presentato come villain, ma in seguito emerge come figura tragica che sacrifica reputazione e legami familiari per evitare un conflitto più grande.<br><br>
-Restituisci l'output in questo formato:<br>
-Ragionamento:<br>
-1. ...<br>
-2. ...<br>
-3. ...<br><br>
-Archetipo: [nome dell'archetipo scelto]
-            </div>
-        </section>
-
-        <section class="report-section">
-            <h2>Few-shot Chain-of-Thought Prompt</h2>
-            <p>Il Few-shot Chain-of-Thought combina esempi e ragionamento guidato. È utile quando il personaggio è ambiguo e vogliamo far seguire al modello una struttura più stabile.</p>
-            <div class="code-block">
-Classifica il personaggio seguendo il modello degli esempi. Mostra il ragionamento e poi l'archetipo finale.<br><br>
-Esempio 1:<br>
-Personaggio: Itachi Uchiha<br>
-Ragionamento sintetico: è presentato come antagonista, ma le evidenze successive mostrano sacrificio, protezione e ambiguità morale.<br>
-Archetipo: Byronic hero<br><br>
-Esempio 2:<br>
-Personaggio: L<br>
-Ragionamento sintetico: agisce come oppositore intellettuale del protagonista, non come villain; la sua funzione è investigativa e di contrasto narrativo.<br>
-Archetipo: detective foil<br><br>
-Ora classifica:<br>
-Personaggio: Misa Amane<br>
-Descrizione: idol devota a Light, guidata da amore ossessivo, lealtà estrema e disponibilità a sacrificarsi per lui.<br><br>
 Restituisci l'output in questo formato:<br>
 Ragionamento:<br>
 1. ...<br>
@@ -552,7 +519,7 @@ Archetipo: [nome dell'archetipo scelto]
             .map(item => `- ${item.label} (${item.qid}): ${item.description}`)
             .join("\n");
 
-        // Costruisce le quattro varianti di prompt usando contesto Wikidata, descrizione e vocabolario.
+        // Costruisce le tre varianti di prompt usando contesto Wikidata, descrizione e vocabolario.
         function buildPromptsForDemo(ids) {
             const character = document.getElementById(ids.characterName).value.trim();
             const anime = document.getElementById(ids.animeName).value.trim();
@@ -565,18 +532,15 @@ Archetipo: [nome dell'archetipo scelto]
             const personalityBlock = personalityDescription ? `\nLink al profilo Personality Database:\n${personalityDescription}\n` : "";
             const stockCharacterBlock = `\nCandidati controllati per character type:\n${stockCharacterVocabulary}\n`;
 
-            const zero = `Sei un esperto di knowledge engineering e narratologia.\n\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione basata sulle fonti: ${description}\n\nCompito:\nClassifica il personaggio individuando l'archetipo narrativo più adatto per la proprietà Wikidata P9071.\n\nRegole:\n- Usa il contesto Wikidata solo per verificare l'entità e i dati strutturati già disponibili.\n- Usa la descrizione basata sulle fonti per inferire l'archetipo narrativo.\n- Tratta Personality Database solo come link esterno, non come fonte ufficiale.\n- Non inventare QID Wikidata.\n\nRestituisci solo il nome dell'archetipo scelto.`;
+            const zero = `Classifica questo personaggio anime/manga scegliendo un solo character type per la proprietà Wikidata P9071.\n${stockCharacterBlock}\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione: ${description}\n\nUsa soltanto i candidati elencati. Il contesto Wikidata serve a verificare l'entità; la descrizione serve a inferire l'archetipo. Personality Database è solo un riferimento esterno. Non inventare QID.\n\nRispondi soltanto con il nome esatto del character type.`;
 
-            const few = `Classifica personaggi anime e manga in archetipi narrativi per la proprietà Wikidata P9071.\n\nSegui lo stesso formato degli esempi.\n\nEsempio 1:\nPersonaggio: Naruto Uzumaki\nDescrizione: orfano escluso socialmente, cerca riconoscimento, protegge la comunità e cresce attraverso perseveranza.\nArchetipo: The Chosen One / underdog hero\n\nEsempio 2:\nPersonaggio: Light Yagami\nDescrizione: studente brillante corrotto da un potere soprannaturale e posto come minaccia morale centrale.\nArchetipo: Big Bad\n\nOra classifica:\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci solo il nome dell'archetipo scelto. Non inventare QID Wikidata.`;
+            const few = `Classifica personaggi anime e manga scegliendo un solo character type per la proprietà Wikidata P9071.\n${stockCharacterBlock}\nEsempi:\nNaruto Uzumaki — eroe destinato a una missione centrale, cresce attraverso perseveranza e protegge la comunità → The Chosen One\nLight Yagami — antagonista principale corrotto da un potere soprannaturale e minaccia morale centrale → Big Bad\nSpike Spiegel — figura indipendente e solitaria, guidata da un codice personale → Lone Cowboy\n\nOra classifica:\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione: ${description}\n\nSegui lo stesso criterio degli esempi, usa soltanto i candidati elencati e non inventare QID. Rispondi soltanto con il nome esatto del character type.`;
 
-            const cot = `Analizza il personaggio passo per passo e mostra il ragionamento prima della risposta finale.\n\nPassaggi da considerare:\n1. Identifica la funzione del personaggio nella trama.\n2. Identifica motivazioni e comportamenti ricorrenti.\n3. Distingui ruolo narrativo, tratto psicologico e trope anime/manga.\n4. Usa Personality Database solo come link esterno, se presente.\n5. Scegli l'archetipo narrativo più adatto.\n6. Controlla di non inventare QID Wikidata.\n\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci l'output in questo formato:\nRagionamento:\n1. ...\n2. ...\n3. ...\n\nArchetipo: [nome dell'archetipo scelto]`;
-
-            const fewCot = `Classifica il personaggio seguendo il modello degli esempi. Mostra il ragionamento e poi l'archetipo finale.\n\nEsempio 1:\nPersonaggio: Itachi Uchiha\nRagionamento sintetico: è presentato come antagonista, ma le evidenze successive mostrano sacrificio, protezione e ambiguità morale.\nArchetipo: Byronic hero\n\nEsempio 2:\nPersonaggio: L\nRagionamento sintetico: agisce come oppositore intellettuale del protagonista, non come villain; la sua funzione è investigativa e di contrasto narrativo.\nArchetipo: detective foil\n\nOra classifica:\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}${stockCharacterBlock}\nDescrizione basata sulle fonti: ${description}\n\nRestituisci l'output in questo formato:\nRagionamento:\n1. ...\n2. ...\n3. ...\n\nArchetipo: [nome dell'archetipo scelto]\n\nNon inventare QID Wikidata.`;
+            const cot = `Devi classificare questo personaggio anime/manga scegliendo un solo character type per la proprietà Wikidata P9071.\n${stockCharacterBlock}\nPersonaggio: ${character}\nOpera: ${anime}${contextBlock}${personalityBlock}\nDescrizione: ${description}\n\nRagiona passo per passo:\n1. Qual è la funzione del personaggio nella trama?\n2. Quali motivazioni e comportamenti ricorrono nella descrizione?\n3. Quali candidati sono compatibili e quali devono essere esclusi?\n4. Qual è il character type più specifico tra quelli elencati?\n5. Il nome e il QID del candidato corrispondono esattamente al vocabolario fornito?\n\nNon usare conoscenze non presenti nell'input e non inventare QID.\n\nRestituisci l'output in questo formato:\nRagionamento:\n1. ...\n2. ...\n3. ...\n4. ...\n\nCharacter type: [nome esatto del candidato]`;
 
             document.getElementById(ids.zeroPrompt).value = zero;
             document.getElementById(ids.fewPrompt).value = few;
             document.getElementById(ids.cotPrompt).value = cot;
-            document.getElementById(ids.fewCotPrompt).value = fewCot;
         }
 
         // Wrapper per la demo libera.
@@ -588,8 +552,7 @@ Archetipo: [nome dell'archetipo scelto]
                 selectedDescription: "selectedDescription",
                 zeroPrompt: "zeroPrompt",
                 fewPrompt: "fewPrompt",
-                cotPrompt: "cotPrompt",
-                fewCotPrompt: "fewCotPrompt"
+                cotPrompt: "cotPrompt"
             });
         }
 
@@ -603,8 +566,7 @@ Archetipo: [nome dell'archetipo scelto]
                 personalityDescription: "personalityDescription2",
                 zeroPrompt: "zeroPrompt2",
                 fewPrompt: "fewPrompt2",
-                cotPrompt: "cotPrompt2",
-                fewCotPrompt: "fewCotPrompt2"
+                cotPrompt: "cotPrompt2"
             });
         }
 
@@ -637,8 +599,7 @@ Archetipo: [nome dell'archetipo scelto]
                 "selectedDescription2",
                 "zeroPrompt2",
                 "fewPrompt2",
-                "cotPrompt2",
-                "fewCotPrompt2"
+                "cotPrompt2"
             ].forEach(id => {
                 document.getElementById(id).value = "";
             });
