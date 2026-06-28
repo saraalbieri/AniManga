@@ -157,99 +157,6 @@
 
 
 
-        .api-demo {
-            margin-top: 1.25rem;
-            padding: 1.25rem;
-            border-radius: 18px;
-            background: #fbfcff;
-            border: 1px solid var(--llm-border);
-        }
-
-        .source-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .source-card {
-            padding: 1rem;
-            border-radius: 16px;
-            background: #ffffff;
-            border: 1px solid var(--llm-border);
-        }
-
-        .source-card h3 {
-            margin-top: 0;
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
-        }
-
-        .source-card textarea {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid var(--llm-border);
-            border-radius: 12px;
-            padding: 0.75rem;
-            font: inherit;
-            background: #ffffff;
-            resize: vertical;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-        }
-
-        .form-row {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-row label {
-            font-weight: 700;
-            color: var(--llm-code);
-        }
-
-        .form-row input,
-        .form-row textarea,
-        .form-row select {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid var(--llm-border);
-            border-radius: 12px;
-            padding: 0.75rem;
-            font: inherit;
-            background: #ffffff;
-        }
-
-        .form-row textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        .primary-button {
-            border: 0;
-            border-radius: 999px;
-            padding: 0.8rem 1.15rem;
-            background: var(--llm-accent);
-            color: #ffffff;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .primary-button:hover {
-            opacity: 0.92;
-        }
-
-        .status-text {
-            color: var(--llm-muted);
-            margin-top: 0.8rem;
-        }
-
         .mini-note {
             padding: 1rem;
             border-left: 4px solid var(--llm-accent);
@@ -296,7 +203,7 @@
                 <li><strong>Input minimo:</strong> personaggio e opera di appartenenza.</li>
                 <li><strong>Prompting:</strong> confronto tra Zero-shot, Few-shot e Zero-shot Chain-of-Thought.</li>
                 <li><strong>Validazione:</strong> controllo umano dell'archetipo proposto.</li>
-                <li><strong>RDF:</strong> trasformazione del risultato validato in una tripla con <code>wdt:P9071</code>.</li>
+                <li><strong>RDF:</strong> trasformazione del risultato validato in triple RDF, usando <code>wdt:P9071</code> quando esiste un QID verificato e risorse interne quando serve rappresentare archetipi non presenti in Wikidata.</li>
             </ol>
         </div>
 
@@ -335,17 +242,19 @@
 
             <div class="prompt-label">Prompt zero-shot</div>
             <div class="prompt-box">
-                
-Classifica il personaggio individuando l'archetipo narrativo. Restituisci solo il nome dell'archetipo.Personaggio: Itachi Uchiha
-Opera: Naruto
+                Classifica il personaggio individuando l'archetipo narrativo.<br>
+                Restituisci solo il nome dell'archetipo.<br><br>
+                Personaggio: <strong>Itachi Uchiha</strong><br>
+                Opera: <em>Naruto</em>
             </div>
-               <div class="prompt-box">
-                
-Classifica il personaggio individuando l'archetipo narrativo. Restituisci solo il nome dell'archetipo.Personaggio: Itachi Uchiha
-Opera: Luffy
+            <div class="prompt-box">
+                Classifica il personaggio individuando l'archetipo narrativo.<br>
+                Restituisci solo il nome dell'archetipo.<br><br>
+                Personaggio: <strong>Monkey D. Luffy</strong><br>
+                Opera: <em>One Piece</em>
             </div>
 
-            <div class="prompt-label">Output con Gemini</div>
+                <div class="prompt-label">Output con Gemini</div>
             <div class="response-box">Luffy: Eroe Epico; Itachi: L'Antieroe</div>
             <div class="prompt-label">Output con ChatGPT</div>
             <div class="response-box">Luffy: Eroe avventuriero, Itachi: L'Antieroe Tragico</div>
@@ -355,16 +264,12 @@ Opera: Luffy
         </div>
 
         <div class="section">
-            <h2>Tecnica 2 — Few-shot Prompting senza descrizione</h2>
-            <p>
-                Nel Few-shot si forniscono esempi prima del nuovo caso. In questa versione, però, gli esempi
-                non contengono descrizioni: servono solo a mostrare al modello il formato dell'associazione
-                tra personaggio, opera e archetipo.
-            </p>
+            <h2>Tecnica 2 — Few-shot Prompting</h2>
+            
             <p class="mini-note">
-                Gli esempi scelti sono volutamente semplici: <em>Naruto Uzumaki</em> viene associato a
+                Nel Few-shot si forniscono esempi. Gli esempi stati scelti sulla base di chi aveva character type valorizzato: <em>Naruto Uzumaki</em> viene associato a
                 <strong>The Chosen One</strong>, mentre <em>Light Yagami</em> viene associato a
-                <strong>villain</strong>. Il modello deve poi classificare un nuovo personaggio seguendo
+                <strong>villain</strong>. Il modello deve poi classificare i nuovi personaggi seguendo
                 lo stesso formato.
             </p>
 
@@ -380,22 +285,24 @@ Opera: Luffy
                 Personaggio: Light Yagami<br>
                 Opera: Death Note<br>
                 Archetipo: villain<br><br>
-                Ora classifica:<br>
+                Ora classifica i seguenti personaggi seguendo lo stesso formato:<br><br>
                 Personaggio: <strong>Itachi Uchiha</strong><br>
-                Opera: <em>Naruto</em><br><br>
-                Restituisci solo il nome dell'archetipo scelto. 
-
-
-                Ora classifica:<br>
-                Personaggio: <strong>Monkey D. luffy </strong><br>
-                Opera: <em>One Piece</em><br><br>
-                Restituisci solo il nome dell'archetipo scelto. 
-
-                Ora classifica:<br>
-                Personaggio: <strong>L</strong><br>
-                Opera: <em>Death Note</em><br><br>
-                Restituisci solo il nome dell'archetipo scelto. 
+                Opera: <em>Naruto</em><br>
+                Archetipo:<br><br>
             </div>
+                
+
+            <div class="prompt-box">
+                Personaggio: <strong>Monkey D. Luffy</strong><br>
+                Opera: <em>One Piece</em><br>
+                Archetipo:<br><br>
+                </div>
+            <div class="prompt-box">
+                Personaggio: <strong>L</strong><br>
+                Opera: <em>Death Note</em><br>
+                Archetipo:
+            </div>
+        </div>
 
         <div class="prompt-label">Output con Gemini</div>
             <div class="response-box">Itachi: Tragic-Hero, Luffy: The Chosen One, L: The Eccentric Detective</div>
@@ -403,18 +310,23 @@ Opera: Luffy
             <div class="response-box">Itachi: Tragic hero, Monkey D. Luffy: The Hero, L: The Detached Genius Detective (The Mastermind Rival)</div>
             <div class="prompt-label">Output con Copilot</div>
             <div class="response-box">Itachi: Tragic-Hero, Luffy: The Hero, L: The Detective</div>
+            <p class="mini-note">
+                Il risultato di Luffy come <strong>The Chosen One</strong> mostra un possibile effetto di orientamento
+                del Few-shot: , il modello può avvicinarsi agli archetipi
+                già presenti nel prompt solo nel caso di Luffy che è un protagonista simile a Naruti. Per gli altri esempi, come Itachi e L, il modello non ha esempi simili e produce archetipi più generici o diversi.
+            </p>
             
         </div>
 
         <div class="section">
-            <h2>Tecnica 3 — Zero-shot Chain-of-Thought sintetico</h2>
+            <h2>Tecnica 3 — Zero-shot Chain-of-Thought </h2>
             <p>
                 Lo Zero-shot Chain-of-Thought viene usato come confronto metodologico rispetto al Few-shot.
                 Non fornisce esempi, ma chiede al modello di ragionare sui passaggi essenziali prima di proporre
                 l'archetipo finale.
             </p>
             <p>
-                Questa tecnica è stata preferita per i casi ambigui perché, nel dominio anime e manga, i valori
+                Questa tecnica è stata preferita per i casi ambigui, nel dominio anime e manga, i valori
                 <code>character type</code> già presenti in Wikidata sono limitati e disomogenei. Usare pochi esempi
                 rischia di orientare eccessivamente il modello verso quei casi specifici; lo Zero-shot CoT consente
                 invece di guidare il ragionamento senza vincolarlo a esempi potenzialmente fuorvianti.
@@ -437,7 +349,7 @@ Opera: Luffy
 Funzione nella trama: Itachi Uchiha è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke. Con il procedere della storia, la rivelazione delle sue vere intenzioni ribalta la prospettiva e lo trasforma in un personaggio tragico che mette in discussione i temi del sacrificio, della verità e del peso del dovere.
 Motivazioni principali: Agisce principalmente per proteggere il villaggio e il fratello, accettando di essere considerato un criminale pur di evitare una guerra civile. Le sue scelte sono guidate dal senso del dovere e dal sacrificio personale più che dall'interesse individuale.
 Archetipo narrativo più adatto: L'archetipo che lo descrive meglio è quello dell'eroe tragico: un personaggio che compie scelte moralmente dolorose, rinuncia alla propria reputazione e paga un prezzo enorme per perseguire un bene più grande. Presenta anche elementi del "mentore nascosto" e dell'"antagonista apparente", ma questi sono ruoli funzionali alla storia più che il suo archetipo dominante.
-Archetipo finale: Eroe tragico.</strong>
+Archetipo finale: Eroe tragico.
             </div>
             <div class="prompt-label">Output Gemini</div>
             <div class="response-box">
@@ -450,7 +362,7 @@ Il bene superiore e la pace: Un profondo pacifismo derivato dal trauma di aver v
 L'amore fraterno incondizionato: La salvaguardia della vita e della crescita di Sasuke, che mette persino al di sopra del destino del villaggio.
 3. Archetipo narrativo più adatto
 Il Mentore Tragico / L'Antieroe Sacrificale: Sebbene parta come il classico "Cattivo", l'archetipo che meglio lo definisce alla fine del suo arco è quello del Martire Antieroico (o The Noble Scapegoat). È colui che accetta di macchiarsi del crimine più atroce e di essere odiato dal mondo intero pur di compiere ciò che ritiene giusto, agendo nell'ombra e pagando il prezzo più alto senza cercare gloria o redenzione.
-Archetipo Finale: L'Antieroe Sacrificale (Il Martire dell'Ombra)</strong>
+Archetipo Finale: L'Antieroe Sacrificale (Il Martire dell'Ombra)
             </div>
             <div class="prompt-label">Output Copilot</div>
             <div class="response-box">
@@ -458,7 +370,7 @@ Archetipo Finale: L'Antieroe Sacrificale (Il Martire dell'Ombra)</strong>
 Funzione nella trama: Itachi Uchiha è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke. Con il procedere della storia, la rivelazione delle sue vere intenzioni ribalta la prospettiva e lo trasforma in un personaggio tragico che mette in discussione i temi del sacrificio, della verità e del peso del dovere.
 Motivazioni principali: Agisce principalmente per proteggere il villaggio e il fratello, accettando di essere considerato un criminale pur di evitare una guerra civile. Le sue scelte sono guidate dal senso del dovere e dal sacrificio personale più che dall'interesse individuale.
 Archetipo narrativo più adatto: L'archetipo che lo descrive meglio è quello dell'eroe tragico: un personaggio che compie scelte moralmente dolorose, rinuncia alla propria reputazione e paga un prezzo enorme per perseguire un bene più grande. Presenta anche elementi del "mentore nascosto" e dell'"antagonista apparente", ma questi sono ruoli funzionali alla storia più che il suo archetipo dominante.
-Archetipo finale: Eroe tragico.</strong>
+Archetipo finale: Eroe tragico.
             </div>
         </div>
 
@@ -519,7 +431,7 @@ Archetipo finale: Eroe tragico.</strong>
                         <td>Few-shot senza descrizione</td>
                         <td>Itachi Uchiha; Monkey D. Luffy; L</td>
                         <td>Itachi: tragic hero / tragic-hero.<br>Luffy: The Hero / The Chosen One.<br>L: The Eccentric Detective / The Detached Genius Detective / The Detective.</td>
-                        <td>Restituisce il formato richiesto per più personaggi, ma gli archetipi vanno verificati caso per caso.</td>
+                        <td>Restituisce il formato richiesto per più personaggi, ma può orientare il modello verso archetipi già presenti negli esempi.</td>
                     </tr>
                     <tr>
                         <td>Zero-shot Chain-of-Thought</td>
@@ -537,7 +449,7 @@ Archetipo finale: Eroe tragico.</strong>
         </div>
 
         <div class="section">
-            <h2>Evolutive</h2>
+            <h2>Sviluppi futuri</h2>
             <p>
                 Una possibile evoluzione del progetto consiste nell'aggiungere un secondo livello di
                 classificazione basato su archetipi e figure culturali giapponesi. In questo modo ogni
@@ -634,7 +546,7 @@ Restituisci solo: archetipo generale, archetipo giapponese.
                     </tr>
                     <tr>
                         <td>Zero-shot Chain-of-Thought</td>
-                        <td>Collega l'archetipo generale al sacrificio, al dovere e alla figura dello shinobi nell'ombra.</td>
+                        <td>Collega l'archetipo generale al sacrificio, al dovere, al ruolo nell'ombra e a figure culturali vicine come lo shinobi sacrificiale, il <em>giseisha</em> o il fratello maggiore protettivo.</td>
                         <td class="check">Risulta la tecnica migliore perché esplicita il ponte tra archetipo narrativo e lettura culturale giapponese.</td>
                     </tr>
                 </table>
@@ -645,6 +557,12 @@ Restituisci solo: archetipo generale, archetipo giapponese.
                 di esempi per gli archetipi giapponesi. Lo Zero-shot semplice rimane una baseline rapida, mentre
                 lo Zero-shot CoT è più prudente perché obbliga il modello a spiegare la scelta prima della
                 validazione manuale.
+            </p>
+            <p class="mini-note">
+                Gli output dei modelli non vengono copiati automaticamente nel knowledge graph: prima vengono
+                normalizzati manualmente. Questo significa ricondurre varianti lessicali diverse ma vicine, come
+                <em>antieroe sacrificiale</em>, <em>martire dell'ombra</em>, <em>giseisha</em> o <em>shinobi nell'ombra</em>,
+                a una sola etichetta controllata scelta dal gruppo, ad esempio <code>ex:sacrificial-shinobi</code>.
             </p>
         </div>
 
@@ -665,7 +583,7 @@ Restituisci solo: archetipo generale, archetipo giapponese.
                 </div>
                 <div class="card">
                     <h3>Compatibilità RDF</h3>
-                    <p>Il risultato deve poter essere trasformato in una tripla RDF con <code>wdt:P9071</code>.</p>
+                    <p>Il risultato deve poter essere trasformato in triple RDF distinguendo archetipo generale e archetipo giapponese.</p>
                 </div>
             </div>
         </div>
@@ -673,17 +591,31 @@ Restituisci solo: archetipo generale, archetipo giapponese.
         <div class="section">
             <h2>Template RDF finale</h2>
             <p>
-                Dopo la validazione manuale, l'archetipo selezionato può essere aggiunto al knowledge graph.
-                Lo schema seguente mostra la forma logica della tripla da produrre.
+                Dopo la validazione manuale, gli archetipi selezionati possono essere aggiunti al knowledge graph.
+                Seguendo lo stile del progetto di confronto, il template usa triple Turtle semplici, risorse con IRI
+                e prefissi chiari, senza dichiarare nella pagina una T-Box completa.
             </p>
-            <div class="code-block-simple">@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
-@prefix wdt: &lt;http://www.wikidata.org/prop/direct/&gt; .
+            <div class="code-block-simple">@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
+@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 
-# Sostituire entrambi i valori con QID Wikidata reali e verificati.
-wd:QID_PERSONAGGIO wdt:P9071 wd:QID_ARCHETIPO .</div>
+ex:itachi-uchiha
+    animanga:hasGeneralArchetype ex:tragic-hero ;
+    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
+
+ex:tragic-hero
+    rdfs:label "eroe tragico"@it ;
+    rdfs:label "tragic hero"@en .
+
+ex:sacrificial-shinobi
+    rdfs:label "shinobi sacrificiale"@it ;
+    rdfs:label "sacrificial shinobi"@en .</div>
             <p class="mini-note">
-                Se Wikidata non contiene un item adatto per l'archetipo, il valore non viene inventato:
-                l'ipotesi resta documentata nel report e non viene trasformata automaticamente in RDF.
+                Questa soluzione evita di inventare QID Wikidata quando non esiste un identificativo verificato.
+                L'archetipo generale e quello giapponese sono modellati come due risorse distinte del knowledge graph
+                e collegati al personaggio con due proprietà diverse. La risorsa <code>ex:sacrificial-shinobi</code>
+                rappresenta quindi una normalizzazione manuale degli output prodotti dai modelli, non una risposta
+                presa automaticamente da un singolo LLM.
             </p>
         </div>
     </main>
