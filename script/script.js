@@ -305,6 +305,98 @@ function scrollareAInizioTabella() {
     }
 }
 
+// --- PARTE 10: LOGICA DI IMPAGINAZIONE QUERY 2 (GLOBALE)
+function caricaDatiQuery2() {
+    const tbody = document.getElementById("tbody-query2");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    // Assicurati che il percorso del file JSON sia corretto
+    fetch('./queries/query_2.json') 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery2 = data.results.bindings;
+                paginaCorrenteQ2 = 1;
+                renderizzaTabellaQ2();
+                configuraControlliQ2();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 2:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ2() {
+    const tbody = document.getElementById("tbody-query2");
+    const indicator = document.getElementById("page-indicator-q2");
+    const btnPrev = document.getElementById("btn-prev-q2");
+    const btnNext = document.getElementById("btn-next-q2");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ2 - 1) * righePerPaginaQ2;
+    const fine = Math.min(inizio + righePerPaginaQ2, datiQuery2.length);
+    const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+
+    const righeMostrate = datiQuery2.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr");
+
+        // Estrazione e fallback dei valori (struttura SPARQL standard)
+        const propUri = row.proprieta ? row.proprieta.value : "#";
+        const propQID = propUri.split('/').pop();
+        const desc = row.proprietaLabel ? row.proprietaLabel.value : "";
+        const numero = row.numeroProprieta ? row.numeroProprieta.value : "1";
+
+        tr.innerHTML = `
+            <td>
+                <a href="${propUri}" target="_blank" class="item-link">${propQID}</a>
+            </td>
+            <td><span>${desc}</span></td>
+            <td><span>${numero}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ2} di ${totalePagine} (${datiQuery2.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ2 === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ2 === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ2() {
+    const btnPrev = document.getElementById("btn-prev-q2");
+    const btnNext = document.getElementById("btn-next-q2");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ2 > 1) {
+                paginaCorrenteQ2--;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+            if (paginaCorrenteQ2 < totalePagine) {
+                paginaCorrenteQ2++;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnNext.dataset.listener = "true";
+    }
+}
+
 // ==========================================
 // 2. INIZIALIZZAZIONE E LISTENER (DOM Content Loaded)
 // ==========================================
@@ -723,7 +815,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let paginaCorrente = 1;
     const righePerPagina = 25; 
 
+    // -- AVVIO CARICAMENTO DATI (Query 2) ---
+    // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
+    const urlFileJson2 = "./queries_results/ query_2.json"; 
+    
+    if (document.getElementById("tbody-query2")) {
+        caricaDatiQuery2();
+    }
 
+    // Variabili di stato per la Query 2
+    let datiQuery2 = [];
+    let paginaCorrenteQ2 = 1;
+    const righePerPaginaQ2 = 10; // Imposta il limite di righe che preferisci per pagina
 
 
 });
