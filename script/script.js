@@ -343,8 +343,8 @@ function renderizzaTabellaQ2() {
 
         const propUri = row.proprieta ? row.proprieta.value : "#";
         const propQID = propUri.split('/').pop();
-        const desc = row.proprietaLabel ? row.proprietaLabel.value : "";
-        const numero = row.numeroProprieta ? row.numeroProprieta.value : "1";
+        const desc = row.proprietalabel ? row.proprietalabel.value : "";
+        const numero = row.numeroDiProprieta ? row.numeroDiProprieta.value : "1";
 
         tr.innerHTML = `
             <td><a href="${propUri}" target="_blank" class="item-link">${propQID}</a></td>
