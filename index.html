@@ -44,28 +44,28 @@
                 Questo progetto esplora l'uso combinato di <strong>Knowledge Graphs (KGs)</strong> e <strong>Large Language Models (LLMs)</strong> per automatizzare l'estrazione e la formalizzazione della conoscenza nell'ambito della narratologia applicata ai media pop giapponesi (Anime e Manga). 
             </p>
             <p>
-                L'obiettivo principale è colmare un <strong>significativo gap informativo</strong> individuato all'interno di <a href="https://www.wikidata.org/" target="_blank">Wikidata</a>: la scarsa presenza di dati strutturati riguardanti gli archetipi narrativi dei personaggi. Nel nostro campione di 15 personaggi tratti da <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>, 11 non presentano alcun valore per la proprietà <code>wdt:P9071</code> (<em>character type</em>). Trasformando descrizioni testuali destrutturate in triple RDF, abbiamo costruito una proposta di arricchimento semantico pronta per essere interrogata.
+                L'obiettivo principale è colmare un <strong>significativo gap informativo</strong> individuato all'interno di <a href="https://www.wikidata.org/" target="_blank">Wikidata</a>: la scarsa presenza di dati strutturati riguardanti gli archetipi narrativi dei personaggi. Il progetto si concentra su un campione mirato tratto da <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>, usato per verificare la proprietà <code>wdt:P9071</code> (<em>character type</em>) e testare una pipeline controllata di classificazione, validazione e formalizzazione RDF.
             </p>
             <div class="stat-grid">
                 <div class="stat-box">
                     <div class="number">3</div>
-                    <div class="label">Anime analizzati</div>
+                    <div class="label">Opere considerate</div>
                 </div>
                 <div class="stat-box">
-                    <div class="number">15</div>
-                    <div class="label">Personaggi selezionati</div>
+                    <div class="number">4</div>
+                    <div class="label">Personaggi testati</div>
                 </div>
                 <div class="stat-box">
-                    <div class="number">11</div>
-                    <div class="label">Senza P9071</div>
+                    <div class="number">3</div>
+                    <div class="label">Tecniche di prompting</div>
                 </div>
                 <div class="stat-box">
-                    <div class="number">5</div>
-                    <div class="label">Triple RDF proposte</div>
+                    <div class="number">3</div>
+                    <div class="label">Modelli confrontati</div>
                 </div>
             </div>
             <p style="margin-top: 15px; font-weight: 500; color: #f43f5e;">
-                &rarr; <a href="metodologia.html" style="color: #f43f5e; text-decoration: none;">Scopri come abbiamo identificato il gap e definito la pipeline nella sezione Metodologia.</a>
+                &rarr; <a href="metodologia.html" style="color: #f43f5e; text-decoration: none;">Segui la pipeline: dalla verifica del gap in Wikidata al benchmark LLM e alla formalizzazione RDF.</a>
             </p>
         </section>
 
@@ -78,7 +78,7 @@
                 <div class="card-content">
                     <span class="card-tag">01. Metodologia</span>
                     <h3 class="card-title">Pipeline & Vocabolario</h3>
-                    <p>La definizione dei passi metodologici, del corpus di 15 personaggi e della proposta di estensione del vocabolario tramite RDF/RDFS.</p>
+                    <p>La definizione dei passi metodologici, del campione mirato di personaggi e della proposta di estensione del vocabolario tramite RDF/RDFS.</p>
                 </div>
             </a>
 
@@ -96,9 +96,9 @@
             <a href="llm-benchmark.html" class="card">
                 <img class="card-img" src="./img/DeathNote.webp" alt="Ingegnerizzazione dei Prompt">
                 <div class="card-content">
-                    <span class="card-tag">03. Intelligenza Artificiale</span>
+                    <span class="card-tag">03. LLM Results</span>
                     <h3 class="card-title">Prompt & LLM Benchmark</h3>
-                    <p>L'ingegnerizzazione dei prompt Zero-shot, Few-shot e Chain-of-Thought e l'analisi comparativa dei modelli linguistici testati.</p>
+                    <p>Il confronto tra Zero-shot, Few-shot e Zero-shot Chain-of-Thought su input minimi, con output di Gemini, ChatGPT e Copilot e normalizzazione manuale degli archetipi.</p>
                 </div>
             </a>
 

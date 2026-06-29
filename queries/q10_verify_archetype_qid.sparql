@@ -1,0 +1,29 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+# Obiettivo: verificare se un archetipo proposto dall'LLM esiste gia in Wikidata
+# ed e classificato come stock character.
+# Esempio: "tragic hero" e stato proposto come archetipo generale per Itachi Uchiha.
+# Il QID viene accettato solo se label, descrizione e classificazione corrispondono al concetto narrativo cercato.
+SELECT ?item ?itemLabel ?description
+WHERE {
+  ?item wdt:P31 wd:Q636497.
+
+  ?item rdfs:label ?itemLabel.
+  FILTER(LANG(?itemLabel) = "en")
+  FILTER(REGEX(STR(?itemLabel), "^tragic hero$", "i"))
+
+  OPTIONAL {
+    ?item schema:description ?description.
+    FILTER(LANG(?description) = "en")
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+LIMIT 10
