@@ -305,25 +305,30 @@
  <!-- Vocabolario controllato: stock character Wikidata usati come candidati per gli archetipi. -->
         <div class="query-box" id="query-box-9">
             <h3>stock character come vocabolario per l'IA</h3>
-            <p>Dopo aver osservato che alcuni personaggi avevano già un valore per <code>P9071</code>, abbiamo analizzato uno di questi valori: <em>The Chosen One</em> (<code>wd:Q113946608</code>). In Wikidata questa entità è classificata come istanza di <code>stock character</code> (<code>wd:Q636497</code>). Da qui abbiamo usato la classe <code>stock character</code> come punto di accesso per trovare altri ruoli e archetipi narrativi già presenti nel Knowledge Graph.</p>
-            <p>Questa query estrae quindi da Wikidata gli archetipi classificati come <code>stock character</code>. Il risultato diventa una lista di riferimento: nella fase successiva, quando analizziamo un personaggio con l'intelligenza artificiale, possiamo confrontarlo con archetipi già esistenti in Wikidata invece di inventare categorie nuove da zero.</p>
-            <iframe class="query-embed" src="./queries/q3_stock_character_vocabulary.sparql" title="Query salvata q3_stock_character_vocabulary.sparql"></iframe>
-            <p>Per ogni candidato vengono recuperati QID, label e descrizione. La descrizione è importante perché permette all'IA di motivare la scelta confrontando i tratti del personaggio con il significato dell'archetipo.</p>
-            <p>Dopo l'estrazione, abbiamo usato un'interrogazione a ChatGPT come supporto metodologico per capire quali categorie fossero più adatte al dominio anime/manga e al nostro corpus. Da questa selezione è nata la lista ristretta di stock character da usare nei prompt.</p>
-            <table class="results-table">
+            <p></p>
+            <pre class="query-embed" data-src="./queries/q9.stock_character.sparql"><code>Caricamento query in corso...</code></pre>
+            <h4>Risultati ottenuti</h4>
+            <table class="results-table" id="results-table-9" data-limit="10">
                 <thead>
-                    <tr><th>Entità Wikidata</th><th>Archetipo</th><th>Descrizione</th></tr>
+                    <tr>
+                        <th>Opera - Entità</th>
+                        <th>Etichetta dell'opera</th>
+                        <th>Totale dei personaggi</th>
+                        <th>Personaggio - Entità</th>
+                        <th>Etichetta del personaggio</th>
+                        <th>Tipo</th>
+                        <th>Etichetta del tipo</th>
+                    </tr>
                 </thead>
-                <tbody>
-                    <tr><td>wd:Q113946608</td><td>The Chosen One</td><td>Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale.</td></tr>
-                    <tr><td>wd:Q4904967</td><td>Big Bad</td><td>Antagonista principale che guida o rappresenta la minaccia più importante della storia.</td></tr>
-                    <tr><td>wd:Q1018644</td><td>Byronic hero</td><td>Figura eroica tormentata, carismatica e moralmente ambigua.</td></tr>
-                    <tr><td>wd:Q2755065</td><td>Dark Lord</td><td>Villain dominante, spesso associato a potere, oscurità e controllo.</td></tr>
-                    <tr><td>wd:Q65934439</td><td>Lone Cowboy</td><td>Personaggio indipendente, solitario e guidato da un codice personale.</td></tr>
-                    <tr><td>wd:Q17145824</td><td>Lovable rogue</td><td>Personaggio furbo e irregolare, ma simpatico e spesso moralmente recuperabile.</td></tr>
-                    <tr><td>wd:Q1254327</td><td>Mary Sue</td><td>Personaggio idealizzato, dotato di qualità eccezionali e pochi difetti narrativi.</td></tr>
-                </tbody>
+                <tbody id="tbody-query9"></tbody>
             </table>
+            <div class="pagination-container">
+                <button id="btn-prev-q9" class="btn-action primary" onclick="paginaPrecedente()">Precedente</button>
+                <span id="page-indicator">Pagina 1 di Lungh</span>
+                <button id="btn-next-q9" class="btn-action primary" onclick="paginaSuccessiva()">Successiva</button>
+            </div>
+            <p><strong>Perché è utile:</strong> Questa query è fondamentale perché standardizza e unifica i diversi modi in cui la community di Wikidata cataloga gli 
+                archetipi narrativi, permettendoci di mappare e confrontare l'anatomia dei personaggi di franchise complessi senza perdere dati per strada.</p>
         </div>
 
     </main>
