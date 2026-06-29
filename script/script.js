@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // -- AVVIO CARICAMENTO DATI (Query 2) ---
     // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
-    const urlFileJson2 = "./queries_results/ query_2.json"; 
+    const urlFileJson2 = "./queries_results/query_2.json"; 
 
     if (document.getElementById("tbody-query2")) {
         caricaDatiQuery2(urlFileJson2);
