@@ -537,12 +537,12 @@ function renderizzaTabellaQ8() {
 
         const personaggio = row.personaggio ? row.personaggio.value : "#";
         const personaggioQID = personaggio.split('/').pop();
-        const personaggiolabel = row.personaggiolabel ? row.personaggiolabel.value : "";
+        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
         const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
 
         tr.innerHTML = `
             <td><a href="${personaggio}" target="_blank" class="item-link">${personaggioQID}</a></td>
-            <td><span>${personaggiolabel}</span></td>
+            <td><span>${personaggioLabel}</span></td>
             <td><span>${tipoPersonaggioLabel}</span></td>
         `;
         tbody.appendChild(tr);
