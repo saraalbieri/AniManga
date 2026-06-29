@@ -17,6 +17,11 @@ let datiQuery3 = [];
 let paginaCorrenteQ3 = 1;
 const righePerPaginaQ3 = 10; 
 
+// Stato per la Query 8
+let datiQuery8 = [];
+let paginaCorrenteQ8 = 1;
+const righePerPaginaQ8 = 10; 
+
 
 // ==========================================
 // 1. DEFINIZIONE DELLE FUNZIONI (Globali)
@@ -426,7 +431,7 @@ function renderizzaTabellaQ3() {
     tbody.innerHTML = "";
 
     const inizio = (paginaCorrenteQ3 - 1) * righePerPaginaQ3;
-    const fine = Math.min(inizio + righePerPaginaQ3, datiQuery2.length);
+    const fine = Math.min(inizio + righePerPaginaQ3, datiQuery3.length);
     const totalePagine = Math.ceil(datiQuery3.length / righePerPaginaQ3);
 
     const righeMostrate = datiQuery3.slice(inizio, fine);
@@ -468,7 +473,7 @@ function configuraControlliQ3() {
         btnPrev.addEventListener('click', () => {
             if (paginaCorrenteQ3 > 1) {
                 paginaCorrenteQ3--;
-                renderizzaTabellaQ2();
+                renderizzaTabellaQ8();
             }
         });
         btnPrev.dataset.listener = "true";
@@ -476,10 +481,98 @@ function configuraControlliQ3() {
 
     if (btnNext && !btnNext.dataset.listener) {
         btnNext.addEventListener('click', () => {
-            const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+            const totalePagine = Math.ceil(datiQuery3.length / righePerPaginaQ3);
             if (paginaCorrenteQ3 < totalePagine) {
                 paginaCorrenteQ3++;
-                renderizzaTabellaQ2();
+                renderizzaTabellaQ3();
+            }
+        });
+        btnNext.dataset.listener = "true";
+    }
+}
+
+// --- Logica Caricamento e Impaginazione Query 8 ---
+function caricaDatiQuery8(urlFile) {
+    const tbody = document.getElementById("tbody-query8");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    fetch(urlFile) 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery8 = data.results.bindings;
+                paginaCorrenteQ8 = 1;
+                renderizzaTabellaQ8();
+                configuraControlliQ8();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 8:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ8() {
+    const tbody = document.getElementById("tbody-query8");
+    const indicator = document.getElementById("page-indicator-q8");
+    const btnPrev = document.getElementById("btn-prev-q8");
+    const btnNext = document.getElementById("btn-next-q8");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ8 - 1) * righePerPaginaQ8;
+    const fine = Math.min(inizio + righePerPaginaQ8, datiQuery8.length);
+    const totalePagine = Math.ceil(datiQuery8.length / righePerPaginaQ8);
+
+    const righeMostrate = datiQuery8.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr");
+
+        const personaggio = row.personaggio ? row.personaggio.value : "#";
+        const personaggioQID = personaggio.split('/').pop();
+        const personaggiolabel = row.personaggiolabel ? row.personaggiolabel.value : "";
+        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
+
+        tr.innerHTML = `
+            <td><a href="${personaggio}" target="_blank" class="item-link">${personaggioQID}</a></td>
+            <td><span>${personaggiolabel}</span></td>
+            <td><span>${tipoPersonaggioLabel}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ8} di ${totalePagine} (${datiQuery8.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ8 === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ8 === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ8() {
+    const btnPrev = document.getElementById("btn-prev-q8");
+    const btnNext = document.getElementById("btn-next-q8");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ8 > 1) {
+                paginaCorrenteQ8--;
+                renderizzaTabellaQ8();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery8.length / righePerPaginaQ8);
+            if (paginaCorrenteQ8 < totalePagine) {
+                paginaCorrenteQ8++;
+                renderizzaTabellaQ8();
             }
         });
         btnNext.dataset.listener = "true";
@@ -776,6 +869,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Avvio Query 3
     if (document.getElementById("tbody-query3")) {
         caricaDatiQuery3("./queries_results/query_3.json");
+    }
+
+    // Avvio Query 8
+    if (document.getElementById("tbody-query8")) {
+        caricaDatiQuery3("./queries_results/query_8.json");
     }
 
 });
