@@ -12,6 +12,11 @@ let datiQuery2 = [];
 let paginaCorrenteQ2 = 1;
 const righePerPaginaQ2 = 10; 
 
+// Stato per la Query 3
+let datiQuery3 = [];
+let paginaCorrenteQ3 = 1;
+const righePerPaginaQ3 = 10; 
+
 
 // ==========================================
 // 1. DEFINIZIONE DELLE FUNZIONI (Globali)
@@ -378,6 +383,102 @@ function configuraControlliQ2() {
             const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
             if (paginaCorrenteQ2 < totalePagine) {
                 paginaCorrenteQ2++;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnNext.dataset.listener = "true";
+    }
+}
+
+// --- Logica Caricamento e Impaginazione Query 3 ---
+function caricaDatiQuery3(urlFile) {
+    const tbody = document.getElementById("tbody-query3");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    fetch(urlFile) 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery3 = data.results.bindings;
+                paginaCorrenteQ3 = 1;
+                renderizzaTabellaQ3();
+                configuraControlliQ3();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 3:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ3() {
+    const tbody = document.getElementById("tbody-query3");
+    const indicator = document.getElementById("page-indicator-q3");
+    const btnPrev = document.getElementById("btn-prev-q3");
+    const btnNext = document.getElementById("btn-next-q3");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ3 - 1) * righePerPaginaQ3;
+    const fine = Math.min(inizio + righePerPaginaQ3, datiQuery2.length);
+    const totalePagine = Math.ceil(datiQuery3.length / righePerPaginaQ3);
+
+    const righeMostrate = datiQuery3.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr");
+
+        const item = row.item ? row.item.value : "#";
+        const itemQID = item.split('/').pop();
+        const itemlabel = row.itemlabel ? row.itemlabel.value : "";
+        const propUri = row.proprieta ? row.proprieta.value : "#";
+        const propQID = propUri.split('/').pop();
+        const proprietalabel = row.proprietalabel ? row.proprietalabel.value : "";
+        const objUri = row.valore ? row.valore.value : "#";
+        const objQID = objUri.split('/').pop();
+        const objlabel = row.valorelabel ? row.valorelabel.value : "";
+
+        tr.innerHTML = `
+            <td><a href="${item}" target="_blank" class="item-link">${itemQID}</a></td>
+            <td><span>${itemlabel}</span></td>
+            <td><a href="${propUri}" target="_blank" class="item-link">${propQID}</a></td>
+            <td><span>${proprietalabel}</span></td>
+            <td><a href="${objUri}" target="_blank" class="item-link">${objQID}</a></td>
+            <td><span>${objlabel}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ3} di ${totalePagine} (${datiQuery3.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ3 === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ3 === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ3() {
+    const btnPrev = document.getElementById("btn-prev-q3");
+    const btnNext = document.getElementById("btn-next-q3");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ3 > 1) {
+                paginaCorrenteQ3--;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+            if (paginaCorrenteQ3 < totalePagine) {
+                paginaCorrenteQ3++;
                 renderizzaTabellaQ2();
             }
         });
