@@ -78,6 +78,7 @@
             border-radius: 16px;
             border: 1px solid var(--llm-border);
             line-height: 1.65;
+            margin-bottom: 1rem;
         }
 
         .prompt-box {
@@ -155,8 +156,6 @@
             font-size: 0.95rem;
         }
 
-
-
         .mini-note {
             padding: 1rem;
             border-left: 4px solid var(--llm-accent);
@@ -166,9 +165,7 @@
         }
     </style>
 </head>
-
 <body>
-
     <nav class="navbar">
         <a class="navbar-brand" href="index.html">AniManga O-KG</a>
         <div class="navbar-menu">
@@ -235,7 +232,7 @@
         <div class="section">
             <h2>Tecnica 1 — Zero-shot Prompting</h2>
             <p>
-                Nel benchmark lo zero-shot è usato nella forma più semplice: il modello riceve solo il nome
+                Nel benchmark lo Zero-shot è usato nella forma più semplice: il modello riceve solo il nome
                 del personaggio e l'opera di appartenenza, senza esempi preliminari.
             </p>
 
@@ -253,26 +250,28 @@
                 Opera: <em>One Piece</em>
             </div>
 
-                <div class="prompt-label">Output con Gemini</div>
-            <div class="response-box">Luffy: Eroe Epico; Itachi: L'Antieroe</div>
+            <div class="prompt-label">Output con Gemini</div>
+            <div class="response-box">Luffy: Eroe epico; Itachi: antieroe.</div>
             <div class="prompt-label">Output con ChatGPT</div>
-            <div class="response-box">Luffy: Eroe avventuriero, Itachi: L'Antieroe Tragico</div>
+            <div class="response-box">Luffy: eroe avventuriero; Itachi: antieroe tragico.</div>
             <div class="prompt-label">Output con Copilot</div>
-            <div class="response-box">Luffy: Eroe, Itachi: L'Antieroe Tragico</div>
-
+            <div class="response-box">Luffy: eroe; Itachi: antieroe tragico.</div>
         </div>
 
         <div class="section">
             <h2>Tecnica 2 — Few-shot Prompting</h2>
-            
+            <p>
+                Nel Few-shot si forniscono esempi di classificazione prima del nuovo caso. Gli esempi sono stati
+                scelti tra personaggi che avevano già un <code>character type</code> valorizzato: <em>Naruto Uzumaki</em>
+                viene associato a <strong>The Chosen One</strong>, mentre <em>Light Yagami</em> viene associato a
+                <strong>villain</strong>.
+            </p>
             <p class="mini-note">
-                Nel Few-shot si forniscono esempi. Gli esempi stati scelti sulla base di chi aveva character type valorizzato: <em>Naruto Uzumaki</em> viene associato a
-                <strong>The Chosen One</strong>, mentre <em>Light Yagami</em> viene associato a
-                <strong>villain</strong>. Il modello deve poi classificare i nuovi personaggi seguendo
-                lo stesso formato.
+                La classificazione di Itachi Uchiha, Monkey D. Luffy e L è stata eseguita con tre prompt separati.
+                In ogni test sono stati mantenuti gli stessi esempi Few-shot, modificando soltanto il personaggio da classificare.
             </p>
 
-            <div class="prompt-label">Prompt few-shot</div>
+            <div class="prompt-label">Template few-shot</div>
             <div class="prompt-box">
                 Classifica personaggi anime e manga in archetipi narrativi.<br>
                 Segui lo stesso formato degli esempi.<br><br>
@@ -284,48 +283,62 @@
                 Personaggio: Light Yagami<br>
                 Opera: Death Note<br>
                 Archetipo: villain<br><br>
-                Ora classifica i seguenti personaggi seguendo lo stesso formato:<br><br>
-                Personaggio: <strong>Itachi Uchiha</strong><br>
-                Opera: <em>Naruto</em><br>
-                Archetipo:<br><br>
-            </div>
-                
-
-            <div class="prompt-box">
-                Personaggio: <strong>Monkey D. Luffy</strong><br>
-                Opera: <em>One Piece</em><br>
-                Archetipo:<br><br>
-                </div>
-            <div class="prompt-box">
-                Personaggio: <strong>L</strong><br>
-                Opera: <em>Death Note</em><br>
+                Ora classifica:<br>
+                Personaggio: <strong>[PERSONAGGIO TESTATO]</strong><br>
+                Opera: <em>[OPERA]</em><br>
                 Archetipo:
             </div>
-        </div>
 
-        <div class="prompt-label">Output con Gemini</div>
-            <div class="response-box">Itachi: Tragic-Hero, Luffy: The Chosen One, L: The Eccentric Detective</div>
+            <div class="prompt-label">Personaggi testati</div>
+            <div class="table-wrap">
+                <table class="llm-table">
+                    <tr>
+                        <th>Test</th>
+                        <th>Personaggio</th>
+                        <th>Opera</th>
+                    </tr>
+                    <tr>
+                        <td>Prompt 1</td>
+                        <td>Itachi Uchiha</td>
+                        <td>Naruto</td>
+                    </tr>
+                    <tr>
+                        <td>Prompt 2</td>
+                        <td>Monkey D. Luffy</td>
+                        <td>One Piece</td>
+                    </tr>
+                    <tr>
+                        <td>Prompt 3</td>
+                        <td>L</td>
+                        <td>Death Note</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="prompt-label">Output con Gemini</div>
+            <div class="response-box">Itachi: Tragic Hero; Luffy: The Chosen One; L: The Eccentric Detective.</div>
             <div class="prompt-label">Output con ChatGPT</div>
-            <div class="response-box">Itachi: Tragic hero, Monkey D. Luffy: The Hero, L: The Detached Genius Detective (The Mastermind Rival)</div>
+            <div class="response-box">Itachi: Tragic hero; Monkey D. Luffy: The Hero; L: The Detached Genius Detective / The Mastermind Rival.</div>
             <div class="prompt-label">Output con Copilot</div>
-            <div class="response-box">Itachi: Tragic-Hero, Luffy: The Hero, L: The Detective</div>
+            <div class="response-box">Itachi: Tragic Hero; Luffy: The Hero; L: The Detective.</div>
+
             <p class="mini-note">
                 Il risultato di Luffy come <strong>The Chosen One</strong> mostra un possibile effetto di orientamento
-                del Few-shot: , il modello può avvicinarsi agli archetipi
-                già presenti nel prompt solo nel caso di Luffy che è un protagonista simile a Naruti. Per gli altri esempi, come Itachi e L, il modello non ha esempi simili e produce archetipi più generici o diversi.
+                del Few-shot: poiché Naruto, protagonista shonen, è già presente negli esempi con quell'archetipo,
+                il modello può avvicinare Luffy a una categoria simile. Per personaggi meno vicini agli esempi,
+                come Itachi e L, i modelli producono etichette più varie o generiche.
             </p>
-            
         </div>
 
         <div class="section">
-            <h2>Tecnica 3 — Zero-shot Chain-of-Thought </h2>
+            <h2>Tecnica 3 — Zero-shot Chain-of-Thought</h2>
             <p>
                 Lo Zero-shot Chain-of-Thought viene usato come confronto metodologico rispetto al Few-shot.
                 Non fornisce esempi, ma chiede al modello di ragionare sui passaggi essenziali prima di proporre
                 l'archetipo finale.
             </p>
             <p>
-                Questa tecnica è stata preferita per i casi ambigui, nel dominio anime e manga, i valori
+                Questa tecnica è stata preferita per i casi ambigui perché, nel dominio anime e manga, i valori
                 <code>character type</code> già presenti in Wikidata sono limitati e disomogenei. Usare pochi esempi
                 rischia di orientare eccessivamente il modello verso quei casi specifici; lo Zero-shot CoT consente
                 invece di guidare il ragionamento senza vincolarlo a esempi potenzialmente fuorvianti.
@@ -344,32 +357,21 @@
 
             <div class="prompt-label">Output ChatGPT</div>
             <div class="response-box">
-                Ragionamento sintetico
-Funzione nella trama: Itachi Uchiha è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke. Con il procedere della storia, la rivelazione delle sue vere intenzioni ribalta la prospettiva e lo trasforma in un personaggio tragico che mette in discussione i temi del sacrificio, della verità e del peso del dovere.
-Motivazioni principali: Agisce principalmente per proteggere il villaggio e il fratello, accettando di essere considerato un criminale pur di evitare una guerra civile. Le sue scelte sono guidate dal senso del dovere e dal sacrificio personale più che dall'interesse individuale.
-Archetipo narrativo più adatto: L'archetipo che lo descrive meglio è quello dell'eroe tragico: un personaggio che compie scelte moralmente dolorose, rinuncia alla propria reputazione e paga un prezzo enorme per perseguire un bene più grande. Presenta anche elementi del "mentore nascosto" e dell'"antagonista apparente", ma questi sono ruoli funzionali alla storia più che il suo archetipo dominante.
-Archetipo finale: Eroe tragico.
+                <p><strong>Funzione nella trama:</strong> Itachi Uchiha è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke. Con il procedere della storia, la rivelazione delle sue vere intenzioni ribalta la prospettiva e lo trasforma in un personaggio tragico.</p>
+                <p><strong>Motivazioni principali:</strong> agisce per proteggere il villaggio e il fratello, accettando di essere considerato un criminale pur di evitare una guerra civile.</p>
+                <p><strong>Archetipo finale:</strong> eroe tragico.</p>
             </div>
             <div class="prompt-label">Output Gemini</div>
             <div class="response-box">
-                Ecco l'analisi sintetica del personaggio di Itachi Uchiha basata sui tre aspetti richiesti:
-1. Funzione nella trama
-Inizialmente Itachi funge da antagonista catalizzatore e personificazione del trauma per il fratello minore, Sasuke. Il suo sterminio del clan Uchiha è l'evento motore che spinge l'intera evoluzione di Sasuke e introduce i temi più cupi dell'opera. Successivamente, si rivela essere un protettore ombra e un agente sotto copertura: la sua reale funzione è quella di "martire sacrificatosi" per prevenire un colpo di stato, preservare la pace di Konoha e, soprattutto, proteggere la vita di suo fratello.
-2. Motivazioni principali
-Le azioni di Itachi sono guidate da due forze monumentali e apparentemente contrastanti:
-Il bene superiore e la pace: Un profondo pacifismo derivato dal trauma di aver vissuto la Terza Guerra Mondiale Ninja da bambino, che lo porta a scegliere il male minore (lo sterminio del proprio clan) per evitare un conflitto civile globale.
-L'amore fraterno incondizionato: La salvaguardia della vita e della crescita di Sasuke, che mette persino al di sopra del destino del villaggio.
-3. Archetipo narrativo più adatto
-Il Mentore Tragico / L'Antieroe Sacrificale: Sebbene parta come il classico "Cattivo", l'archetipo che meglio lo definisce alla fine del suo arco è quello del Martire Antieroico (o The Noble Scapegoat). È colui che accetta di macchiarsi del crimine più atroce e di essere odiato dal mondo intero pur di compiere ciò che ritiene giusto, agendo nell'ombra e pagando il prezzo più alto senza cercare gloria o redenzione.
-Archetipo Finale: L'Antieroe Sacrificale (Il Martire dell'Ombra)
+                <p><strong>Funzione nella trama:</strong> Itachi funge inizialmente da antagonista catalizzatore e personificazione del trauma per Sasuke. Successivamente si rivela un protettore ombra e un agente sotto copertura.</p>
+                <p><strong>Motivazioni principali:</strong> le sue azioni sono guidate dalla pace e dall'amore fraterno, accettando il sacrificio della propria reputazione.</p>
+                <p><strong>Archetipo finale:</strong> antieroe sacrificale / martire dell'ombra.</p>
             </div>
             <div class="prompt-label">Output Copilot</div>
             <div class="response-box">
-                Ragionamento sintetico
-Funzione nella trama: Itachi Uchiha è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke. Con il procedere della storia, la rivelazione delle sue vere intenzioni ribalta la prospettiva e lo trasforma in un personaggio tragico che mette in discussione i temi del sacrificio, della verità e del peso del dovere.
-Motivazioni principali: Agisce principalmente per proteggere il villaggio e il fratello, accettando di essere considerato un criminale pur di evitare una guerra civile. Le sue scelte sono guidate dal senso del dovere e dal sacrificio personale più che dall'interesse individuale.
-Archetipo narrativo più adatto: L'archetipo che lo descrive meglio è quello dell'eroe tragico: un personaggio che compie scelte moralmente dolorose, rinuncia alla propria reputazione e paga un prezzo enorme per perseguire un bene più grande. Presenta anche elementi del "mentore nascosto" e dell'"antagonista apparente", ma questi sono ruoli funzionali alla storia più che il suo archetipo dominante.
-Archetipo finale: Eroe tragico.
+                <p><strong>Funzione nella trama:</strong> Itachi è inizialmente presentato come antagonista e motore del conflitto personale di Sasuke, ma la rivelazione delle sue vere intenzioni lo trasforma in un personaggio tragico.</p>
+                <p><strong>Motivazioni principali:</strong> protegge il villaggio e il fratello, accettando di essere odiato per un bene più grande.</p>
+                <p><strong>Archetipo finale:</strong> eroe tragico.</p>
             </div>
         </div>
 
@@ -430,7 +432,7 @@ Archetipo finale: Eroe tragico.
                         <td>Few-shot</td>
                         <td>Itachi Uchiha; Monkey D. Luffy; L</td>
                         <td>Itachi: tragic hero / tragic-hero.<br>Luffy: The Hero / The Chosen One.<br>L: The Eccentric Detective / The Detached Genius Detective / The Detective.</td>
-                        <td>Restituisce il formato richiesto per più personaggi, ma può orientare il modello verso archetipi già presenti negli esempi.</td>
+                        <td>Restituisce il formato richiesto, ma può orientare il modello verso archetipi già presenti negli esempi.</td>
                     </tr>
                     <tr>
                         <td>Zero-shot Chain-of-Thought</td>
@@ -441,87 +443,58 @@ Archetipo finale: Eroe tragico.
                 </table>
             </div>
             <p class="mini-note">
-                In sintesi, il Few-shot è utile per confrontare più personaggi nello stesso prompt, mentre lo
-                Zero-shot Chain-of-Thought è più utile quando serve spiegare l'archetipo di un personaggio ambiguo
-                come Itachi.
+                In sintesi, il Few-shot è utile per confrontare più personaggi mantenendo un formato costante,
+                mentre lo Zero-shot Chain-of-Thought è più utile quando serve spiegare l'archetipo di un personaggio
+                ambiguo come Itachi.
             </p>
         </div>
 
         <div class="section">
             <h2>Sviluppi futuri</h2>
             <p>
-                Una possibile evoluzione del progetto consiste nell'aggiungere un secondo livello di
-                classificazione basato su archetipi e figure culturali giapponesi. In questo modo ogni
-                personaggio potrebbe essere collegato sia a un archetipo narrativo generale, più vicino
-                alla tradizione occidentale o globale, sia a una categoria interpretativa legata al contesto
-                culturale di anime e manga.
+                Una possibile evoluzione del progetto consiste nell'aggiungere un secondo livello di classificazione
+                basato su archetipi e figure culturali giapponesi. In questo modo ogni personaggio potrebbe essere
+                collegato sia a un archetipo narrativo generale, più vicino alla tradizione occidentale o globale,
+                sia a una categoria interpretativa legata al contesto culturale di anime e manga.
             </p>
-            
 
             <h3>Tecnica migliore per il prompt giapponese</h3>
             <p>
                 Per questa evolutiva sono stati previsti due prompt: Zero-shot e Zero-shot Chain-of-Thought.
-                La tecnica più adatta resta lo
-                <strong>Zero-shot Chain-of-Thought</strong>, perché l'archetipo giapponese richiede
-                di distinguere il ruolo narrativo universale dalla figura culturale: un personaggio può essere
-                un <em>mentor</em> nel senso narrativo generale, ma un <em>sensei</em> nel contesto giapponese.
-                Il ragionamento guidato aiuta a motivare questa distinzione e riduce il rischio di scegliere
-                categorie solo per somiglianza lessicale.
+                La tecnica più adatta resta lo <strong>Zero-shot Chain-of-Thought</strong>, perché l'archetipo
+                giapponese richiede di distinguere il ruolo narrativo universale dalla figura culturale. Il ragionamento
+                guidato aiuta a motivare questa distinzione e riduce il rischio di scegliere categorie solo per somiglianza lessicale.
             </p>
 
-            <div class="prompt-label">Prompt evolutivo zero-shot</div>
+            <div class="prompt-label">Prompt evolutivo zero-shot — Itachi</div>
             <div class="prompt-box">
-               Classifica il personaggio su due livelli: archetipo narrativo generale e archetipo della cultura manga e anime giapponese più vicina.
-
-Personaggio: Itachi Uchiha
-Opera: Naruto
-Restituisci solo: archetipo generale, archetipo giapponese.
-
+                Classifica il personaggio su due livelli: archetipo narrativo generale e archetipo della cultura manga e anime giapponese più vicina.<br><br>
+                Personaggio: <strong>Itachi Uchiha</strong><br>
+                Opera: <em>Naruto</em><br><br>
+                Restituisci solo: archetipo generale, archetipo giapponese.
             </div>
-            <div class="prompt-label">Output zero-shot</div>
+            <div class="prompt-label">Output zero-shot — Itachi</div>
             <div class="response-box">
-                <strong>Gemini</strong><br>
-                Archetipo generale: eroe tragico / sacrificio consapevole / antieroe segreto.<br>
-                Archetipo giapponese: dark hero / infiltrato / fratello maggiore tragico.
-            </div>
-             <div class="response-box">
-                <strong>ChatGPT</strong><br>
-                Archetipo generale: martire tragico / antieroe sacrificiale.<br>
-                Archetipo giapponese: shinobi tragico / antieroe shonen.
-            </div>
-             <div class="response-box">
-                <strong>Copilot</strong><br>
-                Archetipo generale: eroe tragico / martire segreto.<br>
-                Archetipo giapponese: gisei-sha / shinobi sacrificiale.
+                <strong>Gemini:</strong> archetipo generale: eroe tragico / sacrificio consapevole / antieroe segreto; archetipo giapponese: dark hero / infiltrato / fratello maggiore tragico.<br>
+                <strong>ChatGPT:</strong> archetipo generale: martire tragico / antieroe sacrificiale; archetipo giapponese: shinobi tragico / antieroe shonen.<br>
+                <strong>Copilot:</strong> archetipo generale: eroe tragico / martire segreto; archetipo giapponese: gisei-sha / shinobi sacrificiale.
             </div>
 
+            <div class="prompt-label">Prompt evolutivo zero-shot — Nami</div>
             <div class="prompt-box">
-               Classifica il personaggio su due livelli: archetipo narrativo generale e archetipo della cultura manga e anime giapponese più vicina.
-
-Personaggio: Nami
-Opera: One Piece
-Restituisci solo: archetipo generale, archetipo giapponese.
-
+                Classifica il personaggio su due livelli: archetipo narrativo generale e archetipo della cultura manga e anime giapponese più vicina.<br><br>
+                Personaggio: <strong>Nami</strong><br>
+                Opera: <em>One Piece</em><br><br>
+                Restituisci solo: archetipo generale, archetipo giapponese.
             </div>
-            <div class="prompt-label">Output zero-shot</div>
+            <div class="prompt-label">Output zero-shot — Nami</div>
             <div class="response-box">
-                <strong>Gemini</strong><br>
-                Archetipo generale: Il Ladro Scaltro / La Bussola Morale (The Rogue / The Navigator<br>
-                Archetipo giapponese: Tsundere.
-            </div>
-             <div class="response-box">
-                <strong>ChatGPT</strong><br>
-                Archetipo generale: Stratega/Trickster<br>
-                Archetipo giapponese: Tsundere
-            </div>
-             <div class="response-box">
-                <strong>Copilot</strong><br>
-                Archetipo generale: Furfante dal cuore d’oro (trickster/ladra astuta)<br>
-                Archetipo giapponese: Tsundere
+                <strong>Gemini:</strong> archetipo generale: ladro scaltro / bussola morale; archetipo giapponese: tsundere.<br>
+                <strong>ChatGPT:</strong> archetipo generale: stratega / trickster; archetipo giapponese: tsundere.<br>
+                <strong>Copilot:</strong> archetipo generale: furfante dal cuore d'oro / ladra astuta; archetipo giapponese: tsundere.
             </div>
 
-
-            <div class="prompt-label">Prompt evolutivo Zero-shot CoT</div>
+            <div class="prompt-label">Prompt evolutivo Zero-shot CoT — Nami</div>
             <div class="prompt-box">
                 Analizza il personaggio distinguendo due livelli:<br>
                 1. archetipo narrativo generale;<br>
@@ -529,61 +502,30 @@ Restituisci solo: archetipo generale, archetipo giapponese.
                 3. motivazione sintetica del collegamento tra i due livelli.<br><br>
                 Personaggio: <strong>Nami</strong><br>
                 Opera: <em>One Piece</em><br><br>
-                Restituisci una risposta solo con il nome dell'archetipo generale e dell'archetipo giapponese e la motivazione.
+                Restituisci una risposta con il nome dell'archetipo generale, il nome dell'archetipo giapponese e una breve motivazione.
             </div>
-            <div class="prompt-label">Output Zero-shot CoT</div>
+            <div class="prompt-label">Output Zero-shot CoT — Nami</div>
             <div class="response-box">
-                <strong>Gemini</strong><br>
-                Archetipo narrativo generale: La Ladra d'Ombra / L'Ingannatrice Benevola (The Rogue / Trickster with a heart of gold)
-Archetipo giapponese: Koakuma (Piccolo Demonio)
-Motivazione: Nami incarna l'archetipo universale del "ladro scaltro" che usa l'ingegno, la seduzione e l'astuzia per sopravvivere e proteggere i propri cari, distaccandosi dai classici canoni dell'eroe puro. Questo concetto si traduce perfettamente nell'archetipo giapponese della Koakuma: una figura femminile giocosa, manipolatrice e furbesca che usa il proprio fascino per ottenere ciò che vuole, ma che nasconde una profonda lealtà e un animo fondamentalmente buono.
+                <strong>Gemini:</strong> archetipo generale: ladra d'ombra / ingannatrice benevola; archetipo giapponese: koakuma; motivazione: Nami usa ingegno, seduzione e astuzia per sopravvivere e proteggere i propri cari.<br>
+                <strong>ChatGPT:</strong> archetipo generale: esploratrice / trickster intelligente; archetipo giapponese: kitsune; motivazione: entrambe le figure richiamano astuzia, adattabilità e uso strategico dell'inganno.<br>
+                <strong>Copilot:</strong> archetipo generale: trickster alleato / ladra astuta; archetipo giapponese: kitsune; motivazione: Nami usa intelligenza, persuasione e adattabilità per raggiungere i propri obiettivi e proteggere il gruppo.
             </div>
 
-            <div class="response-box">
-                <strong>ChatGPT</strong><br>
-                **Archetipo generale: Esploratrice / Trickster intelligente
-
-Archetipo giapponese:Kitsune
-
-Motivazione:Entrambi incarnano una figura astuta, adattabile e brillante, che usa intelligenza, inganno e fascino più della forza fisica per raggiungere i propri obiettivi, trasformando progressivamente l'astuzia individuale in lealtà verso il proprio gruppo.
-
-            </div>
-
-            <div class="response-box">
-                <strong>Copilot</strong><br>
-                Archetipo narrativo generale:** Trickster alleato (la ladra astuta)**
-Archetipo giapponese: Kitsune (volpe astuta e affascinante)
-Motivazione: Nami usa intelligenza, inganno, persuasione e adattabilità per raggiungere i propri obiettivi e proteggere il gruppo; come il Trickster altera gli equilibri con l’astuzia, mentre il richiamo alla Kitsune emerge nella sua furbizia, capacità manipolativa e nell’uso del fascino come strumento strategico.
-            </div>
- <div class="prompt-box">
+            <div class="prompt-label">Prompt evolutivo Zero-shot CoT — Itachi</div>
+            <div class="prompt-box">
                 Analizza il personaggio distinguendo due livelli:<br>
                 1. archetipo narrativo generale;<br>
                 2. archetipo giapponese;<br>
                 3. motivazione sintetica del collegamento tra i due livelli.<br><br>
                 Personaggio: <strong>Itachi Uchiha</strong><br>
                 Opera: <em>Naruto</em><br><br>
-                Restituisci una risposta solo con il nome dell'archetipo generale e dell'archetipo giapponese e la motivazione.
+                Restituisci una risposta con il nome dell'archetipo generale, il nome dell'archetipo giapponese e una breve motivazione.
             </div>
-            <div class="prompt-label">Output Zero-shot CoT</div>
+            <div class="prompt-label">Output Zero-shot CoT — Itachi</div>
             <div class="response-box">
-                <strong>Gemini</strong><br>
-                Archetipo generale: eroe tragico / martire sacrificale.<br>
-                Archetipo giapponese: antieroe tragico / finto cattivo / dark hero.<br>
-                Motivazione: entrambi i livelli ruotano attorno al sacrificio di sé. Itachi accetta di macchiare la propria reputazione e rinuncia all'onore personale per proteggere il villaggio e il fratello.
-            </div>
-
-            <div class="response-box">
-                <strong>ChatGPT</strong><br>
-                Archetipo generale: eroe tragico.<br>
-                Archetipo giapponese: antieroe sacrificiale / giseisha.<br>
-                Motivazione: nasconde la propria vera natura e accetta di essere odiato, sacrificando reputazione e vita per proteggere il fratello e il bene collettivo.
-            </div>
-
-            <div class="response-box">
-                <strong>Copilot</strong><br>
-                Archetipo generale: eroe tragico sacrificiale.<br>
-                Archetipo giapponese: fratello maggiore protettivo segreto / oniisan martire / shinobi nell'ombra.<br>
-                Motivazione: entrambi gli archetipi si fondano sull'autosacrificio per un bene superiore; Itachi accetta di essere odiato e frainteso pur di proteggere il fratello e preservare la pace.
+                <strong>Gemini:</strong> archetipo generale: eroe tragico / martire sacrificale; archetipo giapponese: antieroe tragico / finto cattivo / dark hero; motivazione: entrambi i livelli ruotano attorno al sacrificio di sé.<br>
+                <strong>ChatGPT:</strong> archetipo generale: eroe tragico; archetipo giapponese: antieroe sacrificiale / giseisha; motivazione: Itachi accetta di essere odiato, sacrificando reputazione e vita per proteggere il fratello e il bene collettivo.<br>
+                <strong>Copilot:</strong> archetipo generale: eroe tragico sacrificiale; archetipo giapponese: fratello maggiore protettivo segreto / oniisan martire / shinobi nell'ombra; motivazione: entrambi gli archetipi si fondano sull'autosacrificio per un bene superiore.
             </div>
 
             <h3>Risultati aggiornati</h3>
@@ -596,13 +538,13 @@ Motivazione: Nami usa intelligenza, inganno, persuasione e adattabilità per rag
                     </tr>
                     <tr>
                         <td>Zero-shot</td>
-                        <td>Identifica correttamente Itachi come eroe tragico, martire o antieroe sacrificiale.</td>
+                        <td>Per Itachi identifica archetipi come eroe tragico, martire o antieroe sacrificiale. Per Nami produce etichette vicine a trickster, ladra astuta e tsundere.</td>
                         <td class="partial">Utile come baseline, ma produce etichette meno motivate e talvolta sovrappone archetipo generale e giapponese.</td>
                     </tr>
                     <tr>
                         <td>Zero-shot Chain-of-Thought</td>
-                        <td>Collega l'archetipo generale al sacrificio, al dovere, al ruolo nell'ombra e a figure culturali vicine come lo shinobi sacrificiale, il <em>giseisha</em> o il fratello maggiore protettivo.</td>
-                        <td class="check">Risulta la tecnica migliore perché esplicita il ponte tra archetipo narrativo e lettura culturale giapponese.</td>
+                        <td>Per Itachi collega l'archetipo al sacrificio, al dovere e al ruolo nell'ombra. Per Nami collega il trickster alla figura della kitsune o della koakuma.</td>
+                        <td class="check">Risulta la tecnica migliore perché esplicita il ponte tra archetipo narrativo generale e lettura culturale giapponese.</td>
                     </tr>
                 </table>
             </div>
@@ -610,8 +552,7 @@ Motivazione: Nami usa intelligenza, inganno, persuasione e adattabilità per rag
             <p class="mini-note">
                 Il Few-shot non viene usato in questa evolutiva perché manca ancora una lista stabile e validata
                 di esempi per gli archetipi giapponesi. Lo Zero-shot semplice rimane una baseline rapida, mentre
-                lo Zero-shot CoT è più prudente perché obbliga il modello a spiegare la scelta prima della
-                validazione manuale.
+                lo Zero-shot CoT è più prudente perché obbliga il modello a spiegare la scelta prima della validazione manuale.
             </p>
             <p class="mini-note">
                 Gli output dei modelli non vengono copiati automaticamente nel knowledge graph: prima vengono
@@ -674,6 +615,5 @@ ex:sacrificial-shinobi
             </p>
         </div>
     </main>
-
 </body>
 </html>
