@@ -24,7 +24,7 @@ const righePerPaginaQ3 = 10;
 
 // --- Grafo Dinamico (Query 3 - Lightbox 3) ---
 function loadGraphFromJSON() {
-    fetch('./queries_results/query_grafo_3.json')
+    fetch('./queries_results/query_3.json') //"./queries_results/query_3.json"
         .then(response => response.json())
         .then(data => {
             let nodesArray = [];
@@ -112,7 +112,7 @@ function loadGraphFromJSON() {
 
 // --- Grafo Dinamico (Query 7 - Lightbox 7) ---
 function loadGraph7FromJSON() {
-    fetch('./queries/query_7.json')
+    fetch('./queries_results/query_7.json')//"./queries_results/query_3.json"
         .then(response => response.json())
         .then(data => {
             let nodesArray = [];
