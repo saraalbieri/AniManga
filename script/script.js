@@ -32,8 +32,8 @@ function loadGraphFromJSON() {
             let addedNodes = new Set();
 
             data.results.bindings.forEach(row => {
-                let sourceId = row.soggetto.value;
-                let sourceLabel = row.soggettolabel ? row.soggettolabel.value : sourceId.split('/').pop();
+                let sourceId = row.item.value;
+                let sourceLabel = row.itemlabel ? row.itemlabel.value : sourceId.split('/').pop();
 
                 if (!addedNodes.has(sourceId)) {
                     nodesArray.push({
