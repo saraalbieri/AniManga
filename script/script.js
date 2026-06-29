@@ -10,17 +10,17 @@ const righePerPagina = 25;
 // Stato per la Query 2
 let datiQuery2 = [];
 let paginaCorrenteQ2 = 1;
-const righePerPaginaQ2 = 10; 
+const righePerPaginaQ2 = 15; 
 
 // Stato per la Query 3
 let datiQuery3 = [];
 let paginaCorrenteQ3 = 1;
-const righePerPaginaQ3 = 10; 
+const righePerPaginaQ3 = 15; 
 
 // Stato per la Query 8
 let datiQuery8 = [];
 let paginaCorrenteQ8 = 1;
-const righePerPaginaQ8 = 10; 
+const righePerPaginaQ8 = 25; 
 
 
 // ==========================================
@@ -518,6 +518,7 @@ function caricaDatiQuery8(urlFile) {
 }
 
 function renderizzaTabellaQ8() {
+    alert("qui");
     const tbody = document.getElementById("tbody-query8");
     const indicator = document.getElementById("page-indicator-q8");
     const btnPrev = document.getElementById("btn-prev-q8");
@@ -547,7 +548,6 @@ function renderizzaTabellaQ8() {
         `;
         tbody.appendChild(tr);
     });
-    alert(personaggio);
 
     if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ8} di ${totalePagine} (${datiQuery8.length} elementi)`;
     if (btnPrev) btnPrev.disabled = (paginaCorrenteQ8 === 1);
