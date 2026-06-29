@@ -473,7 +473,7 @@ function configuraControlliQ3() {
         btnPrev.addEventListener('click', () => {
             if (paginaCorrenteQ3 > 1) {
                 paginaCorrenteQ3--;
-                renderizzaTabellaQ8();
+                renderizzaTabellaQ3();
             }
         });
         btnPrev.dataset.listener = "true";
@@ -518,7 +518,6 @@ function caricaDatiQuery8(urlFile) {
 }
 
 function renderizzaTabellaQ8() {
-    alert("qui");
     const tbody = document.getElementById("tbody-query8");
     const indicator = document.getElementById("page-indicator-q8");
     const btnPrev = document.getElementById("btn-prev-q8");
