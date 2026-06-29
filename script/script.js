@@ -196,19 +196,20 @@ function loadGraph7FromJSON() {
 }
 
 // --- PARTE 7: AVVIO CARICAMENTO DATI (Query 7)
-function caricaDatiDaJson() {
+function caricaDatiDaJson(urlFile) {
     const tbody = document.getElementById("tbody-query7");
-    if(!tbody) return; // Se la tabella non esiste nella pagina corrente, esce
+    if(!tbody) return; 
 
     tbody.innerHTML = "<tr><td colspan='4'>Caricamento dati in corso...</td></tr>";
 
-    fetch(urlFileJson)
+    // Usa urlFile al posto della vecchia variabile globale
+    fetch(urlFile)
         .then(response => {
             if (!response.ok) throw new Error("Errore HTTP: " + response.status);
             return response.json();
         })
         .then(data => {
-            gestisciRisultatiQuery7(data); // Richiama la funzione globale definita in basso
+            gestisciRisultatiQuery7(data); 
         })
         .catch(error => {
             console.error("Si è verificato un errore durante il caricamento del JSON:", error);
@@ -804,10 +805,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // -- AVVIO CARICAMENTO DATI (Query 7) ---
     // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
-    const urlFileJson = "./queries/query_7.json"; 
+    const urlFileJson7 = "./queries/query_7.json"; 
 
     if (document.getElementById("tbody-query7")) {
-        caricaDatiDaJson();
+        caricaDatiDaJson(urlFileJson);
     }
 
     // --- LOGICA DI IMPAGINAZIONE QUERY 7 (GLOBALE)
@@ -818,9 +819,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // -- AVVIO CARICAMENTO DATI (Query 2) ---
     // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
     const urlFileJson2 = "./queries_results/ query_2.json"; 
-    
+
     if (document.getElementById("tbody-query2")) {
-        caricaDatiQuery2();
+        caricaDatiQuery2(urlFileJson2);
     }
 
     // Variabili di stato per la Query 2
