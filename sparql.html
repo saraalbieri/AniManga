@@ -22,13 +22,13 @@
 
     <main class="container">
         <h1>Validazione tramite SPARQL Queries</h1>
-        <p>Le query SPARQL sono state usate prima per esplorare il dominio anime/manga in Wikidata e solo successivamente per verificare la proprietà <code>wdt:P9071</code>. In questo modo il gap sugli archetipi narrativi non è stato assunto in partenza, ma individuato progressivamente confrontando le proprietà disponibili sui personaggi.</p>
+        <p>Le query SPARQL sono state usate prima per esplorare il dominio anime/manga in Wikidata e solo successivamente per verificare la proprietà <code>wdt:P9071</code>. 
+            In questo modo il gap sugli archetipi narrativi non è stato assunto in partenza, ma individuato progressivamente confrontando le proprietà disponibili sui personaggi.</p>
 
         <!-- Prime query esplorative: confronto tra anime, manga e franchise di Naruto. -->
         <div class="query-box" id="query-box-1">
             <h3>Query 1: contare le dichiarazioni dirette delle entità Naruto</h3>
             <p>Questa query cerca le entità che hanno esattamente la label inglese <em>Naruto</em>, recupera la loro descrizione inglese e conta quante righe vengono trovate per ciascun item attraverso le proprietà dirette di Wikidata.</p>
-            <!--iframe class="query-embed" src="./queries/q0c_count_direct_statements_for_naruto.sparql" title="Query salvata q0c_count_direct_statements_for_naruto.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0c_count_direct_statements_for_naruto.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-1" data-limit="5">
@@ -282,79 +282,9 @@ Ora dobbiamo prendere in considerazione solo gli item relativi alle tre opere se
 
 E ora??????
 
-<div>###################################################################################</div>
+<div>##########################</div>
 
 
-
-
-        <!-- Fase preliminare: ricerca testuale con REGEX prima della scelta dei QID definitivi. -->
-        <div class="query-box" id="query-box-5">
-            <h3>Fase esplorativa 0: cercare opere candidate con REGEX</h3>
-            <p>Prima di fissare i QID definitivi, abbiamo usato una query esplorativa basata sulle label testuali. Il filtro <code>REGEX</code> cerca i nomi delle tre opere nella label (<em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>), ignorando maiuscole e minuscole. Per evitare risultati troppo generici, la query usa anche <code>P31</code> (<em>instance of</em>) e limita i risultati alle entità classificate come <em>anime television series</em>.</p>
-            <iframe class="query-embed" src="./queries/q0_regex_find_candidate_works.sparql" title="Query salvata q0_regex_find_candidate_works.sparql"></iframe>
-            <h4>Risultati ottenuti</h4>
-            <table class="results-table">
-                <thead>
-                    <tr><th>Entità Wikidata</th><th>Label</th><th>Description estratta da Wikidata</th><th>Instance of</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>wd:Q718624</td><td>Death Note</td><td>Japanese anime television series</td><td>anime television series</td></tr>
-                    <tr><td>wd:Q25929253</td><td>Naruto</td><td>Japanese anime television series</td><td>anime television series</td></tr>
-                    <tr><td>wd:Q12500134</td><td>Naruto: Shippūden</td><td>Japanese anime television series</td><td>anime television series</td></tr>
-                    <tr><td>wd:Q710324</td><td>One Piece</td><td>Japanese anime television series</td><td>anime television series</td></tr>
-                    <tr><td>wd:Q123893209</td><td>The One Piece</td><td>upcoming Japanese anime series</td><td>anime television series</td></tr>
-                </tbody>
-            </table>
-            <p><strong>Perché è utile:</strong> questa query documenta la fase di ricerca iniziale per nome e per categoria anime. Il risultato mostra le versioni dell'anime ne scegliamo solo 3 che sono di nostro interesse.Dopo questa verifica, la query successiva usa direttamente i QID confermati delle tre opere.</p>
-        </div>
-
-        <!-- Fase esplorativa: verifica che le tre opere scelte esistano in Wikidata. -->
-        <div class="query-box" id="query-box-6">
-            <h3>Fase esplorativa: trovare le opere su Wikidata</h3>
-            <p>La prima operazione è stata cercare le entità Wikidata relative alle tre opere scelte: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Questa query serve a verificare che il dominio sia già rappresentato nel Knowledge Graph. Abbiamo scelto di utilizzare i QID verificati per assicurarci che le opere fossero correttamente identificate. In particolare sono stati scelti quelli relativi alla versione anime.</p>
-            <!-- La query viene incorporata dal file salvato, così il codice SPARQL non è duplicato nell'HTML. -->
-            <iframe class="query-embed" src="./queries/q0a_find_anime_entities.sparql" title="Query salvata q0a_find_anime_entities.sparql"></iframe>
-            <!-- Risultati riportati manualmente dopo l'esecuzione della query su Wikidata Query Service. -->
-            <table class="results-table">
-                <thead>
-                    <tr><th>Entità Wikidata</th><th>Opera</th><th>Description estratta da Wikidata</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>wd:Q718624</td><td>Death Note</td><td>Japanese anime television series</td></tr>
-                    <tr><td>wd:Q25929253</td><td>Naruto</td><td>Japanese anime television series</td></tr>
-                    <tr><td>wd:Q710324</td><td>One Piece</td><td>Japanese anime television series</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Fase esplorativa: recupero dei personaggi collegati alle opere tramite P1441/P1080. -->
-        <div class="query-box" id="query-box-7">
-            <h3> recuperare i personaggi collegati alle opere</h3>
-            <p>Dopo aver individuato le opere, abbiamo cercato le entità dei personaggi collegate a <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. In Wikidata questo collegamento non è sempre modellato nello stesso modo: alcuni personaggi sono collegati direttamente all'opera con <code>P1441</code> (<em>present in work</em>), mentre altri possono essere collegati tramite <code>P1080</code> (<em>from narrative universe</em>). Per questo la query usa <code>UNION</code>, cioè combina entrambe le possibilità in un'unica ricerca. Infine, il filtro su <code>anime character</code> serve a limitare i risultati ai personaggi e a ridurre entità non pertinenti.</p>
-            <iframe class="query-embed" src="./queries/q0b_discover_characters_from_works.sparql" title="Query salvata q0b_discover_characters_from_works.sparql"></iframe>
-            <p><strong>Perché è utile:</strong> questa query ci ha permesso di vedere che Wikidata contiene già numerosi personaggi delle tre opere.</p>
-        </div>
-
-        <!-- Sintesi metodologica: dal controllo delle proprieta emerge il gap su P9071. -->
-        <div class="query-box" id="query-box-8">
-            <h3>Dal confronto delle proprietà al gap</h3>
-            <p>
-                Dopo aver confrontato personaggi principali (Monkey D. Luffy, Naruto Uzumaki, Light Yagami), abbiamo cercato una proprietà adatta a rappresentare gli archetipi narrativi. La proprietà individuata è <code>wdt:P9071</code>, <em>character type</em>. 
-            <p>La query seguente documenta questa fase esplorativa: cerca i tre personaggi principali tramite <code>REGEX</code>, filtra le entità dichiarate come <em>anime character</em> e controlla solo <code>P9071</code>, cioè la proprietà Wikidata usata per rappresentare il <em>character type</em>.</p>
-            <iframe class="query-embed" src="./queries/q1a_regex_main_characters_properties.sparql" title="Query salvata q1a_regex_main_characters_properties.sparql"></iframe>
-            <h4>Risultati ottenuti</h4>
-            <table class="results-table">
-                <thead>
-                    <tr><th>Personaggio</th><th>Character type (P9071)</th><th>Descrizione estratta</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Monkey D. Luffy</td><td>The Chosen One</td><td>Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale.</td></tr>
-                    <tr><td>Naruto Uzumaki</td><td>The Chosen One</td><td>Personaggio scelto da un destino, una profezia o una forza superiore per compiere una missione centrale.</td></tr>
-                    <tr><td>Light Yagami</td><td>antihero; villain</td><td>Personaggio moralmente ambiguo o antagonista centrale, utile per mostrare che <code>P9071</code> può contenere più valori.</td></tr>
-                </tbody>
-            </table>
-            <p><strong>Conclusione:</strong> il vocabolario esiste sui personaggi selezionati.</p>
-        </div>
 
         <!-- Query di controllo: mostra sia personaggi con P9071 sia personaggi senza P9071. -->
         <div class="query-box" id="query-box-8">

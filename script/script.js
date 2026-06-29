@@ -723,4 +723,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let paginaCorrente = 1;
     const righePerPagina = 25; 
 
+
+
+
 });
