@@ -169,7 +169,7 @@
         <div class="query-box" id="query-box-5">
             <h3>Query 5: trovare le proprietà non universali dei personaggi</h3>
             <p>Questa query identifica le proprietà di Wikidata che non sono condivise da tutti i personaggi analizzati. Lo script calcola prima il numero totale dei personaggi (tramite una subquery) e successivamente verifica in quanti di essi è presente ciascuna proprietà. Infine, filtra i risultati per mostrare esclusivamente le proprietà il cui numero di utilizzi è inferiore al totale assoluto dei personaggi, escludendo così i tratti universali e ordinando i risultati da quelli più usati a quelli più rari.</p>
-            <pre class="query-embed" data-src="./queries/q0g_SARA.sparql"><code>Caricamento query in corso...</code></pre>
+            <pre class="query-embed" data-src="./queries/q5_prop_non_universali.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-5" data-limit="10">
                 <thead>
@@ -205,7 +205,7 @@
         <div class="query-box" id="query-box-6">
             <h3>Query 6: Estrazione per i 3 manga scelti per l'analisi</h3>
             <p>L'utilizzo dell'operatore logico OR (tramite il simbolo pipe <code>|</code>) all'interno dell'espressione regolare permette di intercettare simultaneamente le principali forme espressive dei media giapponesi in una singola interrogazione. Questa tecnica di filtraggio avanzato è fondamentale quando si costruiscono strutture complesse come AniManga O-KG, poiché garantisce di scartare a priori le entità irrilevanti o ambigue presenti su Wikidata (ad esempio brani musicali, live-action o merchandising scollegato), isolando esclusivamente i nodi pertinenti all'ecosistema manga e anime necessari per popolare l'ontologia in modo pulito e coerente.</p>
-            <pre class="query-embed" data-src="./queries/q0h_SARA.sparql"><code>Caricamento query in corso...</code></pre>
+            <pre class="query-embed" data-src="./queries/q6_analisi_3_manga.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-6" data-limit="10">
                 <thead>
@@ -239,7 +239,7 @@
         <div class="query-box" id="query-box-7">
             <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <em>P9071</em> character type solo in relazione alle opere selezionate</h3>
             <p>.</p>
-            <pre class="query-embed" data-src="./queries/q0i_SARA.sparql"><code>Caricamento query in corso...</code></pre>
+            <pre class="query-embed" data-src="./queries/q7_P9071.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-7" data-limit="10">
                 <thead>
@@ -279,7 +279,7 @@
         <div class="query-box" id="query-box-8">
             <h3>Query 8: Raffiniamo la ricerca: cerchiamo i personaggi (DISTINCT) che hanno l'archetipo <em>P9071</em> character type. </h3>
             <p>.</p>            
-            <pre class="query-embed" data-src="./queries/q0j_SARA.sparql"><code>Caricamento query in corso...</code></pre>
+            <pre class="query-embed" data-src="./queries/q8_all_character_P9071.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-8" data-limit="10">
                 <thead>
