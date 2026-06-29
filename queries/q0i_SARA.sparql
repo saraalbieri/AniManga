@@ -8,9 +8,7 @@ WHERE {
   # 1. Inseriamo le tue 16 entità esatte
   VALUES ?opera { 
     wd:Q4431905 wd:Q642 wd:Q673 wd:Q104623150 wd:Q1834 
-    wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 
-    wd:Q25929253 wd:Q138507620 wd:Q138507619 wd:Q131936531 
-    wd:Q22077183 wd:Q1200673 wd:Q1209459 
+    wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 wd:Q25929253 
   }
   
   # 2. RICERCA OBBLIGATORIA: Estraiamo i personaggi

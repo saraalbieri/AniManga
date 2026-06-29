@@ -54,13 +54,16 @@
                 <span class="lightbox-close">&times;</span>
                 <img class="lightbox-content" id="lightbox-img-1" src="./img/chart-1.png" alt="Grafico Risultati 1">
             </div>
-            <p><strong>Perché è utile:</strong> </p>
+            <p><strong>Perché è utile:</strong> Prima di esplorare le relazioni più complesse, è necessario capire "di cosa parliamo" quando cerchiamo Naruto su Wikidata. 
+                Questa query fa proprio questo: isola tutte le entità che condividono lo stesso nome, ne recupera la descrizione e conta quante informazioni (dichiarazioni) 
+                possiede ciascuna. In questo modo possiamo differenziare a colpo d'occhio la serie anime dal manga o dal franchise multimediale, scartando le entità omonime 
+                (come città o navi). Sapere quante dichiarazioni ha ogni entità ci offre una mappa iniziale del dominio e ci dice subito quali sono i nodi più ricchi di dati da 
+                cui partire per le nostre analisi successive.</p>
         </div>
 
         <div class="query-box" id="query-box-2">
             <h3>Query 2: confrontare le proprietà delle entità Naruto</h3>
             <p>La seconda query usa i QID <code>wd:Q25929253</code>, <code>wd:Q26971382</code> e <code>wd:Q642</code> per recuperare le proprietà dirette delle tre entità. Raggruppa i risultati per proprietà e label inglese, mostrando quante volte ciascuna proprietà compare complessivamente.</p>
-            <!--iframe class="query-embed" src="./queries/q0d_compare_direct_properties_across_naruto_entities.sparql" title="Query salvata q0d_compare_direct_properties_across_naruto_entities.sparql"></iframe -->
             <pre class="query-embed" data-src="./queries/q0d_compare_direct_properties_across_naruto_entities.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-2" data-limit="5">
@@ -85,13 +88,16 @@
                 <span class="lightbox-close">&times;</span>
                 <img class="lightbox-content" id="lightbox-img-2" src="./img/chart-2.png" alt="Grafico Risultati 2">
             </div>
-            <p><strong>Perché è utile:</strong> </p>
+            <p><strong>Perché è utile:</strong> Se con la prima query abbiamo capito quali entità esistono, con questa andiamo a scoprire come vengono descritte e confrontate. 
+                Mettendo sotto la lente d'ingrandimento le proprietà dell'anime, del manga e del franchise di Naruto, possiamo vedere quali sono le informazioni più frequenti 
+                (come l'elenco dei personaggi o i generi di appartenenza) e come variano tra un formato e l'altro. Questo confronto ravvicinato è la prova schiacciante che ci serve: 
+                ci mostra chiaramente che Wikidata è ricca di metadati tecnici e identificativi esterni, ma è quasi del tutto priva di informazioni strutturate sugli archetipi e 
+                sulla caratterizzazione sociologica dei personaggi, aprendo la strada all'utilità del nostro progetto.</p>
         </div>
 
         <div class="query-box" id="query-box-3">
             <h3>Query 3: elencare tutte le dichiarazioni dirette</h3>
             <p>Questa query espande il confronto precedente e restituisce tutte le dichiarazioni dirette delle tre entità Naruto. Per ogni riga mostra l'entità di partenza, la proprietà e il valore, aggiungendo le rispettive label inglesi quando disponibili. È una vista diagnostica utile per osservare nel dettaglio come Wikidata descrive anime, manga e franchise e per individuare proprietà rilevanti per le analisi successive.</p>
-            <!--iframe class="query-embed" src="./queries/q0e_list_direct_statements_for_naruto_entities.sparql" title="Query salvata q0e_list_direct_statements_for_naruto_entities.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0e_list_direct_statements_for_naruto_entities.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-3" data-limit="15">
@@ -120,7 +126,10 @@
                 <span class="lightbox-close">&times;</span>
                 <div class="lightbox-content" id="mynetwork-3" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
-            <p><strong>Perché è utile:</strong> Questa query è molto utile per l'<strong>esplorazione e la comprensione del modello dati</strong>. Permette di ottenere una "radiografia" completa di come determinati elementi sono strutturati su Wikidata, mettendo in luce quali proprietà vengono utilizzate per descriverli. È uno strumento essenziale in fase di analisi preliminare: consente a chi interroga il database di esplorare a 360 gradi le informazioni disponibili per una singola entità, offrendo una base solida prima di costruire query più complesse o selettive.</p>
+            <p><strong>Perché è utile:</strong> Questa query è molto utile per l'<strong>esplorazione e la comprensione del modello dati</strong>. Permette di ottenere una "radiografia" 
+                completa di come determinati elementi sono strutturati su Wikidata, mettendo in luce quali proprietà vengono utilizzate per descriverli. È uno strumento essenziale in 
+                fase di analisi preliminare: consente a chi interroga il database di esplorare a 360 gradi le informazioni disponibili per una singola entità, offrendo una base solida 
+                prima di costruire query più complesse o selettive.</p>
         </div>
 
         <div class="query-box" id="query-box-4">
@@ -144,15 +153,12 @@
                 <button class="btn-action primary" id="toggleBtn-4">
                     Mostra tutte
                 </button>
-                <!--button class="btn-action primary" id="chartBtn-4">
-                    Chart
-                </button-->
             </div>
-            <!--div id="lightbox-4" class="lightbox-overlay">
-                <span class="lightbox-close">&times;</span>
-                <img class="lightbox-content" id="lightbox-img-4" src="./img/chart-4.png" alt="Grafico Risultati 4">
-            </div-->
-            <p><strong>Perché è utile:</strong> </p>
+            <p><strong>Perché è utile:</strong> Con le query precedenti abbiamo visto quante proprietà ed elementi contengono i dati di Naruto, scoprendo che la voce sui personaggi 
+                è in assoluto la più ricca. Questa quarta query fa un passo avanti pratico: mette ordine. Visto che un personaggio come Sasuke o Sakura compare sia nel manga che 
+                nell'anime, rischiemmo di trovarli ripetuti più volte. Grazie all'istruzione DISTINCT, la query elimina i doppioni e ci restituisce una lista pulita, univoca e 
+                in ordine alfabetico di tutti i personaggi esistenti nel mondo di Naruto su Wikidata. È l'elenco perfetto da cui partire per iniziare ad applicare i nostri 
+                archetipi narrativi ed esplorare la sociologia dei personaggi nel dettaglio.</p>
         </div>
 
         <div class="query-box" id="query-box-5">

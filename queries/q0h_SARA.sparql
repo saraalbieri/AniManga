@@ -18,7 +18,7 @@ WHERE {
     FILTER(LANG(?descrizione) = "en")
   }
  
-  # 4. Filtriamo per la parola "Manga"
+  # 4. Filtriamo per la parola "Manga", "Anime", "Film", "Media Franchise"
   # La "i" finale rende la ricerca case-insensitive (trova "Manga", "manga", "MANGA", ecc.)
   FILTER(REGEX(?descrizione, "manga | anime | film | media franchise", "i")) 
  
