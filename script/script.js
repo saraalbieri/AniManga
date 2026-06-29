@@ -805,7 +805,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // -- AVVIO CARICAMENTO DATI (Query 7) ---
     // Assicuriamoci che il percorso sia quello corretto (./ anziché ../ se la pagina html è nella cartella principale)
-    const urlFileJson7 = "./queries/query_7.json"; 
+    const urlFileJson7 = "./queries_results/query_7.json"; 
 
     if (document.getElementById("tbody-query7")) {
         caricaDatiDaJson(urlFileJson7);
