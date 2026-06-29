@@ -874,7 +874,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Avvio Query 8
     if (document.getElementById("tbody-query8")) {
-        caricaDatiQuery3("./queries_results/query_8.json");
+        caricaDatiQuery8("./queries_results/query_8.json");
     }
 
 });
