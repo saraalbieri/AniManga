@@ -775,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Avvio Query 3
     if (document.getElementById("tbody-query3")) {
-        caricaDatiQuery2("./queries_results/query_3.json");
+        caricaDatiQuery3("./queries_results/query_3.json");
     }
 
 });
