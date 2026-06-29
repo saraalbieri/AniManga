@@ -135,7 +135,6 @@
         <div class="query-box" id="query-box-4">
             <h3>Query 4: trovare i personaggi Naruto univoci</h3>
             <p>L'ultima query esplorativa seleziona soltanto la proprietà <code>P674</code> (<em>characters</em>) nelle tre entità indicate. <code>DISTINCT</code> elimina le righe duplicate e il risultato mostra proprietà, personaggio e rispettive label inglesi, ordinando alfabeticamente i valori.</p>
-            <!--iframe class="query-embed" src="./queries/q0f_list_unique_characters_across_naruto_entities.sparql" title="Query salvata q0f_list_unique_characters_across_naruto_entities.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0f_list_unique_characters_across_naruto_entities.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-4" data-limit="10">
@@ -164,7 +163,6 @@
         <div class="query-box" id="query-box-5">
             <h3>Query 5: trovare le proprietà non universali dei personaggi</h3>
             <p>Questa query identifica le proprietà di Wikidata che non sono condivise da tutti i personaggi analizzati. Lo script calcola prima il numero totale dei personaggi (tramite una subquery) e successivamente verifica in quanti di essi è presente ciascuna proprietà. Infine, filtra i risultati per mostrare esclusivamente le proprietà il cui numero di utilizzi è inferiore al totale assoluto dei personaggi, escludendo così i tratti universali e ordinando i risultati da quelli più usati a quelli più rari.</p>
-            <!--iframe class="query-embed" src="./queries/q0g_SARA.sparql.sparql" title="Query salvata q0g_SARA.sparql.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0g_SARA.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-5" data-limit="10">
@@ -198,21 +196,9 @@
                 Abbiamo deciso di concentrarci su quelle proprietà che sono meno utilizzate, come la propretà <em>wd:P9071</em> - <strong>character type</strong> che a nostro avviso è una proprietà importante per comprendere la natura dei personaggi.</p>
         </div>
 
-
-<div>###################################################################################</div>
-
-DOMANDA: ora dovremmo rifare il tutto anche per One Piece e Death Note, oppure, riusciamo a fare una query unica che ci restituisca i personaggi di tutte e tre le opere?
-
-Come possiamo fare a trovare tutti i personaggi di One Piece e Death Note che sono anche dentro Japanese manga series, Japanese anime television series e Japanese media franchise?
-
-
-
-<div>###################################################################################</div>
-
         <div class="query-box" id="query-box-6">
-            <h3>Query 6: Estrazione per i 3 manga</h3>
+            <h3>Query 6: Estrazione per i 3 manga scelti per l'analisi</h3>
             <p>L'utilizzo dell'operatore logico OR (tramite il simbolo pipe <code>|</code>) all'interno dell'espressione regolare permette di intercettare simultaneamente le principali forme espressive dei media giapponesi in una singola interrogazione. Questa tecnica di filtraggio avanzato è fondamentale quando si costruiscono strutture complesse come AniManga O-KG, poiché garantisce di scartare a priori le entità irrilevanti o ambigue presenti su Wikidata (ad esempio brani musicali, live-action o merchandising scollegato), isolando esclusivamente i nodi pertinenti all'ecosistema manga e anime necessari per popolare l'ontologia in modo pulito e coerente.</p>
-            <!--iframe class="query-embed" src="./queries/q0h_SARA.sparql.sparql" title="Query salvata q0g_SARA.sparql.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0h_SARA.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-6" data-limit="10">
@@ -244,16 +230,9 @@ Come possiamo fare a trovare tutti i personaggi di One Piece e Death Note che so
                 problema è diffuso e che la nostra ontologia è la soluzione ideale per mappare l'intero panorama dei fumetti giapponesi.</p>
         </div>
 
-<div>###################################################################################</div>
-
-Ora dobbiamo prendere in considerazione solo gli item relativi alle tre opere selezionate e vedere quali personaggi hanno l'archetipo Character type
-
-<div>###################################################################################</div>
-
         <div class="query-box" id="query-box-7">
-            <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <em>P9071</em> character type</h3>
+            <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <em>P9071</em> character type solo in relazione alle opere selezionate</h3>
             <p>.</p>
-            <!--iframe class="query-embed" src="./queries/q0i_SARA.sparql.sparql" title="Query salvata q0g_SARA.sparql.sparql"></iframe-->
             <pre class="query-embed" data-src="./queries/q0i_SARA.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-7" data-limit="10">
@@ -291,77 +270,44 @@ Ora dobbiamo prendere in considerazione solo gli item relativi alle tre opere se
                 È esattamente in questo spazio vuoto che si inserisce AniManga O-KG, dimostrando l'assoluta utilità del nostro lavoro.</p>
         </div>
 
-
-<div>###################################################################################</div>
-
-E ora??????
-
-<div>##########################</div>
-
-
-
-        <!-- Query di controllo: mostra sia personaggi con P9071 sia personaggi senza P9071. -->
         <div class="query-box" id="query-box-8">
-            <h3>personaggi selezionati e valori P9071</h3>
-            <p>Il passaggio successivo è stato quindi verificare se questa proprietà fosse effettivamente valorizzata anche in altri personaggi analizzati. Abbiamo individuato 15 personaggi principali (5 per opera) e verificato i loro QID, per poi controllare se esistesse un valore per <code>P9071</code>.
-            </p>Questa query usa i QID verificati dei 15 personaggi e controlla, tramite <code>OPTIONAL</code>, se esiste un valore per <code>wdt:P9071</code>.</p>
-            <iframe class="query-embed" src="./queries/q1_selected_characters_p9071.sparql" title="Query salvata q1_selected_characters_p9071.sparql"></iframe>
-
+            <h3>Query 8: Raffiniamo la ricerca: cerchiamo i personaggi (DISTINCT) che hanno l'archetipo <em>P9071</em> character type. </h3>
+            <p>.</p>            
+            <pre class="query-embed" data-src="./queries/q0j_SARA.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
-            <table class="results-table">
+            <table class="results-table" id="results-table-8" data-limit="10">
                 <thead>
-                    <tr><th>Anime</th><th>Personaggio</th><th>Valore P9071</th></tr>
+                    <tr>
+                        <th>Personaggio - Entità</th>
+                        <th>Etichetta del personaggio</th>
+                        <th>Etichetta Character type</th>
+                    </tr>
                 </thead>
-                <tbody>
-                    <tr><td>One Piece</td><td>Monkey D. Luffy</td><td>The Chosen One</td></tr>
-                    <tr><td>One Piece</td><td>Roronoa Zoro</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Nami</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Sanji</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Nico Robin</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Naruto Uzumaki</td><td>The Chosen One</td></tr>
-                    <tr><td>Naruto</td><td>Sasuke Uchiha</td><td>Lone Cowboy</td></tr>
-                    <tr><td>Naruto</td><td>Sakura Haruno</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Kakashi Hatake</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Itachi Uchiha</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Light Yagami</td><td>antihero; villain</td></tr>
-                    <tr><td>Death Note</td><td>L</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Misa Amane</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Ryuk</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Near</td><td>Nessun valore P9071</td></tr>
+                <tbody id="tbody-query8">
                 </tbody>
             </table>
-        </div>
-            </table>
-            <p><strong>Conclusione:</strong> il vocabolario esiste sui personaggi principali ma non su altri personaggi che abbiamo selezionato.Questo è il gap semantico su cui si basa il progetto.</p>
-
-        <!-- Query di gap analysis: isola solo i personaggi che non hanno character type. -->
-        <div class="query-box" id="query-box-9">
-            <h3>personaggi senza P9071</h3>
-            <p>Questa query usa <code>FILTER NOT EXISTS</code> per isolare i personaggi del campione privi di archetipo narrativo strutturato. Il risultato è stato usato come base per il menu a tendina della demo LLM: per ogni personaggio sono stati mantenuti nome, opera e QID Wikidata, necessari per recuperare automaticamente il contesto e le descrizioni.</p>
-            <iframe class="query-embed" src="./queries/q2_missing_p9071_in_sample.sparql" title="Query salvata q2_missing_p9071_in_sample.sparql"></iframe>
-            <h4>Risultati ottenuti</h4>
-            <table class="results-table">
-                <thead>
-                    <tr><th>Opera</th><th>Personaggio</th><th>QID Wikidata</th><th>Stato P9071</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>One Piece</td><td>Roronoa Zoro</td><td>wd:Q858432</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Nami</td><td>wd:Q877964</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Sanji</td><td>wd:Q1061765</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>One Piece</td><td>Nico Robin</td><td>wd:Q1190653</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Sakura Haruno</td><td>wd:Q203240</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Kakashi Hatake</td><td>wd:Q1767</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Naruto</td><td>Itachi Uchiha</td><td>wd:Q1043344</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>L</td><td>wd:Q52863</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Misa Amane</td><td>wd:Q687038</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Ryuk</td><td>wd:Q2328583</td><td>Nessun valore P9071</td></tr>
-                    <tr><td>Death Note</td><td>Near</td><td>wd:Q138008</td><td>Nessun valore P9071</td></tr>
-                </tbody>
-            </table>
-            <p><strong>Interpretazione:</strong> 11 personaggi su 15 non hanno un valore <code>P9071</code>. Questa query fornisce la prova quantitativa del nostro gap.</p>
+            <div class="pagination-container">
+                <button id="btn-prev" class="btn-action primary" onclick="paginaPrecedente()">Precedente</button>
+                <span id="page-indicator">Pagina 1 di Lungh</span>
+                <button id="btn-next" class="btn-action primary" onclick="paginaSuccessiva()">Successiva</button>
+            </div>
+            <div class="table-controls">
+                <button class="btn-action primary" id="chartBtn-8">
+                    Grafo
+                </button>
+            </div>
+            <div id="lightbox-8" class="lightbox-overlay">
+                <span class="lightbox-close">&times;</span>
+                <div class="lightbox-content" id="mynetwork-8" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+            </div>
+            <p><strong>Perché è utile:</strong> Dopo aver esplorato il funzionamento generale di Wikidata, andiamo dritti al punto: quanti personaggi utilizzano la 
+                proprietà <em>P9071</em> per definire il proprio archetipo narrativo? Il risultato è sorprendente e mette in luce il vero problema: nonostante la proprietà 
+                esista sulla carta, quasi nessun personaggio di manga o anime è stato effettivamente collegato a un "tipo" o a un archetipo sociologico. 
+                Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa. 
+                È esattamente in questo spazio vuoto che si inserisce AniManga O-KG, dimostrando l'assoluta utilità del nostro lavoro.</p>
         </div>
 
-        <!-- Vocabolario controllato: stock character Wikidata usati come candidati per gli archetipi. -->
+ <!-- Vocabolario controllato: stock character Wikidata usati come candidati per gli archetipi. -->
         <div class="query-box" id="query-box-10">
             <h3>stock character come vocabolario per l'IA</h3>
             <p>Dopo aver osservato che alcuni personaggi avevano già un valore per <code>P9071</code>, abbiamo analizzato uno di questi valori: <em>The Chosen One</em> (<code>wd:Q113946608</code>). In Wikidata questa entità è classificata come istanza di <code>stock character</code> (<code>wd:Q636497</code>). Da qui abbiamo usato la classe <code>stock character</code> come punto di accesso per trovare altri ruoli e archetipi narrativi già presenti nel Knowledge Graph.</p>
@@ -383,34 +329,6 @@ E ora??????
                     <tr><td>wd:Q1254327</td><td>Mary Sue</td><td>Personaggio idealizzato, dotato di qualità eccezionali e pochi difetti narrativi.</td></tr>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Contesto LLM: dati strutturati da Wikidata da inserire nel prompt. -->
-        <div class="query-box" id="query-box-11">
-            <h3>contesto Wikidata per il prompt LLM</h3>
-            <p>Questa query estrae il contesto strutturato che viene fornito al modello LLM prima della scelta dell'archetipo. Le proprietà selezionate descrivono appartenenza, ruolo e caratterizzazione del personaggio, rendendo la classificazione più motivata e meno dipendente dalla sola label.</p>
-            <iframe class="query-embed" src="./queries/q4_wikidata_context_for_llm.sparql" title="Query salvata q4_wikidata_context_for_llm.sparql"></iframe>
-            <h4>Risultato ottenuto</h4>
-            <p>La query può restituire più righe quando una proprietà ha più valori. Nella tabella seguente il risultato per <code>wd:Q1740</code> è riportato in forma sintetica, come contesto leggibile da passare al prompt.</p>
-            <p><strong>Personality Database</strong> è una piattaforma esterna in cui gli utenti discutono e votano profili psicologici e tipologie di personaggi. In questo progetto viene considerata solo come collegamento esterno recuperabile da Wikidata tramite <code>P10757</code>, non come fonte ufficiale per assegnare un archetipo.</p>
-            <table class="results-table">
-                <thead>
-                    <tr><th>Proprietà</th><th>Valore</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Personaggio</td><td>Sasuke Uchiha</td></tr>
-                    <tr><td>Descrizione</td><td>fictional character in Naruto</td></tr>
-                    <tr><td>Instance of</td><td>anime character; manga character</td></tr>
-                    <tr><td>Present in work</td><td>Naruto</td></tr>
-                    <tr><td>Narrative universe</td><td>Naruto universe</td></tr>
-                    <tr><td>Occupation</td><td>ninja</td></tr>
-                    <tr><td>Creator</td><td>Masashi Kishimoto</td></tr>
-                    <tr><td>Sex or gender</td><td>male</td></tr>
-                    <tr><td>Existing P9071</td><td>Lone Cowboy</td></tr>
-                    <tr><td>Personality Database ID (P10757)</td><td>Identificativo del profilo su Personality Database; usato solo come riferimento esterno, non come fonte ufficiale.</td></tr>
-                </tbody>
-            </table>
-            <p><strong>Uso metodologico:</strong> il risultato viene trasformato in un blocco di contesto nel prompt LLM. In questo modo il modello può usare dati strutturati verificabili, come opera, universo narrativo, gruppo, occupazione e valori P9071 già presenti.</p>
         </div>
 
     </main>
