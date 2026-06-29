@@ -5,166 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLM Benchmark - Anime Mapping</title>
     <link rel="stylesheet" href="./style/style.css">
-    <style>
-        :root {
-            --llm-bg: #f7f8fb;
-            --llm-card: #ffffff;
-            --llm-border: #d9e0ea;
-            --llm-muted: #5f6b7a;
-            --llm-accent: #4d6fdc;
-            --llm-soft: #eef3ff;
-            --llm-code: #1f2533;
-        }
-
-        body {
-            background: var(--llm-bg);
-        }
-
-        .llm-hero {
-            padding: 3.5rem 1.5rem 3rem;
-            margin: 2rem 0;
-            border-radius: 24px;
-            background: linear-gradient(135deg, #eef3ff 0%, #ffffff 70%);
-            border: 1px solid var(--llm-border);
-            text-align: center;
-        }
-
-        .llm-hero h1 {
-            margin-bottom: 0.75rem;
-        }
-
-        .llm-hero p {
-            max-width: 820px;
-            margin: 0 auto;
-            color: var(--llm-muted);
-            font-size: 1.05rem;
-            line-height: 1.7;
-        }
-
-        .section {
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: 20px;
-            background: var(--llm-card);
-            border: 1px solid var(--llm-border);
-            box-shadow: 0 8px 24px rgba(31, 37, 51, 0.06);
-        }
-
-        .section h2 {
-            margin-top: 0;
-        }
-
-        .section p,
-        .section li {
-            line-height: 1.7;
-        }
-
-        .prompt-label {
-            display: inline-block;
-            margin: 1.25rem 0 0.45rem;
-            padding: 0.35rem 0.7rem;
-            border-radius: 999px;
-            background: var(--llm-soft);
-            color: var(--llm-accent);
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-        }
-
-        .prompt-box,
-        .response-box {
-            padding: 1.25rem;
-            border-radius: 16px;
-            border: 1px solid var(--llm-border);
-            line-height: 1.65;
-        }
-
-        .prompt-box {
-            background: #fbfcff;
-        }
-
-        .response-box {
-            background: #f7fff8;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-            margin-top: 1rem;
-        }
-
-        .llm-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-        }
-
-        .llm-table th,
-        .llm-table td {
-            padding: 0.9rem;
-            border: 1px solid var(--llm-border);
-            text-align: left;
-            vertical-align: top;
-        }
-
-        .llm-table th {
-            background: var(--llm-soft);
-        }
-
-        .check {
-            color: #1f7a3f;
-            font-weight: 700;
-        }
-
-        .partial {
-            color: #986a00;
-            font-weight: 700;
-        }
-
-        .cross {
-            color: #a72a2a;
-            font-weight: 700;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .card {
-            padding: 1.25rem;
-            border-radius: 16px;
-            background: #fbfcff;
-            border: 1px solid var(--llm-border);
-        }
-
-        .card h3 {
-            margin-top: 0;
-        }
-
-        .code-block-simple {
-            background: var(--llm-code);
-            color: #f5f7fb;
-            padding: 1.25rem;
-            border-radius: 16px;
-            overflow-x: auto;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            font-size: 0.95rem;
-        }
-
-
-
-        .mini-note {
-            padding: 1rem;
-            border-left: 4px solid var(--llm-accent);
-            background: #fbfcff;
-            color: var(--llm-muted);
-            border-radius: 12px;
-        }
-    </style>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script type="text/javascript" src="script/script.js"></script>
 </head>
 
 <body>
@@ -474,9 +316,9 @@ Archetipo finale: Eroe tragico.
             <div class="prompt-box">
                Classifica il personaggio su due livelli: archetipo narrativo generale e archetipo della cultura manga e anime giapponese più vicina.
 
-Personaggio: Itachi Uchiha
-Opera: Naruto
-Restituisci solo: archetipo generale, archetipo giapponese.
+                Personaggio: Itachi Uchiha
+                Opera: Naruto
+                Restituisci solo: archetipo generale, archetipo giapponese.
 
             </div>
             <div class="prompt-label">Output zero-shot</div>
@@ -593,21 +435,23 @@ Restituisci solo: archetipo generale, archetipo giapponese.
                 Seguendo lo stile del progetto di confronto, il template usa triple Turtle semplici, risorse con IRI
                 e prefissi chiari, senza dichiarare nella pagina una T-Box completa.
             </p>
-            <div class="code-block-simple">@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+            <div class="code-block-simple">
+                @prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
+                @prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
+                @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 
-ex:itachi-uchiha
-    animanga:hasGeneralArchetype ex:tragic-hero ;
-    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
+                ex:itachi-uchiha
+                    animanga:hasGeneralArchetype ex:tragic-hero ;
+                    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
 
-ex:tragic-hero
-    rdfs:label "eroe tragico"@it ;
-    rdfs:label "tragic hero"@en .
+                ex:tragic-hero
+                    rdfs:label "eroe tragico"@it ;
+                    rdfs:label "tragic hero"@en .
 
-ex:sacrificial-shinobi
-    rdfs:label "shinobi sacrificiale"@it ;
-    rdfs:label "sacrificial shinobi"@en .</div>
+                ex:sacrificial-shinobi
+                    rdfs:label "shinobi sacrificiale"@it ;
+                    rdfs:label "sacrificial shinobi"@en .
+            </div>
             <p class="mini-note">
                 Questa soluzione evita di inventare QID Wikidata quando non esiste un identificativo verificato.
                 L'archetipo generale e quello giapponese sono modellati come due risorse distinte del knowledge graph
