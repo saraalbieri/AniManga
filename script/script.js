@@ -1,404 +1,4 @@
 // ==========================================
-// 1. DEFINIZIONE DELLE FUNZIONI (Globale)
-// ==========================================
-
-
-// --- PARTE 5: Grafo Dinamico (Query 3 - Lightbox 3) ---
-function loadGraphFromJSON() {
-    fetch('./queries/query_3.json')
-        .then(response => response.json())
-        .then(data => {
-            let nodesArray = [];
-            let edgesArray = [];
-            let addedNodes = new Set();
-
-            data.results.bindings.forEach(row => {
-                // --- NODO SORGENTE (Es. Opera) ---
-                let sourceId = row.soggetto.value;
-                let sourceLabel = row.soggettolabel ? row.soggettolabel.value : sourceId.split('/').pop();
-
-                if (!addedNodes.has(sourceId)) {
-                    nodesArray.push({
-                        id: sourceId,
-                        label: sourceLabel,
-                        color: { background: '#10b981', border: '#047857' }, // Verde
-                        font: { color: 'white', face: 'Arial', bold: true },
-                        shape: 'box'
-                    });
-                    addedNodes.add(sourceId);
-                }
-
-                // --- NODO DESTINAZIONE (Es. Genere, Autore, ecc.) ---
-                let targetId = row.valore.value;
-                let targetLabel = row.valorelabel ? row.valorelabel.value : (targetId.includes('/') ? decodeURIComponent(targetId.split('/').pop()) : targetId);
-
-                if (!addedNodes.has(targetId)) {
-                    let bgColor = '#3b82f6'; // Blu di default
-                    let borderColor = '#1e40af';
-                    let fontSettings = { color: 'white', face: 'Arial' };
-                    
-                    let proprieta = row.proprieta ? row.proprieta.value : "";
-                    
-                    // Condizione di esempio per il Grafo 3:
-                    if (proprieta.includes('P50') || targetLabel.toLowerCase().includes('autore')) {
-                        bgColor = '#eab308'; // Giallo
-                        borderColor = '#854d0e';
-                        fontSettings = { color: 'black', face: 'Arial', bold: true }; // NERO FORZATO
-                    }
-
-                    nodesArray.push({
-                        id: targetId,
-                        label: targetLabel,
-                        // NESSUN GRUPPO ASSEGNATO PER EVITARE SOVRASCRITTURE
-                        color: { background: bgColor, border: borderColor },
-                        font: fontSettings,
-                        shape: 'ellipse'
-                    });
-                    addedNodes.add(targetId);
-                }
-
-                // --- ARCO ---
-                let edgeLabel = row.proprietalabel ? row.proprietalabel.value : proprieta.split('/').pop();
-                edgesArray.push({
-                    from: sourceId,
-                    to: targetId,
-                    label: edgeLabel,
-                    arrows: 'to',
-                    color: { color: '#94a3b8', highlight: '#f43f5e' },
-                    font: { align: 'middle', size: 11, color: '#475569', background: 'rgba(255,255,255,0.8)' }
-                });
-            });
-
-            var container = document.getElementById('mynetwork-3');
-            if (!container) return;
-
-            var dataVis = {
-                nodes: new vis.DataSet(nodesArray),
-                edges: new vis.DataSet(edgesArray)
-            };
-
-            var options = {
-                physics: {
-                    stabilization: { iterations: 150 },
-                    forceAtlas2Based: {
-                        gravitationalConstant: -120,
-                        centralGravity: 0.01,
-                        springLength: 200,
-                        springConstant: 0.05
-                    },
-                    solver: 'forceAtlas2Based'
-                },
-                interaction: { hover: true, tooltipDelay: 200 }
-            };
-
-            new vis.Network(container, dataVis, options);
-        })
-        .catch(error => console.error("Errore nel caricamento della Query 3:", error));
-}
-
-// --- PARTE 9: Grafo Dinamico (Query 7 - Lightbox 7) ---
-function loadGraph7FromJSON() {
-    fetch('./queries/query_7.json')
-        .then(response => response.json())
-        .then(data => {
-            let nodesArray = [];
-            let edgesArray = [];
-            let addedNodes = new Set();
-
-            data.results.bindings.forEach(row => {
-                
-                // --- 1. NODO OPERA (Nodo Centrale) ---
-                let operaId = row.opera.value;
-                let operaLabel = row.operaLabel ? row.operaLabel.value : operaId.split('/').pop();
-                let totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "";
-                
-                let finalOperaLabel = totalePersonaggi ? `${operaLabel}\n(${totalePersonaggi})` : operaLabel;
-
-                if (!addedNodes.has(operaId)) {
-                    nodesArray.push({
-                        id: operaId,
-                        label: finalOperaLabel,
-                        color: { background: '#10b981', border: '#047857' }, // Verde
-                        font: { color: 'white', size: 16, bold: true, face: 'Arial' },
-                        shape: 'box'
-                    });
-                    addedNodes.add(operaId);
-                }
-
-                // --- 2. NODO PERSONAGGIO (Nodo Satellite) ---
-                let charId = row.personaggio.value;
-                let charLabel = row.personaggioLabel ? row.personaggioLabel.value : charId.split('/').pop();
-                let ruolo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.toLowerCase() : "";
-
-                if (!addedNodes.has(charId)) {
-                    let bgColor = '#3b82f6'; // Blu
-                    let borderColor = '#1e40af';
-                    let fontSettings = { color: 'white', face: 'Arial' };
-                    
-                    if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
-                        bgColor = '#ef4444'; // Rosso
-                        borderColor = '#991b1b';
-                        fontSettings = { color: 'white', face: 'Arial' };
-                    } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
-                        bgColor = '#eab308'; // Giallo
-                        borderColor = '#854d0e';
-                        fontSettings = { color: 'black', face: 'Arial', bold: true }; // NERO FORZATO
-                    }
-
-                    nodesArray.push({
-                        id: charId,
-                        label: charLabel,
-                        // NESSUN GRUPPO ASSEGNATO PER EVITARE SOVRASCRITTURE
-                        color: { background: bgColor, border: borderColor },
-                        font: fontSettings,
-                        shape: 'ellipse'
-                    });
-                    addedNodes.add(charId);
-                }
-
-                // --- 3. ARCO (Collegamento e Ruolo) ---
-                let edgeLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : 'appare in';
-                edgesArray.push({
-                    from: charId,
-                    to: operaId,
-                    label: edgeLabel,
-                    arrows: 'to',
-                    color: { color: '#94a3b8', highlight: '#f43f5e' },
-                    font: { align: 'middle', size: 11, color: '#475569', background: 'rgba(255,255,255,0.8)' }
-                });
-            });
-
-            var container = document.getElementById('mynetwork-7');
-            if (!container) return;
-
-            var dataVis = {
-                nodes: new vis.DataSet(nodesArray),
-                edges: new vis.DataSet(edgesArray)
-            };
-
-            var options = {
-                physics: {
-                    stabilization: { iterations: 150 },
-                    forceAtlas2Based: {
-                        gravitationalConstant: -120,
-                        centralGravity: 0.01,
-                        springLength: 200,
-                        springConstant: 0.05
-                    },
-                    solver: 'forceAtlas2Based'
-                },
-                interaction: { hover: true, tooltipDelay: 200 }
-            };
-
-            new vis.Network(container, dataVis, options);
-        })
-        .catch(error => console.error("Errore nel caricamento del JSON della Query 7:", error));
-}
-
-// --- PARTE 7: AVVIO CARICAMENTO DATI (Query 7)
-function caricaDatiDaJson(urlFile) {
-    const tbody = document.getElementById("tbody-query7");
-    if(!tbody) return; 
-
-    tbody.innerHTML = "<tr><td colspan='4'>Caricamento dati in corso...</td></tr>";
-
-    // Usa urlFile al posto della vecchia variabile globale
-    fetch(urlFile)
-        .then(response => {
-            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            gestisciRisultatiQuery7(data); 
-        })
-        .catch(error => {
-            console.error("Si è verificato un errore durante il caricamento del JSON:", error);
-            tbody.innerHTML = `<tr><td colspan='4' style='color:red;'>Errore nel caricamento dei dati: ${error.message}</td></tr>`;
-        });
-}
-
-// --- PARTE 8: LOGICA DI IMPAGINAZIONE QUERY 7 (GLOBALE)
-function gestisciRisultatiQuery7(data) {
-    if (data && data.results && data.results.bindings) {
-        tuttiIResultati = data.results.bindings; 
-        paginaCorrente = 1; 
-        renderizzaTabella();
-    } else {
-        console.error("Il file JSON non ha la struttura SPARQL prevista.");
-    }
-}
-
-function renderizzaTabella() {
-    const tbody = document.getElementById("tbody-query7");
-    const indicator = document.getElementById("page-indicator");
-    const btnPrev = document.getElementById("btn-prev");
-    const btnNext = document.getElementById("btn-next");
-
-    if (!tbody) return;
-
-    tbody.innerHTML = "";
-
-    const indiceInizio = (paginaCorrente - 1) * righePerPagina;
-    const indiceFine = Math.min(indiceInizio + righePerPagina, tuttiIResultati.length);
-    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
-
-    const righeDaMostrare = tuttiIResultati.slice(indiceInizio, indiceFine);
-
-    righeDaMostrare.forEach(row => {
-        const tr = document.createElement("tr");
-
-        const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "");
-        const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
-        const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "");
-        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "";
-        const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
-        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
-        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
-        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
-
-        /* 
-            {"opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
-            "personaggio":{"type":"uri","value":"http://www.wikidata.org/entity/Q843545"},
-            "totalePersonaggi":{"datatype":"http://www.w3.org/2001/XMLSchema#integer","type":"literal","value":"9"},
-            "operaLabel":{"xml:lang":"en","type":"literal","value":"Death Note"},
-            "personaggioLabel":{"xml:lang":"en","type":"literal","value":"Light Yagami"},
-            "tipoPersonaggioLabel":{"xml:lang":"en","type":"literal","value":"villain"}},
-        */
-
-        tr.innerHTML = `
-            <td><a href="${opera} title="opera">${opera_soloQ}</a></td>
-            <td>${operaLabel}</td>
-            <td>${totalePersonaggi}</td>
-            <td><a href="${personaggio} title="personaggio">${personaggio_soloQ}</a></td>
-            <td>${personaggioLabel}</td>
-            <td>${tipoPersonaggioLabel}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    if (indicator) indicator.textContent = `Pagina ${paginaCorrente} di ${totalePagine} (${tuttiIResultati.length} elementi)`;
-    if (btnPrev) btnPrev.disabled = (paginaCorrente === 1);
-    if (btnNext) btnNext.disabled = (paginaCorrente === totalePagine);
-}
-
-function paginaPrecedente() {
-    if (paginaCorrente > 1) {
-        paginaCorrente--;
-        renderizzaTabella();
-        scrollareAInizioTabella();
-    }
-}
-
-function paginaSuccessiva() {
-    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
-    if (paginaCorrente < totalePagine) {
-        paginaCorrente++;
-        renderizzaTabella();
-        scrollareAInizioTabella();
-    }
-}
-
-function scrollareAInizioTabella() {
-    // Scrolla la pagina verso la tabella quando si cambia pagina
-    const tabella = document.getElementById("tbody-query7");
-    if(tabella) {
-        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
-
-// --- PARTE 10: LOGICA DI IMPAGINAZIONE QUERY 2 (GLOBALE)
-function caricaDatiQuery2() {
-    const tbody = document.getElementById("tbody-query2");
-    if (!tbody) return;
-
-    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
-
-    // Assicurati che il percorso del file JSON sia corretto
-    fetch('./queries/query_2.json') 
-        .then(response => {
-            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.results && data.results.bindings) {
-                datiQuery2 = data.results.bindings;
-                paginaCorrenteQ2 = 1;
-                renderizzaTabellaQ2();
-                configuraControlliQ2();
-            }
-        })
-        .catch(error => {
-            console.error("Errore nel caricamento del JSON della Query 2:", error);
-            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
-        });
-}
-
-function renderizzaTabellaQ2() {
-    const tbody = document.getElementById("tbody-query2");
-    const indicator = document.getElementById("page-indicator-q2");
-    const btnPrev = document.getElementById("btn-prev-q2");
-    const btnNext = document.getElementById("btn-next-q2");
-
-    if (!tbody) return;
-    tbody.innerHTML = "";
-
-    const inizio = (paginaCorrenteQ2 - 1) * righePerPaginaQ2;
-    const fine = Math.min(inizio + righePerPaginaQ2, datiQuery2.length);
-    const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
-
-    const righeMostrate = datiQuery2.slice(inizio, fine);
-
-    righeMostrate.forEach(row => {
-        const tr = document.createElement("tr");
-
-        // Estrazione e fallback dei valori (struttura SPARQL standard)
-        const propUri = row.proprieta ? row.proprieta.value : "#";
-        const propQID = propUri.split('/').pop();
-        const desc = row.proprietaLabel ? row.proprietaLabel.value : "";
-        const numero = row.numeroProprieta ? row.numeroProprieta.value : "1";
-
-        tr.innerHTML = `
-            <td>
-                <a href="${propUri}" target="_blank" class="item-link">${propQID}</a>
-            </td>
-            <td><span>${desc}</span></td>
-            <td><span>${numero}</span></td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ2} di ${totalePagine} (${datiQuery2.length} elementi)`;
-    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ2 === 1);
-    if (btnNext) btnNext.disabled = (paginaCorrenteQ2 === totalePagine || totalePagine === 0);
-}
-
-function configuraControlliQ2() {
-    const btnPrev = document.getElementById("btn-prev-q2");
-    const btnNext = document.getElementById("btn-next-q2");
-
-    if (btnPrev && !btnPrev.dataset.listener) {
-        btnPrev.addEventListener('click', () => {
-            if (paginaCorrenteQ2 > 1) {
-                paginaCorrenteQ2--;
-                renderizzaTabellaQ2();
-            }
-        });
-        btnPrev.dataset.listener = "true";
-    }
-
-    if (btnNext && !btnNext.dataset.listener) {
-        btnNext.addEventListener('click', () => {
-            const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
-            if (paginaCorrenteQ2 < totalePagine) {
-                paginaCorrenteQ2++;
-                renderizzaTabellaQ2();
-            }
-        });
-        btnNext.dataset.listener = "true";
-    }
-}
-
-// ==========================================
 // 2. INIZIALIZZAZIONE E LISTENER (DOM Content Loaded)
 // ==========================================
 
@@ -831,3 +431,405 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 });
+
+// ==========================================
+// 1. DEFINIZIONE DELLE FUNZIONI (Globale)
+// ==========================================
+
+
+// --- PARTE 5: Grafo Dinamico (Query 3 - Lightbox 3) ---
+function loadGraphFromJSON() {
+    fetch('./queries/query_3.json')
+        .then(response => response.json())
+        .then(data => {
+            let nodesArray = [];
+            let edgesArray = [];
+            let addedNodes = new Set();
+
+            data.results.bindings.forEach(row => {
+                // --- NODO SORGENTE (Es. Opera) ---
+                let sourceId = row.soggetto.value;
+                let sourceLabel = row.soggettolabel ? row.soggettolabel.value : sourceId.split('/').pop();
+
+                if (!addedNodes.has(sourceId)) {
+                    nodesArray.push({
+                        id: sourceId,
+                        label: sourceLabel,
+                        color: { background: '#10b981', border: '#047857' }, // Verde
+                        font: { color: 'white', face: 'Arial', bold: true },
+                        shape: 'box'
+                    });
+                    addedNodes.add(sourceId);
+                }
+
+                // --- NODO DESTINAZIONE (Es. Genere, Autore, ecc.) ---
+                let targetId = row.valore.value;
+                let targetLabel = row.valorelabel ? row.valorelabel.value : (targetId.includes('/') ? decodeURIComponent(targetId.split('/').pop()) : targetId);
+
+                if (!addedNodes.has(targetId)) {
+                    let bgColor = '#3b82f6'; // Blu di default
+                    let borderColor = '#1e40af';
+                    let fontSettings = { color: 'white', face: 'Arial' };
+                    
+                    let proprieta = row.proprieta ? row.proprieta.value : "";
+                    
+                    // Condizione di esempio per il Grafo 3:
+                    if (proprieta.includes('P50') || targetLabel.toLowerCase().includes('autore')) {
+                        bgColor = '#eab308'; // Giallo
+                        borderColor = '#854d0e';
+                        fontSettings = { color: 'black', face: 'Arial', bold: true }; // NERO FORZATO
+                    }
+
+                    nodesArray.push({
+                        id: targetId,
+                        label: targetLabel,
+                        // NESSUN GRUPPO ASSEGNATO PER EVITARE SOVRASCRITTURE
+                        color: { background: bgColor, border: borderColor },
+                        font: fontSettings,
+                        shape: 'ellipse'
+                    });
+                    addedNodes.add(targetId);
+                }
+
+                // --- ARCO ---
+                let edgeLabel = row.proprietalabel ? row.proprietalabel.value : proprieta.split('/').pop();
+                edgesArray.push({
+                    from: sourceId,
+                    to: targetId,
+                    label: edgeLabel,
+                    arrows: 'to',
+                    color: { color: '#94a3b8', highlight: '#f43f5e' },
+                    font: { align: 'middle', size: 11, color: '#475569', background: 'rgba(255,255,255,0.8)' }
+                });
+            });
+
+            var container = document.getElementById('mynetwork-3');
+            if (!container) return;
+
+            var dataVis = {
+                nodes: new vis.DataSet(nodesArray),
+                edges: new vis.DataSet(edgesArray)
+            };
+
+            var options = {
+                physics: {
+                    stabilization: { iterations: 150 },
+                    forceAtlas2Based: {
+                        gravitationalConstant: -120,
+                        centralGravity: 0.01,
+                        springLength: 200,
+                        springConstant: 0.05
+                    },
+                    solver: 'forceAtlas2Based'
+                },
+                interaction: { hover: true, tooltipDelay: 200 }
+            };
+
+            new vis.Network(container, dataVis, options);
+        })
+        .catch(error => console.error("Errore nel caricamento della Query 3:", error));
+}
+
+// --- PARTE 9: Grafo Dinamico (Query 7 - Lightbox 7) ---
+function loadGraph7FromJSON() {
+    fetch('./queries/query_7.json')
+        .then(response => response.json())
+        .then(data => {
+            let nodesArray = [];
+            let edgesArray = [];
+            let addedNodes = new Set();
+
+            data.results.bindings.forEach(row => {
+                
+                // --- 1. NODO OPERA (Nodo Centrale) ---
+                let operaId = row.opera.value;
+                let operaLabel = row.operaLabel ? row.operaLabel.value : operaId.split('/').pop();
+                let totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "";
+                
+                let finalOperaLabel = totalePersonaggi ? `${operaLabel}\n(${totalePersonaggi})` : operaLabel;
+
+                if (!addedNodes.has(operaId)) {
+                    nodesArray.push({
+                        id: operaId,
+                        label: finalOperaLabel,
+                        color: { background: '#10b981', border: '#047857' }, // Verde
+                        font: { color: 'white', size: 16, bold: true, face: 'Arial' },
+                        shape: 'box'
+                    });
+                    addedNodes.add(operaId);
+                }
+
+                // --- 2. NODO PERSONAGGIO (Nodo Satellite) ---
+                let charId = row.personaggio.value;
+                let charLabel = row.personaggioLabel ? row.personaggioLabel.value : charId.split('/').pop();
+                let ruolo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.toLowerCase() : "";
+
+                if (!addedNodes.has(charId)) {
+                    let bgColor = '#3b82f6'; // Blu
+                    let borderColor = '#1e40af';
+                    let fontSettings = { color: 'white', face: 'Arial' };
+                    
+                    if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
+                        bgColor = '#ef4444'; // Rosso
+                        borderColor = '#991b1b';
+                        fontSettings = { color: 'white', face: 'Arial' };
+                    } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
+                        bgColor = '#eab308'; // Giallo
+                        borderColor = '#854d0e';
+                        fontSettings = { color: 'black', face: 'Arial', bold: true }; // NERO FORZATO
+                    }
+
+                    nodesArray.push({
+                        id: charId,
+                        label: charLabel,
+                        // NESSUN GRUPPO ASSEGNATO PER EVITARE SOVRASCRITTURE
+                        color: { background: bgColor, border: borderColor },
+                        font: fontSettings,
+                        shape: 'ellipse'
+                    });
+                    addedNodes.add(charId);
+                }
+
+                // --- 3. ARCO (Collegamento e Ruolo) ---
+                let edgeLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : 'appare in';
+                edgesArray.push({
+                    from: charId,
+                    to: operaId,
+                    label: edgeLabel,
+                    arrows: 'to',
+                    color: { color: '#94a3b8', highlight: '#f43f5e' },
+                    font: { align: 'middle', size: 11, color: '#475569', background: 'rgba(255,255,255,0.8)' }
+                });
+            });
+
+            var container = document.getElementById('mynetwork-7');
+            if (!container) return;
+
+            var dataVis = {
+                nodes: new vis.DataSet(nodesArray),
+                edges: new vis.DataSet(edgesArray)
+            };
+
+            var options = {
+                physics: {
+                    stabilization: { iterations: 150 },
+                    forceAtlas2Based: {
+                        gravitationalConstant: -120,
+                        centralGravity: 0.01,
+                        springLength: 200,
+                        springConstant: 0.05
+                    },
+                    solver: 'forceAtlas2Based'
+                },
+                interaction: { hover: true, tooltipDelay: 200 }
+            };
+
+            new vis.Network(container, dataVis, options);
+        })
+        .catch(error => console.error("Errore nel caricamento del JSON della Query 7:", error));
+}
+
+// --- PARTE 7: AVVIO CARICAMENTO DATI (Query 7)
+function caricaDatiDaJson(urlFile) {
+    const tbody = document.getElementById("tbody-query7");
+    if(!tbody) return; 
+
+    tbody.innerHTML = "<tr><td colspan='4'>Caricamento dati in corso...</td></tr>";
+
+    // Usa urlFile al posto della vecchia variabile globale
+    fetch(urlFile)
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            gestisciRisultatiQuery7(data); 
+        })
+        .catch(error => {
+            console.error("Si è verificato un errore durante il caricamento del JSON:", error);
+            tbody.innerHTML = `<tr><td colspan='4' style='color:red;'>Errore nel caricamento dei dati: ${error.message}</td></tr>`;
+        });
+}
+
+// --- PARTE 8: LOGICA DI IMPAGINAZIONE QUERY 7 (GLOBALE)
+function gestisciRisultatiQuery7(data) {
+    if (data && data.results && data.results.bindings) {
+        tuttiIResultati = data.results.bindings; 
+        paginaCorrente = 1; 
+        renderizzaTabella();
+    } else {
+        console.error("Il file JSON non ha la struttura SPARQL prevista.");
+    }
+}
+
+function renderizzaTabella() {
+    const tbody = document.getElementById("tbody-query7");
+    const indicator = document.getElementById("page-indicator");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    const indiceInizio = (paginaCorrente - 1) * righePerPagina;
+    const indiceFine = Math.min(indiceInizio + righePerPagina, tuttiIResultati.length);
+    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
+
+    const righeDaMostrare = tuttiIResultati.slice(indiceInizio, indiceFine);
+
+    righeDaMostrare.forEach(row => {
+        const tr = document.createElement("tr");
+
+        const opera = row.opera ? row.opera.value : (row.opera ? row.opera.value : "");
+        const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
+        const personaggio = row.personaggio ? row.personaggio.value : (row.personaggio ? row.personaggio.value : "");
+        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "";
+        const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
+        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
+        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
+        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
+
+        /* 
+            {"opera":{"type":"uri","value":"http://www.wikidata.org/entity/Q718624"},
+            "personaggio":{"type":"uri","value":"http://www.wikidata.org/entity/Q843545"},
+            "totalePersonaggi":{"datatype":"http://www.w3.org/2001/XMLSchema#integer","type":"literal","value":"9"},
+            "operaLabel":{"xml:lang":"en","type":"literal","value":"Death Note"},
+            "personaggioLabel":{"xml:lang":"en","type":"literal","value":"Light Yagami"},
+            "tipoPersonaggioLabel":{"xml:lang":"en","type":"literal","value":"villain"}},
+        */
+
+        tr.innerHTML = `
+            <td><a href="${opera} title="opera">${opera_soloQ}</a></td>
+            <td>${operaLabel}</td>
+            <td>${totalePersonaggi}</td>
+            <td><a href="${personaggio} title="personaggio">${personaggio_soloQ}</a></td>
+            <td>${personaggioLabel}</td>
+            <td>${tipoPersonaggioLabel}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrente} di ${totalePagine} (${tuttiIResultati.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrente === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrente === totalePagine);
+}
+
+function paginaPrecedente() {
+    if (paginaCorrente > 1) {
+        paginaCorrente--;
+        renderizzaTabella();
+        scrollareAInizioTabella();
+    }
+}
+
+function paginaSuccessiva() {
+    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
+    if (paginaCorrente < totalePagine) {
+        paginaCorrente++;
+        renderizzaTabella();
+        scrollareAInizioTabella();
+    }
+}
+
+function scrollareAInizioTabella() {
+    // Scrolla la pagina verso la tabella quando si cambia pagina
+    const tabella = document.getElementById("tbody-query7");
+    if(tabella) {
+        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// --- PARTE 10: LOGICA DI IMPAGINAZIONE QUERY 2 (GLOBALE)
+function caricaDatiQuery2(urlFile) {
+    const tbody = document.getElementById("tbody-query2");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    // Assicurati che il percorso del file JSON sia corretto
+    fetch(urlFile) 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery2 = data.results.bindings;
+                paginaCorrenteQ2 = 1;
+                renderizzaTabellaQ2();
+                configuraControlliQ2();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 2:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ2() {
+    const tbody = document.getElementById("tbody-query2");
+    const indicator = document.getElementById("page-indicator-q2");
+    const btnPrev = document.getElementById("btn-prev-q2");
+    const btnNext = document.getElementById("btn-next-q2");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ2 - 1) * righePerPaginaQ2;
+    const fine = Math.min(inizio + righePerPaginaQ2, datiQuery2.length);
+    const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+
+    const righeMostrate = datiQuery2.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr");
+
+        // Estrazione e fallback dei valori (struttura SPARQL standard)
+        const propUri = row.proprieta ? row.proprieta.value : "#";
+        const propQID = propUri.split('/').pop();
+        const desc = row.proprietaLabel ? row.proprietaLabel.value : "";
+        const numero = row.numeroProprieta ? row.numeroProprieta.value : "1";
+
+        tr.innerHTML = `
+            <td>
+                <a href="${propUri}" target="_blank" class="item-link">${propQID}</a>
+            </td>
+            <td><span>${desc}</span></td>
+            <td><span>${numero}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ2} di ${totalePagine} (${datiQuery2.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ2 === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ2 === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ2() {
+    const btnPrev = document.getElementById("btn-prev-q2");
+    const btnNext = document.getElementById("btn-next-q2");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ2 > 1) {
+                paginaCorrenteQ2--;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery2.length / righePerPaginaQ2);
+            if (paginaCorrenteQ2 < totalePagine) {
+                paginaCorrenteQ2++;
+                renderizzaTabellaQ2();
+            }
+        });
+        btnNext.dataset.listener = "true";
+    }
+}
+
+
