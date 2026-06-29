@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlFileJson7 = "./queries/query_7.json"; 
 
     if (document.getElementById("tbody-query7")) {
-        caricaDatiDaJson(urlFileJson);
+        caricaDatiDaJson(urlFileJson7);
     }
 
     // --- LOGICA DI IMPAGINAZIONE QUERY 7 (GLOBALE)
