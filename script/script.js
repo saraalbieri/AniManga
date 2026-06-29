@@ -547,6 +547,7 @@ function renderizzaTabellaQ8() {
         `;
         tbody.appendChild(tr);
     });
+    alert(personaggio);
 
     if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ8} di ${totalePagine} (${datiQuery8.length} elementi)`;
     if (btnPrev) btnPrev.disabled = (paginaCorrenteQ8 === 1);
