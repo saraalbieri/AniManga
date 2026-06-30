@@ -1,0 +1,19 @@
+PREFIX animanga: <https://w3id.org/animanga/ontology/>
+PREFIX ex: <https://w3id.org/animanga/resource/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Esempio di generazione RDF con CONSTRUCT.
+# La query restituisce un grafo RDF, senza salvarlo direttamente nel triple store.
+# In questo caso si materializza l'arricchimento semantico proposto per Itachi Uchiha.
+CONSTRUCT {
+  wd:Q1043344
+    animanga:hasGeneralArchetype wd:Q1969230 ;
+    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
+
+  ex:sacrificial-shinobi
+    rdfs:label "shinobi sacrificiale"@it ;
+    rdfs:label "sacrificial shinobi"@en .
+}
+WHERE {
+}
