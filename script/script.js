@@ -900,12 +900,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
-    // --- CONTROLLI DI PAGINAZIONE INTERFACCIA UTENTE (Query 7 HTML) ---
-    const btnPrev7 = document.getElementById("btn-prev");
-    const btnNext7 = document.getElementById("btn-next");
-    if(btnPrev7) btnPrev7.addEventListener('click', paginaPrecedente);
-    if(btnNext7) btnNext7.addEventListener('click', paginaSuccessiva);
-
 
     // ==========================================
     // 3. ESECUZIONE CARICAMENTI DATI ASINCRONI
