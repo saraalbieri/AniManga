@@ -323,18 +323,20 @@
 
         <div class="query-box" id="query-box-9">
             <h3>Query 9: stock character</h3>
-            <p>-----</p>
+            <p>I risultati deludenti della Query 8 sollevano un dubbio metodologico: i dati sugli archetipi sono del tutto assenti, oppure sono stati 
+                modellati in modo incoerente dagli utenti?<br/>
+                Questa query indaga proprio la frammentazione semantica di Wikidata. Utilizzando il costrutto logico <code>UNION</code>, lo script interroga 
+                i tre franchise di riferimento seguendo due percorsi distinti: 
+                da un lato cerca l'attributo ufficiale <code>wdt:P9071</code> (<em>character type</em>), 
+                dall'altro traccia un workaround molto diffuso, ovvero la classificazione del personaggio come istanza (<code>wdt:P31</code>) 
+                di un "personaggio tipo" o <em>stock character</em> (<code>wd:Q1089201</code>).</p>
             <pre class="query-embed" data-src="./queries/q9_stock_character.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-9" data-limit="10">
                 <thead>
                     <tr>
-                        <th>Opera - Entità</th>
-                        <th>Etichetta dell'opera</th>
-                        <th>Totale dei personaggi</th>
-                        <th>Personaggio - Entità</th>
                         <th>Etichetta del personaggio</th>
-                        <th>Tipo</th>
+                        <th>Etichetta dell'opera</th>
                         <th>Etichetta del tipo</th>
                     </tr>
                 </thead>
@@ -345,8 +347,40 @@
                     Mostra tutte
                 </button>
             </div>
-            <p><strong>Perché è utile:</strong> Questa query è fondamentale perché standardizza e unifica i diversi modi in cui la community di Wikidata cataloga gli 
-                archetipi narrativi, permettendoci di mappare e confrontare l'anatomia dei personaggi di franchise complessi senza perdere dati per strada.</p>
+            <p><strong>Perché è utile:</strong> Questa query è cruciale perché rivela il secondo grande problema di Wikidata oltre alla mancanza di 
+                dati: la totale assenza di standardizzazione. Scopriamo infatti che i pochi archetipi narrativi presenti sono dispersi e modellati in 
+                modo incoerente a seconda della sensibilità dell'utente che li ha inseriti.</p>
+        </div>
+
+        <div class="query-box" id="query-box-10">
+            <h3>Query 10: verificare se un archetipo proposto dall'LLM esiste gia in Wikidata ed e classificato come stock character.</h3>
+            <p>Questa query introduce la fase di validazione e allineamento dei risultati prodotti dall'Intelligenza Artificiale.<br/>
+                Prendendo in esame un archetipo specifico proposto dall'LLM — in questo caso "tragic hero" (eroe tragico) per il personaggio di Itachi Uchiha — 
+                lo script verifica se in Wikidata esista già un elemento con questa precisa etichetta e se sia coerentemente classificato come un tipo di 
+                personaggio predefinito. Serve a stabilire in modo automatico se possiamo ancorarci a un nodo Wikidata esistente o se ci troviamo di fronte a un 
+                archetipo inedito.</p>
+            <pre class="query-embed" data-src="./queries/q10_verify_archetype_qid.sparql"><code>Caricamento query in corso...</code></pre>
+            <h4>Risultati ottenuti</h4>
+            <table class="results-table" id="results-table-10" data-limit="10">
+                <thead>
+                    <tr>
+                        <th>Proprietà</th>
+                        <th>Etichetta della proprietà</th>
+                        <th>Descrizione</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-query10"><tr data-index="0"><td class=""><a href="http://www.wikidata.org/entity/Q1969230" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q1969230" target="_blank" class="item-link" rel="noopener">wd:Q1969230</a></td><td class=""><span title=": tragic hero@en">tragic hero</span></td><td class=""><span title=": stock character; hero with a major flaw that leads to their eventual death and downfall@en">stock character; hero with a major flaw that leads to their eventual death and downfall</span></td></tr></tbody>
+            </table>
+            <div class="table-controls">
+                <button class="btn-action primary" id="toggleBtn-10">
+                    Mostra tutte
+                </button>
+            </div>
+            <p><strong>Perché è utile:</strong> Questa interrogazione è fondamentale per rispettare i principi base dei Linked Open Data: il riuso e 
+                l'interoperabilità. Quando l'LLM individua un archetipo, non possiamo limitarci a registrarlo come semplice "testo" o creare un nuovo nodo 
+                alla cieca. Questa query agisce come un sistema di controllo qualità: "aggancia" le nuove deduzioni dell'Intelligenza Artificiale ai 
+                concetti generali già strutturati su Wikidata (i QID), garantendo che la nostra ontologia AniManga O-KG rimanga pulita, 
+                priva di entità duplicate e perfettamente integrata con il resto del Web Semantico.</p>
         </div>
 
     </main>
