@@ -878,6 +878,7 @@ function loadFinalGraph(personaggio) {
     };
     
     // ... inizializzazione vis.Network come negli esempi precedenti
+    new vis.Network(container, graphData, options);
 }
 
 // ==========================================
