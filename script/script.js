@@ -578,116 +578,18 @@ function configuraControlliQ8() {
             if (paginaCorrenteQ8 < totalePagine8) {
                 paginaCorrenteQ8++;
                 renderizzaTabellaQ8();
+                scrollareAInizioTabellaQ8()
             }
         });
         btnNext_8.dataset.listener = "true";
     }
 }
 
-// --- Logica Caricamento e Impaginazione Query 9 ---
-function caricaDatiQuery9(urlFile) {
-    const tbody = document.getElementById("tbody-query9");
-    if (!tbody) return;
 
-    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
-
-    fetch(urlFile) 
-        .then(response => {
-            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.results && data.results.bindings) {
-                datiQuery9 = data.results.bindings;
-                paginaCorrenteQ8 = 1;
-                renderizzaTabellaQ9();
-                configuraControlliQ9();
-            }
-        })
-        .catch(error => {
-            console.error("Errore nel caricamento del JSON della Query 9:", error);
-            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
-        });
-}
-
-function renderizzaTabellaQ9() {
-    const tbody = document.getElementById("tbody-query9");
-    const indicator = document.getElementById("page-indicator-q9");
-    const btnPrev = document.getElementById("btn-prev-q9");
-    const btnNext = document.getElementById("btn-next-q9");
-
-    if (!tbody) return;
-    tbody.innerHTML = "";
-
-    const inizio = (paginaCorrenteQ9 - 1) * righePerPaginaQ9;
-    const fine = Math.min(inizio + righePerPaginaQ9, datiQuery9.length);
-    const totalePagine = Math.ceil(datiQuery9.length / righePerPaginaQ9);
-
-    const righeMostrate = datiQuery9.slice(inizio, fine);
-
-    righeMostrate.forEach(row => {
-        const tr = document.createElement("tr");
-
-        /* "opera",
-            "operaLabel",
-            "totalCharacters",
-            "personaggio",
-            "personaggioLabel",
-            "tipo",
-            "tipoLabel"
-         */
-
-        const opera = row.opera ? row.opera.value : "#";
-        const operaQID = opera.split('/').pop();
-        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
-        const totalCharacters = row.totalCharacters ? row.totalCharacters.value : "";
-        const personaggio = row.personaggio ? row.personaggio.value : "#";
-        const personaggioQID = personaggio.split('/').pop();
-        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
-        const tipo = row.tipo ? row.tipo.value : "#";
-        const tipoQID = tipo.split('/').pop();
-        const tipoLabel = row.tipoLabel ? row.tipoLabel.value : "";
-
-        tr.innerHTML = `
-            <td><a href="${opera}" target="_blank" class="item-link">${operaQID}</a></td>
-            <td><span>${operaLabel}</span></td>
-            <td><span>${totalCharacters}</span></td>
-            <td><a href="${personaggio}" target="_blank" class="item-link">${personaggioQID}</a></td>
-            <td><span>${personaggioLabel}</span></td>
-            <td><a href="${tipo}" target="_blank" class="item-link">${tipoQID}</a></td>
-            <td><span>${tipoLabel}</span></td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ9} di ${totalePagine} (${datiQuery8.length} elementi)`;
-    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ9 === 1);
-    if (btnNext) btnNext.disabled = (paginaCorrenteQ9 === totalePagine || totalePagine === 0);
-}
-
-function configuraControlliQ9() {
-    const btnPrev = document.getElementById("btn-prev-q9");
-    const btnNext = document.getElementById("btn-next-q9");
-
-    if (btnPrev && !btnPrev.dataset.listener) {
-        btnPrev.addEventListener('click', () => {
-            if (paginaCorrenteQ9 > 1) {
-                paginaCorrenteQ9--;
-                renderizzaTabellaQ9();
-            }
-        });
-        btnPrev.dataset.listener = "true";
-    }
-
-    if (btnNext && !btnNext.dataset.listener) {
-        btnNext.addEventListener('click', () => {
-            const totalePagine = Math.ceil(datiQuery9.length / righePerPaginaQ9);
-            if (paginaCorrenteQ9 < totalePagine) {
-                paginaCorrenteQ9++;
-                renderizzaTabellaQ9();
-            }
-        });
-        btnNext.dataset.listener = "true";
+function scrollareAInizioTabellaQ8() {
+    const tabella = document.getElementById("tbody-query8");
+    if(tabella) {
+        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
