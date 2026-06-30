@@ -2,11 +2,6 @@
 // 0. STATO GLOBALE DELL'APPLICAZIONE (In cima per lo Scope)
 // ==========================================
 
-// Stato per la Query 7
-let tuttiIResultati = []; 
-let paginaCorrente = 1;
-const righePerPagina = 25; 
-
 // Stato per la Query 2
 let datiQuery2 = [];
 let paginaCorrenteQ2 = 1;
@@ -16,6 +11,11 @@ const righePerPaginaQ2 = 10;
 let datiQuery3 = [];
 let paginaCorrenteQ3 = 1;
 const righePerPaginaQ3 = 10; 
+
+// Stato per la Query 7
+let tuttiIResultatiQ7 = []; 
+let paginaCorrenteQ7 = 1;
+const righePerPaginaQ7 = 25; 
 
 // Stato per la Query 8
 let datiQuery8 = [];
@@ -214,104 +214,6 @@ function loadGraph7FromJSON() {
         .catch(error => console.error("Errore nel caricamento del JSON della Query 7:", error));
 }
 
-// --- Logica Caricamento e Impaginazione Query 7 ---
-function caricaDatiDaJson(urlFile) {
-    const tbody = document.getElementById("tbody-query7");
-    if(!tbody) return; 
-
-    tbody.innerHTML = "<tr><td colspan='6'>Caricamento dati in corso...</td></tr>";
-
-    fetch(urlFile)
-        .then(response => {
-            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
-            return response.json();
-        })
-        .then(data => {
-            gestisciRisultatiQuery7(data); 
-        })
-        .catch(error => {
-            console.error("Si è verificato un errore durante il caricamento del JSON:", error);
-            tbody.innerHTML = `<tr><td colspan='6' style='color:red;'>Errore nel caricamento dei dati: ${error.message}</td></tr>`;
-        });
-}
-
-function gestisciRisultatiQuery7(data) {
-    if (data && data.results && data.results.bindings) {
-        tuttiIResultati = data.results.bindings; 
-        paginaCorrente = 1; 
-        renderizzaTabella();
-    } else {
-        console.error("Il file JSON non ha la struttura SPARQL prevista.");
-    }
-}
-
-function renderizzaTabella() {
-    const tbody = document.getElementById("tbody-query7");
-    const indicator = document.getElementById("page-indicator");
-    const btnPrev = document.getElementById("btn-prev");
-    const btnNext = document.getElementById("btn-next");
-
-    if (!tbody) return;
-    tbody.innerHTML = "";
-
-    const indiceInizio = (paginaCorrente - 1) * righePerPagina;
-    const indiceFine = Math.min(indiceInizio + righePerPagina, tuttiIResultati.length);
-    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
-
-    const righeDaMostrare = tuttiIResultati.slice(indiceInizio, indiceFine);
-
-    righeDaMostrare.forEach(row => {
-        const tr = document.createElement("tr");
-
-        const opera = row.opera ? row.opera.value : "";
-        const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
-        const personaggio = row.personaggio ? row.personaggio.value : "";
-        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "";
-        const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
-        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
-        const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
-        const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
-
-        tr.innerHTML = `
-            <td><a href="${opera}" title="opera" target="_blank">${opera_soloQ}</a></td>
-            <td>${operaLabel}</td>
-            <td>${totalePersonaggi}</td>
-            <td><a href="${personaggio}" title="personaggio" target="_blank">${personaggio_soloQ}</a></td>
-            <td>${personaggioLabel}</td>
-            <td>${tipoPersonaggioLabel}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    if (indicator) indicator.textContent = `Pagina ${paginaCorrente} di ${totalePagine} (${tuttiIResultati.length} elementi)`;
-    if (btnPrev) btnPrev.disabled = (paginaCorrente === 1);
-    if (btnNext) btnNext.disabled = (paginaCorrente === totalePagine || totalePagine === 0);
-}
-
-function paginaPrecedente() {
-    if (paginaCorrente > 1) {
-        paginaCorrente--;
-        renderizzaTabella();
-        scrollareAInizioTabella();
-    }
-}
-
-function paginaSuccessiva() {
-    const totalePagine = Math.ceil(tuttiIResultati.length / righePerPagina);
-    if (paginaCorrente < totalePagine) {
-        paginaCorrente++;
-        renderizzaTabella();
-        scrollareAInizioTabella();
-    }
-}
-
-function scrollareAInizioTabella() {
-    const tabella = document.getElementById("tbody-query7");
-    if(tabella) {
-        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
-
 // --- Logica Caricamento e Impaginazione Query 2 ---
 function caricaDatiQuery2(urlFile) {
     const tbody = document.getElementById("tbody-query2");
@@ -490,6 +392,97 @@ function configuraControlliQ3() {
             if (paginaCorrenteQ3 < totalePagine) {
                 paginaCorrenteQ3++;
                 renderizzaTabellaQ3();
+            }
+        });
+        btnNext.dataset.listener = "true";
+    }
+}
+
+// --- Logica Caricamento e Impaginazione Query 7 ---
+function caricaDatiQuery7(urlFile) {
+    const tbody = document.getElementById("tbody-query7");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    fetch(urlFile) 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery7 = data.results.bindings;
+                paginaCorrenteQ3 = 1;
+                renderizzaTabellaQ7();
+                configuraControlliQ7();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 7:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ7() {
+    const tbody = document.getElementById("tbody-query7");
+    const indicator = document.getElementById("page-indicator-q7");
+    const btnPrev = document.getElementById("btn-prev-q7");
+    const btnNext = document.getElementById("btn-next-q7");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ7 - 1) * righePerPaginaQ7;
+    const fine = Math.min(inizio + righePerPaginaQ7, datiQuery7.length);
+    const totalePagine = Math.ceil(datiQuery7.length / righePerPaginaQ7);
+
+    const righeMostrate = datiQuery7.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr"); /*"proprieta","proprietalabel","valore","valorelabel"]*/
+
+        const propUri = row.proprieta ? row.proprieta.value : "#";
+        const propQID = propUri.split('/').pop();
+        const proprietalabel = row.proprietalabel ? row.proprietalabel.value : "";
+        const objUri = row.valore ? row.valore.value : "#";
+        const objQID = objUri.split('/').pop();
+        const objlabel = row.valorelabel ? row.valorelabel.value : "";
+
+        tr.innerHTML = `
+            <td><a href="${propUri}" target="_blank" class="item-link">${propQID}</a></td>
+            <td><span>${proprietalabel}</span></td>
+            <td><a href="${objUri}" target="_blank" class="item-link">${objQID}</a></td>
+            <td><span>${objlabel}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ7} di ${totalePagine} (${datiQuery7.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ7 === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ7 === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ7() {
+    const btnPrev = document.getElementById("btn-prev-q7");
+    const btnNext = document.getElementById("btn-next-q7");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ7 > 1) {
+                paginaCorrenteQ7--;
+                renderizzaTabellaQ7();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery3.length / righePerPaginaQ3);
+            if (paginaCorrenteQ7 < totalePagine) {
+                paginaCorrenteQ7++;
+                renderizzaTabellaQ7();
             }
         });
         btnNext.dataset.listener = "true";
@@ -912,11 +905,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 3. ESECUZIONE CARICAMENTI DATI ASINCRONI
     // ==========================================
 
-    // Avvio Query 7
-    if (document.getElementById("tbody-query7")) {
-        caricaDatiDaJson("./queries_results/query_7.json");
-    }
-
     // Avvio Query 2
     if (document.getElementById("tbody-query2")) {
         caricaDatiQuery2("./queries_results/query_2.json");
@@ -925,6 +913,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Avvio Query 3
     if (document.getElementById("tbody-query3")) {
         caricaDatiQuery3("./queries_results/query_3.json");
+    }
+
+      // Avvio Query 7
+    if (document.getElementById("tbody-query7")) {
+        caricaDatiDaJson("./queries_results/query_7.json");
     }
 
     // Avvio Query 8
