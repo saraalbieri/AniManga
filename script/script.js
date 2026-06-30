@@ -49,7 +49,7 @@ function loadGraphFromJSON() {
                     nodesArray.push({
                         id: sourceId,
                         label: sourceLabel,
-                        color: { background: '#10b981', border: '#047857' }, 
+                        color: { background: '#8b5cf6', border: '#6d28d9' }, 
                         font: { color: 'white', face: 'Arial', bold: true },
                         shape: 'box'
                     });
@@ -60,15 +60,15 @@ function loadGraphFromJSON() {
                 let targetLabel = row.valorelabel ? row.valorelabel.value : (targetId.includes('/') ? decodeURIComponent(targetId.split('/').pop()) : targetId);
 
                 if (!addedNodes.has(targetId)) {
-                    let bgColor = '#3b82f6'; 
-                    let borderColor = '#1e40af';
+                    let bgColor = '#06b6d4'; 
+                    let borderColor = '#0891b2';
                     let fontSettings = { color: 'white', face: 'Arial' };
                     
                     let proprieta = row.proprieta ? row.proprieta.value : "";
                     
                     if (proprieta.includes('P50') || targetLabel.toLowerCase().includes('autore')) {
-                        bgColor = '#eab308'; 
-                        borderColor = '#854d0e';
+                        bgColor = '#f97316'; 
+                        borderColor = '#c2410c';
                         fontSettings = { color: 'black', face: 'Arial', bold: true }; 
                     }
 
@@ -140,7 +140,7 @@ function loadGraph7FromJSON() {
                     nodesArray.push({
                         id: operaId,
                         label: finalOperaLabel,
-                        color: { background: '#10b981', border: '#047857' }, 
+                        color: { background: '#64748b', border: '#334155' }, 
                         font: { color: 'white', size: 16, bold: true, face: 'Arial' },
                         shape: 'box'
                     });
@@ -152,17 +152,17 @@ function loadGraph7FromJSON() {
                 let ruolo = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.toLowerCase() : "";
 
                 if (!addedNodes.has(charId)) {
-                    let bgColor = '#3b82f6'; 
-                    let borderColor = '#1e40af';
+                    let bgColor = '#ec4899'; 
+                    let borderColor = '#be185d';
                     let fontSettings = { color: 'white', face: 'Arial' };
                     
                     if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
-                        bgColor = '#ef4444'; 
-                        borderColor = '#991b1b';
+                        bgColor = '#a855f7'; 
+                        borderColor = '#7e22ce';
                         fontSettings = { color: 'black', face: 'Arial' };
                     } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
-                        bgColor = '#eab308'; 
-                        borderColor = '#854d0e';
+                        bgColor = '#84cc16'; 
+                        borderColor = '#4d7c0f';
                         fontSettings = { color: 'black', face: 'Arial', bold: true }; 
                     }
 
@@ -965,7 +965,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // grafo iniziale
-    if (document.getElementById("mynetwork-grafo")) {
+    if (document.getElementById("mynetwork-grafo_iniziale")) {
         loadGraphTipoPersonaggio();
     }
 
