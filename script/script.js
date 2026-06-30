@@ -20,7 +20,7 @@ const righePerPaginaQ7 = 25;
 // Stato per la Query 8
 let datiQuery8 = [];
 let paginaCorrenteQ8 = 1;
-const righePerPaginaQ8 = 10; 
+const righePerPaginaQ8 = 25; 
 
 // Stato per la Query 9
 let datiQuery9 = [];
@@ -530,18 +530,25 @@ function renderizzaTabellaQ8() {
 
     const righeMostrate = datiQuery8.slice(inizio, fine);
 
-    righeMostrate.forEach(row => {
+    righeDaMostrare.forEach(row => {
         const tr = document.createElement("tr");
 
-        const personaggio = row.personaggio ? row.personaggio.value : "#";
-        const personaggioQID = personaggio.split('/').pop();
+        const opera = row.opera ? row.opera.value : "";
+        const opera_soloQ = opera !== "-" ? opera.split('/').pop() : "-";
+        const personaggio = row.personaggio ? row.personaggio.value : "";
+        const personaggio_soloQ = personaggio !== "-" ? personaggio.split('/').pop() : "";
+        const totalePersonaggi = row.totalePersonaggi ? row.totalePersonaggi.value : "0";
+        const operaLabel = row.operaLabel ? row.operaLabel.value : "";
         const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : "";
         const tipoPersonaggioLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : "";
 
         tr.innerHTML = `
-            <td><a href="${personaggio}" target="_blank" class="item-link">${personaggioQID}</a></td>
-            <td><span>${personaggioLabel}</span></td>
-            <td><span>${tipoPersonaggioLabel}</span></td>
+            <td><a href="${opera}" title="opera" target="_blank">${opera_soloQ}</a></td>
+            <td>${operaLabel}</td>
+            <td>${totalePersonaggi}</td>
+            <td><a href="${personaggio}" title="personaggio" target="_blank">${personaggio_soloQ}</a></td>
+            <td>${personaggioLabel}</td>
+            <td>${tipoPersonaggioLabel}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -585,7 +592,6 @@ function scrollareAInizioTabellaQ8() {
         tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
-
 
 // ==========================================
 // 2. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
