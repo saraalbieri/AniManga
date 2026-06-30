@@ -898,7 +898,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btnChart3.addEventListener('click', function() {
             if(lightbox3) lightbox3.style.display = 'flex';
             if (!isGraph3Loaded) {
-                loadGraph3FromJSON();
+                loadGraphFromJSON_3();
                 isGraph3Loaded = true;
             }
         });
@@ -906,13 +906,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const btnChart8 = document.getElementById('chartBtn-8');
     const lightbox8 = document.getElementById('lightbox-8');
-    let isGraph7Loaded = false;
+    let isGraph8Loaded = false;
     if (btnChart8) {
-        btnChart7.addEventListener('click', function() {
-            if(lightbox7) lightbox7.style.display = 'flex';
-            if (!isGraph7Loaded) {
-                loadGraph7FromJSON();
-                isGraph7Loaded = true;
+        btnChart8.addEventListener('click', function() {
+            if(lightbox8) lightbox8.style.display = 'flex';
+            if (!isGraph8Loaded) {
+                loadGraphFromJSON_8();
+                isGraph8Loaded = true;
             }
         });
     }
