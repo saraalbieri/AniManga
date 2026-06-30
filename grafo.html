@@ -23,9 +23,7 @@
 
     <main class="container">
 
-<div id="core_graph">
-        <div id="animanga-core-graph" class="animanga-graph"></div>
-    </div>
+
 
 
     <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
@@ -41,15 +39,28 @@
 
     <h3>Pipeline di visualizzazione</h3>
     <ol class="step-list">
-        <li><div><strong>Estraziome Base:</strong> Recupero dei personaggi da Wikidata per i tre franchise campione.</div></li>
+        <li>
+            <div><strong>Estraziome Base:</strong> Recupero dei personaggi da Wikidata per i tre franchise campione.</div>
+            <div id="core_graph">
+                <div id="animanga-core-graph" class="animanga-graph"></div>
+            </div>
+        </li>
         <li><div><strong>Classificazione LLM:</strong> Generazione di etichette su due livelli tramite prompting Zero-shot CoT.</div></li>
         <li><div><strong>Reconciliation Semantica:</strong> Validazione dei QID tramite Query 10 per evitare duplicazioni inutili.</div></li>
-        <li><div><strong>Rendering RDF:</strong> Visualizzazione della rete che distingue tra entità ufficiali Wikidata (es. <em>Tragic Hero</em>) e risorse locali (es. <em>sacrificial-shinobi</em>).</div></li>
+        <li><div><strong>Rendering RDF:</strong> Visualizzazione della rete che distingue tra entità ufficiali Wikidata (es. <em>Tragic Hero</em>) 
+            e risorse locali (es. <em>sacrificial-shinobi</em>).</div>
+            <div id="core_graph">
+                <div id="animanga-final-graph" class="animanga-graph"></div>
+            </div>
+        </li>
     </ol>
 
+
+
     <div id="core_graph">
-        <div id="animanga-final-graph" class="animanga-graph"></div>
-    </div>
+                <div id="animanga-final-graph" class="animanga-graph"></div>
+            </div>
+    
 </main>
 </body>
 </html>

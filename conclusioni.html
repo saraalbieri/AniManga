@@ -37,7 +37,7 @@
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Allineamento Culturale e Semantico</h3>
             <p>
-                Gli archetipi prodotti dai modelli possono appartenere a livelli diversi: categorie narrative generali, come <em>tragic hero</em>, e categorie più vicine al contesto anime e manga, come <em>shinobi sacrificiale</em> o figure culturali giapponesi. La soluzione adottata distingue quindi tra archetipi già presenti in Wikidata e risorse interne del knowledge graph, evitando di forzare concetti specifici dentro categorie troppo generiche.
+                Gli archetipi prodotti dai modelli possono appartenere a livelli diversi: categorie narrative generali, come <em>tragic hero</em>, e categorie più vicine al contesto anime e manga, come <em>shinobi sacrificale</em> o figure culturali giapponesi. La soluzione adottata distingue quindi tra archetipi già presenti in Wikidata e risorse interne del knowledge graph, evitando di forzare concetti specifici dentro categorie troppo generiche.
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Normalizzazione delle Label</h3>
             <p>
@@ -45,7 +45,9 @@
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Verifica dei QID Wikidata</h3>
             <p>
-                Prima della generazione RDF viene verificato se l'archetipo esiste già in Wikidata. La ricerca avviene tramite query SPARQL sulla label dell'archetipo e sulla sua classificazione come <em>stock character</em>, non solo tramite somiglianza lessicale. Nel caso di Itachi Uchiha, <em>tragic hero</em> è presente come stock character e può essere riusato tramite <code>wd:Q1969230</code>.
+                Prima della generazione RDF viene verificato se l'archetipo esiste già in Wikidata. 
+                La ricerca avviene tramite query SPARQL sulle label <em>character type</em> e <em>stock character</em>, non solo tramite somiglianza lessicale. 
+                Nel caso di Itachi Uchiha, <em>tragic hero</em> è presente solo come <em>stock character</em> e può essere riusato tramite <code>wd:Q1969230</code>.
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Allucinazione dei QID</h3>
             <p>
@@ -102,14 +104,14 @@
 wd:Q1043344<br>
 &nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype wd:Q1969230 ;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:sacrificial-shinobi .<br><br>
+ex:sacrificial-shinobi<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "shinobi sacrificiale"@it ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "sacrificial shinobi"@en .<br><br>
 # Nami esiste in Wikidata: si riusa il suo QID.<br>
 # Gli archetipi "trickster ally" e "kitsune" sono normalizzazioni interne.<br>
 wd:Q877964<br>
 &nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype ex:trickster-ally ;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:kitsune .<br><br>
-ex:sacrificial-shinobi<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "shinobi sacrificiale"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "sacrificial shinobi"@en .<br><br>
 ex:trickster-ally<br>
 &nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster alleato"@it ;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster ally"@en .<br><br>
