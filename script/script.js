@@ -918,7 +918,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Avvio Query 7
     if (document.getElementById("tbody-query7")) {
-        caricaDatiDaJson7("./queries_results/query_7.json");
+        caricaDatiQuery7("./queries_results/query_7.json");
     }
 
     // Avvio Query 8
