@@ -7,9 +7,7 @@
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <script type="text/javascript" src="./script/script.js"></script>
 </head>
-
 <body>
-
     <nav class="navbar">
         <a class="navbar-brand" href="index.html">AniManga O-KG</a>
         <div class="navbar-menu">
@@ -23,29 +21,33 @@
 
     <main class="container">
 
-    <h2>Esplorazione Dinamica dei dati attuali</h2>
-    <p>Questa sezione visualizza la rete semantica del progetto. questo primo grafo si limita a mappare le relazioni enciclopediche di Wikidata.</p>
+        <h2>Esplorazione Dinamica dei dati attuali</h2>
+        <p>Questa sezione visualizza la rete semantica del progetto. questo primo grafo si limita a mappare le relazioni enciclopediche di Wikidata.</p>
 
-    <div id="mynetwork-grafo_iniziale" style="width: 100%; height: 700px;"></div>
-
-    <h2>Esplorazione Dinamica dei dati aggiornati</h2>
-    <ul>
-        <li><strong>Provenienza del Dato:</strong> Gli archi che rappresentano relazioni fattuali provenienti da Wikidata sono a linea continua. 
-            Le relazioni inferite dall'LLM e validate manualmente sono distinte: le linee tratteggiate collegano l'archetipo generale, mentre quelle con marcatore specifico evidenziano l'archetipo culturale giapponese.</li>
-        <li><strong>Modello a Due Livelli:</strong> Ogni personaggio (es. <em>Itachi Uchiha</em>) funge da nodo centrale che connette il suo ruolo nella trama (l'opera di appartenenza) alle due nuove dimensioni semantiche introdotte dal progetto (<code>animanga:hasGeneralArchetype</code> e <code>animanga:hasJapaneseArchetype</code>).</li>
-    </ul>
-
-
-    
-    <div><strong>Rendering RDF:</strong> Visualizzazione della rete che distingue tra entità ufficiali Wikidata (es. <em>Tragic Hero</em>) 
-        e risorse locali (es. <em>sacrificial-shinobi</em>).</div>
-        <div id="final_graph">
-            <div id="animanga-final-graph" class="animanga-graph"></div>
+        <!-- Nuovo Contenitore Flex -->
+        <div class="graph-wrapper">
+            <div id="mynetwork-grafo_iniziale" style="width: 75%; height: 700px; border: 1px solid #ccc;"></div>
+            
+            <aside class="legend-box" style="width: 25%; padding-left: 20px;">
+                <h3>Legenda</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><span style="display:inline-block; width:15px; height:15px; background:#10b981;"></span> Opera</li>
+                    <li><span style="display:inline-block; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></span> Personaggio</li>
+                    <li><span style="display:inline-block; width:15px; height:15px; background:#ef4444; transform: rotate(45deg);"></span> Archetipo</li>
+                </ul>
+            </aside>
         </div>
-    
-    </div>
 
-    
-</main>
+        <div id="mynetwork-grafo_iniziale" style="width: 100%; height: 700px;"></div>
+
+        <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
+        <p><strong>Rendering RDF:</strong> Visualizzazione della rete che distingue tra entità ufficiali Wikidata (es. <em>Tragic Hero</em>) 
+            e risorse locali (es. <em>sacrificial-shinobi</em>).</p>
+
+        <div id="final_graph">
+            <div id="animanga-final-graph" style="width: 100%; height: 700px;"></div>
+        </div>
+
+    </main>
 </body>
 </html>
