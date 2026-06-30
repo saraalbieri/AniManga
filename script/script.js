@@ -708,7 +708,7 @@ function loadGraphTipoPersonaggio() {
                             border: "#047857"
                         },
                         font: {
-                            color: "white",
+                            color: "black",
                             bold: true
                         }
                     });
@@ -765,7 +765,7 @@ function loadGraphTipoPersonaggio() {
                                 border: "#991b1b"       
                             },
                             font: {
-                                color: "white",
+                                color: "black",
                                 bold: true
                             }
                         });
