@@ -22,10 +22,10 @@ let datiQuery8 = [];
 let paginaCorrenteQ8 = 1;
 const righePerPaginaQ8 = 15; 
 
-// Stato per la Query 9
-let datiQuery9 = [];
-let paginaCorrenteQ9 = 1;
-const righePerPaginaQ9 = 10; 
+// Stato per la Query 9bis
+let datiQuery9bis = [];
+let paginaCorrenteQ9bis = 1;
+const righePerPaginaQ9bis = 10; 
 
 
 // ==========================================
@@ -589,6 +589,94 @@ function scrollareAInizioTabellaQ8() {
     const tabella = document.getElementById("tbody-query8");
     if(tabella) {
         tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// --- Logica Caricamento e Impaginazione Query 9bis ---
+function caricaDatiQuery7(urlFile) {
+    const tbody = document.getElementById("tbody-query9bis");
+    if (!tbody) return;
+
+    tbody.innerHTML = "<tr><td colspan='3'>Caricamento dati in corso...</td></tr>";
+
+    fetch(urlFile) 
+        .then(response => {
+            if (!response.ok) throw new Error("Errore HTTP: " + response.status);
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.results && data.results.bindings) {
+                datiQuery9bis = data.results.bindings;
+                paginaCorrenteQ9bis = 1;
+                renderizzaTabellaQ9bis();
+                configuraControlliQ9bis();
+            }
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del JSON della Query 9bis:", error);
+            tbody.innerHTML = `<tr><td colspan='3' style='color:red;'>Errore: ${error.message}</td></tr>`;
+        });
+}
+
+function renderizzaTabellaQ9bis() {
+    const tbody = document.getElementById("tbody-query9bis");
+    const indicator = document.getElementById("page-indicator-q9bis");
+    const btnPrev = document.getElementById("btn-prev-q9bis");
+    const btnNext = document.getElementById("btn-next-q9bis");
+
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const inizio = (paginaCorrenteQ9bis - 1) * righePerPaginaQ9bis;
+    const fine = Math.min(inizio + righePerPaginaQ9bis, datiQuery9bis.length);
+    const totalePagine = Math.ceil(datiQuery9bis.length / righePerPaginaQ9bis);
+
+    const righeMostrate = datiQuery9bis.slice(inizio, fine);
+
+    righeMostrate.forEach(row => {
+        const tr = document.createElement("tr"); /*"stockCharacter","stockCharacterLabel","description"*/
+
+        const stockCharacterUri = row.stockCharacter ? row.stockCharacter.value : "#";
+        const stockCharacterQID = stockCharacterUri.split('/').pop();
+        const stockCharacterlabel = row.stockCharacterLabel ? row.stockCharacterLabel.value : "";
+        const description = row.description ? row.description.value : "";
+
+        tr.innerHTML = `
+            <td><a href="${stockCharacterUri}" target="_blank" class="item-link">${stockCharacterQID}</a></td>
+            <td><span>${stockCharacterlabel}</span></td>
+            <td><span>${description}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ9bis} di ${totalePagine} (${datiQuery9bis.length} elementi)`;
+    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ9bis === 1);
+    if (btnNext) btnNext.disabled = (paginaCorrenteQ9bis === totalePagine || totalePagine === 0);
+}
+
+function configuraControlliQ9bis() {
+    const btnPrev = document.getElementById("btn-prev-q9bis");
+    const btnNext = document.getElementById("btn-next-q9bis");
+
+    if (btnPrev && !btnPrev.dataset.listener) {
+        btnPrev.addEventListener('click', () => {
+            if (paginaCorrenteQ9bis > 1) {
+                paginaCorrenteQ9bis--;
+                renderizzaTabellaQ9bis();
+            }
+        });
+        btnPrev.dataset.listener = "true";
+    }
+
+    if (btnNext && !btnNext.dataset.listener) {
+        btnNext.addEventListener('click', () => {
+            const totalePagine = Math.ceil(datiQuery9bis.length / righePerPaginaQ9bis);
+            if (paginaCorrenteQ9bis < totalePagine) {
+                paginaCorrenteQ9bis++;
+                renderizzaTabellaQ9bis();
+            }
+        });
+        btnNext.dataset.listener = "true";
     }
 }
 
