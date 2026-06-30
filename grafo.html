@@ -22,13 +22,22 @@
     </nav>
 
     <main class="container">
+
+<div id="core_graph">
+        <div id="animanga-core-graph" class="animanga-graph"></div>
+    </div>
+
+
     <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
-    <p>Questa sezione visualizza la rete semantica del progetto. Il grafo non si limita a mappare le relazioni enciclopediche di Wikidata, ma integra il nostro arricchimento metodologico basato su una <strong>classificazione a doppio livello</strong>: archetipi narrativi generali e archetipi culturali giapponesi.</p>
+    <p>Questa sezione visualizza la rete semantica del progetto. Il grafo non si limita a mappare le relazioni enciclopediche di Wikidata, 
+        ma integra il nostro arricchimento metodologico basato su una <strong>classificazione a doppio livello</strong>: 
+        archetipi narrativi generali e archetipi culturali giapponesi.</p>
 
     <ul>
         <li><strong>Provenienza del Dato:</strong> Gli archi che rappresentano relazioni fattuali provenienti da Wikidata sono a linea continua. Le relazioni inferite dall'LLM e validate manualmente sono distinte: le linee tratteggiate collegano l'archetipo generale, mentre quelle con marcatore specifico evidenziano l'archetipo culturale giapponese.</li>
         <li><strong>Modello a Due Livelli:</strong> Ogni personaggio (es. <em>Itachi Uchiha</em>) funge da nodo centrale che connette il suo ruolo nella trama (l'opera di appartenenza) alle due nuove dimensioni semantiche introdotte dal progetto (<code>animanga:hasGeneralArchetype</code> e <code>animanga:hasJapaneseArchetype</code>).</li>
     </ul>
+
 
     <h3>Pipeline di visualizzazione</h3>
     <ol class="step-list">
@@ -39,7 +48,7 @@
     </ol>
 
     <div id="core_graph">
-        <div id="animanga-core-graph" class="animanga-graph"></div>
+        <div id="animanga-final-graph" class="animanga-graph"></div>
     </div>
 </main>
 </body>

@@ -722,6 +722,48 @@ document.addEventListener('DOMContentLoaded', function() {
         new vis.Network(container_core, data_core, options_core);
     }
 
+    // --- GRAFO FINALE ---
+
+    // Esempio di aggiornamento nodi e archi nel tuo script.js
+    var nodes_final = new vis.DataSet([
+        { id: 'wd:Q1043344', label: 'Itachi Uchiha', group: 'character' },
+        { id: 'wd:Q81', label: 'Naruto (Opera)', group: 'series' },
+        { id: 'wd:Q1969230', label: 'Tragic Hero', group: 'archetype' }, // QID Wikidata
+        { id: 'ex:sacrificial-shinobi', label: 'Sacrificial Shinobi', group: 'archetype' } // Risorsa locale
+    ]);
+
+    var edges_final = new vis.DataSet([
+        // Relazione base (Wikidata)
+        { from: 'wd:Q1043344', to: 'wd:Q81', label: 'appare in', color: {color: '#BDBDBD'} },
+        
+        // Relazione Archetipo Generale (Tratteggiata)
+        { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'hasGeneral', dashes: true, color: {color: '#f43f5e'} },
+        
+        // Relazione Archetipo Giapponese (Nuova - es. Colore diverso o freccia specifica)
+        { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'hasJapanese', color: {color: '#9C27B0'}, width: 2 }
+      ]);    
+
+    var container_core = document.getElementById('animanga-final-graph');
+    if (container_core) {
+        var data_core = { nodes: nodes_core, edges: edges_core };
+        var options_core = {
+            nodes: { shape: 'dot', size: 20, font: { size: 14, face: 'Helvetica', color: '#333' }, borderWidth: 2 },
+            groups: {
+                series: { color: { background: '#4CAF50', border: '#388E3C' }, shape: 'box', font: {size: 18, color: 'white'} },
+                character: { color: { background: '#2196F3', border: '#1976D2' } },
+                archetype: { color: { background: '#FFC107', border: '#FFA000' }, shape: 'ellipse' },
+                role: { color: { background: '#9C27B0', border: '#7B1FA2' }, shape: 'ellipse', font: {color: 'white'} }
+            },
+            edges: { font: { align: 'middle', size: 10, color: '#666' }, smooth: { type: 'continuous' } },
+            physics: {
+                forceAtlas2Based: { gravitationalConstant: -100, centralGravity: 0.01, springLength: 200, springConstant: 0.08 },
+                maxVelocity: 50, solver: 'forceAtlas2Based', timestep: 0.35, stabilization: { iterations: 150 }
+            }
+        };
+        new vis.Network(container_core, data_core, options_core);
+    }
+
+
     // --- GRAFO ONTOLOGICO (Schema) ---
     var container_onto = document.getElementById('animanga-onto-graph');
     if (container_onto) {
