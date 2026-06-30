@@ -33,7 +33,7 @@ const righePerPaginaQ9bis = 10;
 // ==========================================
 
 // --- Grafo Dinamico (Query 3 - Lightbox 3) ---
-function loadGraphFromJSON() {
+function loadGraphFromJSON_3() {
     fetch('./queries_results/query_3.json') //"./queries_results/query_3.json"
         .then(response => response.json())
         .then(data => {
@@ -120,9 +120,9 @@ function loadGraphFromJSON() {
         .catch(error => console.error("Errore nel caricamento della Query 3:", error));
 }
 
-// --- Grafo Dinamico (Query 7 - Lightbox 7) ---
-function loadGraph7FromJSON() {
-    fetch('./queries_results/query_7.json')//"./queries_results/query_3.json"
+// --- Grafo Dinamico (Query 8 - Lightbox 8) ---
+function loadGraphFromJSON_8() {
+    fetch('./queries_results/query_8.json')
         .then(response => response.json())
         .then(data => {
             let nodesArray = [];
@@ -898,16 +898,16 @@ document.addEventListener('DOMContentLoaded', function() {
         btnChart3.addEventListener('click', function() {
             if(lightbox3) lightbox3.style.display = 'flex';
             if (!isGraph3Loaded) {
-                loadGraphFromJSON();
+                loadGraph3FromJSON();
                 isGraph3Loaded = true;
             }
         });
     }
 
-    const btnChart7 = document.getElementById('chartBtn-7');
-    const lightbox7 = document.getElementById('lightbox-7');
+    const btnChart8 = document.getElementById('chartBtn-8');
+    const lightbox8 = document.getElementById('lightbox-8');
     let isGraph7Loaded = false;
-    if (btnChart7) {
+    if (btnChart8) {
         btnChart7.addEventListener('click', function() {
             if(lightbox7) lightbox7.style.display = 'flex';
             if (!isGraph7Loaded) {
