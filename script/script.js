@@ -20,7 +20,7 @@ const righePerPaginaQ7 = 25;
 // Stato per la Query 8
 let datiQuery8 = [];
 let paginaCorrenteQ8 = 1;
-const righePerPaginaQ8 = 25; 
+const righePerPaginaQ8 = 15; 
 
 // Stato per la Query 9
 let datiQuery9 = [];
