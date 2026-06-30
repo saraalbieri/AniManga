@@ -1,0 +1,17 @@
+@prefix animanga: <https://w3id.org/animanga/ontology/> .
+@prefix ex: <https://w3id.org/animanga/resource/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Esempio di allineamento per Nami (One Piece)
+wd:Q877964
+    animanga:hasGeneralArchetype ex:trickster-ally ;
+    animanga:hasJapaneseArchetype ex:kitsune .
+
+ex:trickster-ally
+    rdfs:label "trickster alleato"@it ;
+    rdfs:label "trickster ally"@en .
+
+ex:kitsune
+    rdfs:label "kitsune"@it ;
+    rdfs:label "kitsune"@en .

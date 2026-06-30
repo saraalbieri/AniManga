@@ -1,0 +1,2 @@
+[wd:Personaggio] → animanga:hasGeneralArchetype → [wd:QID_Archetipo]
+[wd:Personaggio] → animanga:hasJapaneseArchetype → [ex:Nuovo_Archetipo]
