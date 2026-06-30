@@ -578,19 +578,19 @@ function configuraControlliQ8() {
             if (paginaCorrenteQ8 < totalePagine8) {
                 paginaCorrenteQ8++;
                 renderizzaTabellaQ8();
-                scrollareAInizioTabellaQ8()
+                //scrollareAInizioTabellaQ8()
             }
         });
         btnNext_8.dataset.listener = "true";
     }
 }
 
-function scrollareAInizioTabellaQ8() {
+/*function scrollareAInizioTabellaQ8() {
     const tabella = document.getElementById("tbody-query8");
     if(tabella) {
         tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-}
+}*/
 
 // --- Logica Caricamento e Impaginazione Query 9bis ---
 function caricaDatiQuery9bis(urlFile) {
@@ -674,19 +674,19 @@ function configuraControlliQ9bis() {
             if (paginaCorrenteQ9bis < totalePagine) {
                 paginaCorrenteQ9bis++;
                 renderizzaTabellaQ9bis();
-                scrollareAInizioTabellaQ9bis()
+                //scrollareAInizioTabellaQ9bis()
             }
         });
         btnNext.dataset.listener = "true";
     }
 }
 
-function scrollareAInizioTabellaQ9bis() {
+/*function scrollareAInizioTabellaQ9bis() {
     const tabella = document.getElementById("tbody-query9b");
     if(tabella) {
         tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-}
+}*/
 
 // ==========================================
 // 2. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
