@@ -887,7 +887,7 @@ function loadFinalGraph(personaggio, containerId) {
     const options = {
         groups: {
             personaggio: { color: "#3b82f6", shape: "ellipse" },
-            "archetipo-gen": { color: "#10b981", shape: "box" },
+            "archetipo-gen": { color: "#ef4444", shape: "diamond" },
             "archetipo-jp": { color: "#ef4444", shape: "diamond" }
         },
         physics: {
