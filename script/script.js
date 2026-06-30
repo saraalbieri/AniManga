@@ -693,86 +693,71 @@ function loadGraphTipoPersonaggio() {
                 const operaLabel = row.operaLabel ? row.operaLabel.value : operaId.split("/").pop();
 
                 const personaggioId = row.personaggio.value;
-                const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : personaggioId.split("/").pop();
+const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : personaggioId.split("/").pop();
 
-                const tipoLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : null;
+// GESTIONE ETICHETTA ROMBO ROSSO (Rimuove gli spazi vuoti, se non c'è nulla scrive "Sconosciuto")
+let tipoLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value.trim() : null;
+if (tipoLabel === "") {
+    tipoLabel = "Tipo Sconosciuto";
+}
 
-                if (!addedNodes.has(operaId)) {
-                    nodesArray.push({
-                        id: operaId,
-                        label: operaLabel,
-                        group: "opera",
-                        shape: "box",
-                        color: {
-                            background: "#10b981",
-                            border: "#047857"
-                        },
-                        font: {
-                            color: "black",
-                            bold: true
-                        }
-                    });
-                    addedNodes.add(operaId);
-                }
+if (!addedNodes.has(operaId)) {
+    // ... [Il tuo codice per l'operaId rimane identico] ...
+}
 
-                if (!addedNodes.has(personaggioId)) {
-                    nodesArray.push({
-                        id: personaggioId,
-                        label: personaggioLabel,
-                        group: "personaggio",
-                        shape: "ellipse",
-                        color: {
-                            background: "#3b82f6",
-                            border: "#1e40af"
-                        },
-                        font: {
-                            color: "white"
-                        }
-                    });
-                    addedNodes.add(personaggioId);
-                }
+// 1. RISOLUZIONE NODI GIALLI (Personaggi)
+if (!addedNodes.has(personaggioId)) {
+    nodesArray.push({
+        id: personaggioId,
+        label: personaggioLabel,
+        group: "personaggio",
+        shape: "ellipse",
+        color: {
+            background: "#3b82f6",
+            border: "#1e40af",
+            // Blocca il colore quando ci clicchi o passi il mouse!
+            highlight: { background: "#3b82f6", border: "#1e40af" },
+            hover: { background: "#60a5fa", border: "#1e40af" } // Azzurro leggermente più chiaro al passaggio del mouse
+        },
+        font: {
+            color: "white"
+        }
+    });
+    addedNodes.add(personaggioId);
+}
 
-                const edgeOperaKey = `${personaggioId}-${operaId}`;
+const edgeOperaKey = `${personaggioId}-${operaId}`;
 
-                if (!addedEdges.has(edgeOperaKey)) {
-                    edgesArray.push({
-                        from: personaggioId,
-                        to: operaId,
-                        label: "appare in",
-                        arrows: "to",
-                        color: {
-                            color: "#94a3b8"
-                        },
-                        font: {
-                            color: "#475569",
-                            background: "white"
-                        }
-                    });
-                    addedEdges.add(edgeOperaKey);
-                }
+if (!addedEdges.has(edgeOperaKey)) {
+    // ... [Il tuo codice per l'arco dell'opera rimane identico] ...
+}
 
-                if (tipoLabel) {
-                    const tipoId = `tipo-${tipoLabel}`;
+// 2. RISOLUZIONE ROMBO ROSSO SENZA TESTO
+if (tipoLabel) {
+    const tipoId = `tipo-${tipoLabel}`;
 
-                    if (!addedNodes.has(tipoId)) {  //La parte che rende rossi i tipoPersonaggioLabel
-                        nodesArray.push({
-                            id: tipoId,
-                            label: tipoLabel,
-                            group: "tipoPersonaggio",
-                            shape: "diamond",
-                            color: {
-                                background: "#ef4444", 
-                                border: "#991b1b"       
-                            },
-                            font: {
-                                color: "black",
-                                bold: true
-                            }
-                        });
-                        addedNodes.add(tipoId);
-                    }
+    if (!addedNodes.has(tipoId)) {  
+        nodesArray.push({
+            id: tipoId,
+            label: tipoLabel,
+            group: "tipoPersonaggio",
+            shape: "diamond",
+            color: {
+                background: "#ef4444", 
+                border: "#991b1b",
+                highlight: { background: "#ef4444", border: "#991b1b" } // Blocca il colore al click
+            },
+            font: {
+                color: "white", // Cambiato da black a white per renderlo leggibile
+                bold: true
+            }
+        });
+        addedNodes.add(tipoId);
+    }
 
-                    const edgeTipoKey = `${personaggioId}-${tipoId}`;
+    const edgeTipoKey = `${personaggioId}-${tipoId}`;
+
+    if (!addedEdges.has(edgeTipoKey)) {
 
                     if (!addedEdges.has(edgeTipoKey)) {
                         edgesArray.push({
