@@ -841,13 +841,12 @@ function loadGraphTipoPersonaggio() {
 }
 
 //finali
-function loadFinalGraph(personaggio) {
-    // Dati basati sulle tue normalizzazioni manuali in llm-benchmark.html
+function loadFinalGraph(personaggio, containerId) {
     const dataset = {
         "Itachi": {
             nodes: [
                 {id: 1, label: "Itachi Uchiha", group: "personaggio"},
-                {id: 2, label: "Tragic Hero (wd:Q1969230)", group: "archetipo-gen"},
+                {id: 2, label: "Tragic Hero", group: "archetipo-gen"},
                 {id: 3, label: "sacrificial-shinobi", group: "archetipo-jp"}
             ],
             edges: [
@@ -868,16 +867,36 @@ function loadFinalGraph(personaggio) {
         }
     };
 
-    // Configurazione visuale coerente con il tuo stile
+    const data = dataset[personaggio];
+    if (!data) return;
+
+    // DEFINIZIONE CORRETTA:
+    const container = document.getElementById(containerId); 
+    
+    // Controllo di sicurezza: se il div non esiste, esci per evitare l'errore
+    if (!container) {
+        console.error("Elemento non trovato: " + containerId);
+        return;
+    }
+
+    const graphData = {
+        nodes: new vis.DataSet(data.nodes),
+        edges: new vis.DataSet(data.edges)
+    };
+
     const options = {
         groups: {
             personaggio: { color: "#3b82f6", shape: "ellipse" },
             "archetipo-gen": { color: "#10b981", shape: "box" },
             "archetipo-jp": { color: "#ef4444", shape: "diamond" }
+        },
+        physics: {
+            stabilization: { iterations: 100 },
+            solver: "forceAtlas2Based"
         }
     };
-    
-    // ... inizializzazione vis.Network come negli esempi precedenti
+
+    // Ora 'container' è definita e può essere usata qui:
     new vis.Network(container, graphData, options);
 }
 
