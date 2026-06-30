@@ -1,9 +1,9 @@
-PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
-PREFIX schema: &lt;http://schema.org/&gt;
-PREFIX wd: &lt;http://www.wikidata.org/entity/&gt;
-PREFIX wdt: &lt;http://www.wikidata.org/prop/direct/&gt;
-PREFIX wikibase: &lt;http://wikiba.se/ontology#&gt;
-PREFIX bd: &lt;http://www.bigdata.com/rdf#&gt;
+PREFIX rdfs:http://www.w3.org/2000/01/rdf-schema#
+PREFIX schema:http://schema.org/
+PREFIX wd:http://www.wikidata.org/entity/
+PREFIX wdt:http://www.wikidata.org/prop/direct/
+PREFIX wikibase:http://wikiba.se/ontology#
+PREFIX bd:http://www.bigdata.com/rdf#
 
 # Verifica del QID dell'archetipo proposto dall'LLM.
 # Il risultato viene accettato solo se l'entità è classificata come stock character.

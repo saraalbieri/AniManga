@@ -1,7 +1,7 @@
-@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
-@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix animanga: https://w3id.org/animanga/ontology/ .
+@prefix ex: https://w3id.org/animanga/resource/ .
+@prefix wd: http://www.wikidata.org/entity/ .
+@prefix rdfs: http://www.w3.org/2000/01/rdf-schema# .
 
 # Nami esiste in Wikidata: si riusa il suo QID.
 # Gli archetipi "trickster ally" e "kitsune" sono usati qui come normalizzazioni interne.
