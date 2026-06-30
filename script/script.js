@@ -674,9 +674,17 @@ function configuraControlliQ9bis() {
             if (paginaCorrenteQ9bis < totalePagine) {
                 paginaCorrenteQ9bis++;
                 renderizzaTabellaQ9bis();
+                scrollareAInizioTabellaQ9bis()
             }
         });
         btnNext.dataset.listener = "true";
+    }
+}
+
+function scrollareAInizioTabellaQ9bis() {
+    const tabella = document.getElementById("tbody-query9b");
+    if(tabella) {
+        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
