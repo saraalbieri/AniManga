@@ -27,7 +27,8 @@
 
         <div class="query-box" id="query-box-1">
             <h3>Query 1: contare le dichiarazioni dirette delle entità Naruto</h3>
-            <p>Questa query cerca le entità che hanno esattamente la label inglese <em>Naruto</em>, recupera la loro descrizione inglese e conta quante righe vengono trovate per ciascun item attraverso le proprietà dirette di Wikidata.</p>
+            <p>Questa query cerca le entità che hanno esattamente la label inglese <em>Naruto</em>, recupera la loro descrizione inglese e conta quante righe vengono trovate per 
+                ciascun item attraverso le proprietà dirette di Wikidata.</p>
             <pre class="query-embed" data-src="./queries/q1_Q-ta_entita_Naruto.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-1" data-limit="5">
@@ -54,15 +55,18 @@
                 <img class="lightbox-content" id="lightbox-img-1" src="./img/chart-1.png" alt="Grafico Risultati 1">
             </div>
             <p><strong>Perché è utile:</strong> Prima di esplorare le relazioni più complesse, è necessario capire "di cosa parliamo" quando cerchiamo Naruto su Wikidata. 
-                Questa query fa proprio questo: isola tutte le entità che condividono lo stesso nome, ne recupera la descrizione e conta quante informazioni (dichiarazioni) 
+                Questa query isola tutte le entità che condividono lo stesso nome, ne recupera la descrizione e conta quante informazioni (dichiarazioni) 
                 possiede ciascuna. In questo modo possiamo differenziare a colpo d'occhio la serie anime dal manga o dal franchise multimediale, scartando le entità omonime 
-                (come città o navi). Sapere quante dichiarazioni ha ogni entità ci offre una mappa iniziale del dominio e ci dice subito quali sono i nodi più ricchi di dati da 
+                (come città o navi).<br/>
+                Sapere quante dichiarazioni ha ogni entità ci offre una mappa iniziale del dominio e ci dice subito quali sono i nodi più ricchi di dati da 
                 cui partire per le nostre analisi successive.</p>
         </div>
 
         <div class="query-box" id="query-box-2">
             <h3>Query 2: confrontare le proprietà delle entità Naruto</h3>
-            <p>La seconda query usa i QID <code>wd:Q25929253</code>, <code>wd:Q26971382</code> e <code>wd:Q642</code> per recuperare le proprietà dirette delle tre entità. Raggruppa i risultati per proprietà e label inglese, mostrando quante volte ciascuna proprietà compare complessivamente.</p>
+            <p>La seconda query usa i QID <code>wd:Q25929253</code> - (<em>Japanese anime television series</em>), <code>wd:Q26971382</code> - (<em>Japanese manga series</em>) e 
+                <code>wd:Q642</code> - (<em>Japanese media franchise</em>) per recuperare le proprietà dirette delle tre entità.<br/>
+                Raggruppa i risultati per proprietà e label inglese, mostrando quante volte ciascuna proprietà compare complessivamente.</p>
             <pre class="query-embed" data-src="./queries/q2_confronto_proprietà_Naruto.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-2" data-limit="5">
@@ -91,10 +95,10 @@
                 <span class="lightbox-close">&times;</span>
                 <img class="lightbox-content" id="lightbox-img-2" src="./img/chart-2.png" alt="Grafico Risultati 2">
             </div>
-            <p><strong>Perché è utile:</strong> Se con la prima query abbiamo capito quali entità esistono, con questa andiamo a scoprire come vengono descritte e confrontate. 
+            <p><strong>Perché è utile:</strong> Se con la prima query abbiamo capito quali entità esistono, con questa andiamo a scoprire come vengono descritte e confrontate.<br/> 
                 Mettendo sotto la lente d'ingrandimento le proprietà dell'anime, del manga e del franchise di Naruto, possiamo vedere quali sono le informazioni più frequenti 
-                (come l'elenco dei personaggi o i generi di appartenenza) e come variano tra un formato e l'altro. Questo confronto ravvicinato è la prova schiacciante che ci serve: 
-                ci mostra chiaramente che Wikidata è ricca di metadati tecnici e identificativi esterni, ma è quasi del tutto priva di informazioni strutturate sugli archetipi e 
+                (come l'elenco dei personaggi o i generi di appartenenza) e come variano tra un formato e l'altro. Questo confronto ci mostra chiaramente che Wikidata è ricca 
+                di metadati tecnici e identificativi esterni, ma è quasi del tutto priva di informazioni strutturate sugli archetipi e 
                 sulla caratterizzazione sociologica dei personaggi, aprendo la strada all'utilità del nostro progetto.</p>
         </div>
 
@@ -133,14 +137,14 @@
                 <div class="lightbox-content" id="mynetwork-3" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
             <p><strong>Perché è utile:</strong> Questa query è molto utile per l'<strong>esplorazione e la comprensione del modello dati</strong>. Permette di ottenere una "radiografia" 
-                completa di come determinati elementi sono strutturati su Wikidata, mettendo in luce quali proprietà vengono utilizzate per descriverli. È uno strumento essenziale in 
-                fase di analisi preliminare: consente a chi interroga il database di esplorare a 360 gradi le informazioni disponibili per una singola entità, offrendo una base solida 
-                prima di costruire query più complesse o selettive.</p>
+                completa di come determinati elementi sono strutturati su Wikidata, mettendo in luce quali proprietà vengono utilizzate per descriverli. Consente a chi interroga il 
+                database di esplorare a 360 gradi le informazioni disponibili per una singola entità, offrendo una base solida prima di costruire query più complesse o selettive.</p>
         </div>
 
         <div class="query-box" id="query-box-4">
             <h3>Query 4: trovare i personaggi Naruto univoci</h3>
-            <p>L'ultima query esplorativa seleziona soltanto la proprietà <code>P674</code> (<em>characters</em>) nelle tre entità indicate. <code>DISTINCT</code> elimina le righe duplicate e il risultato mostra proprietà, personaggio e rispettive label inglesi, ordinando alfabeticamente i valori.</p>
+            <p>Questa query esplorativa seleziona soltanto la proprietà <code>P674</code> (<em>characters</em>) nelle tre entità indicate. <code>DISTINCT</code> elimina le righe duplicate 
+                e il risultato mostra proprietà, personaggio e rispettive label inglesi, ordinando alfabeticamente i valori.</p>
             <pre class="query-embed" data-src="./queries/q4_characters_univoci_Naruto.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-4" data-limit="10">
@@ -159,8 +163,8 @@
                     Mostra tutte
                 </button>
             </div>
-            <p><strong>Perché è utile:</strong> Con le query precedenti abbiamo visto quante proprietà ed elementi contengono i dati di Naruto, scoprendo che la voce sui personaggi 
-                è in assoluto la più ricca. Questa quarta query fa un passo avanti pratico: mette ordine. Visto che un personaggio come Sasuke o Sakura compare sia nel manga che 
+            <p><strong>Perché è utile:</strong> Con le query precedenti abbiamo visto quante proprietà ed elementi contengono i dati di Naruto, scoprendo che la voce sui personaggi <em>characters</em>
+                è in assoluto la più ricca. Questa quarta mette ordine. Visto che un personaggio come Sasuke o Sakura compare sia nel manga che 
                 nell'anime, rischiemmo di trovarli ripetuti più volte. Grazie all'istruzione DISTINCT, la query elimina i doppioni e ci restituisce una lista pulita, univoca e 
                 in ordine alfabetico di tutti i personaggi esistenti nel mondo di Naruto su Wikidata. È l'elenco perfetto da cui partire per iniziare ad applicare i nostri 
                 archetipi narrativi ed esplorare la sociologia dei personaggi nel dettaglio.</p>
@@ -168,7 +172,10 @@
 
         <div class="query-box" id="query-box-5">
             <h3>Query 5: trovare le proprietà non universali dei personaggi</h3>
-            <p>Questa query identifica le proprietà di Wikidata che non sono condivise da tutti i personaggi analizzati. Lo script calcola prima il numero totale dei personaggi (tramite una subquery) e successivamente verifica in quanti di essi è presente ciascuna proprietà. Infine, filtra i risultati per mostrare esclusivamente le proprietà il cui numero di utilizzi è inferiore al totale assoluto dei personaggi, escludendo così i tratti universali e ordinando i risultati da quelli più usati a quelli più rari.</p>
+            <p>Questa query identifica le proprietà di Wikidata che non sono condivise da tutti i personaggi analizzati. Lo script calcola prima il numero totale dei personaggi 
+                (tramite una subquery) e successivamente verifica in quanti di essi è presente ciascuna proprietà. 
+                Infine, filtra i risultati per mostrare esclusivamente le proprietà il cui numero di utilizzi è inferiore al totale assoluto dei personaggi, 
+                escludendo così i tratti universali e ordinando i risultati da quelli più usati a quelli più rari.</p>
             <pre class="query-embed" data-src="./queries/q5_prop_non_universali.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-5" data-limit="10">
@@ -199,12 +206,17 @@
                 compilati per tutti i personaggi, fornendo così una mappa utile per chi deve arricchire il database. Dall'altro lato, aiuta a comprendere l'<strong>eterogeneità 
                 del dataset</strong>, mettendo in luce proprietà specifiche (come "potere sovrumano" o "arma fittizia") che caratterizzano unicamente determinati archetipi, 
                 rivelando quanto sia vario il livello di dettaglio dei vari elementi.<br/>
-                Abbiamo deciso di concentrarci su quelle proprietà che sono meno utilizzate, come la propretà <em>wd:P9071</em> - <strong>character type</strong> che a nostro avviso è una proprietà importante per comprendere la natura dei personaggi.</p>
+                Abbiamo deciso di concentrarci su quelle proprietà che sono meno utilizzate, come la propretà <code>wd:P9071</code> - <em>character type</em> 
+                che a nostro avviso è una proprietà importante per comprendere la natura dei personaggi.</p>
         </div>
 
         <div class="query-box" id="query-box-6">
-            <h3>Query 6: Estrazione per i 3 manga scelti per l'analisi</h3>
-            <p>L'utilizzo dell'operatore logico OR (tramite il simbolo pipe <code>|</code>) all'interno dell'espressione regolare permette di intercettare simultaneamente le principali forme espressive dei media giapponesi in una singola interrogazione. Questa tecnica di filtraggio avanzato è fondamentale quando si costruiscono strutture complesse come AniManga O-KG, poiché garantisce di scartare a priori le entità irrilevanti o ambigue presenti su Wikidata (ad esempio brani musicali, live-action o merchandising scollegato), isolando esclusivamente i nodi pertinenti all'ecosistema manga e anime necessari per popolare l'ontologia in modo pulito e coerente.</p>
+            <h3>Query 6: Estrazione per i 3 manga scelti per l'analisi: One Piese, Naruto, Death Note</h3>
+            <p>Fino a questo punto, l'analisi si è concentrata esclusivamente sul franchise di Naruto per mappare approfonditamente un singolo ecosistema di dati. 
+                Tuttavia, per validare scientificamente l'ipotesi di ricerca e dimostrare che la carenza di dati sugli archetipi non è un caso isolato legato a un'unica opera, 
+                si rende necessario un cambio di scala. Questa query estende l'interrogazione a tre pilastri assoluti del panorama anime e manga (One Piece, Naruto e Death Note), 
+                scelti appositamente per la loro eterogeneità di target, temi e strutture narrative.<br/>
+                L'obiettivo è raccogliere un campione dati comparativo e statisticamente significativo, fondamentale per dimostrare la natura sistemica del problema su Wikidata.</p>
             <pre class="query-embed" data-src="./queries/q6_analisi_3_manga.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-6" data-limit="10">
@@ -229,16 +241,18 @@
                 <span class="lightbox-close">&times;</span>
                 <img class="lightbox-content" id="lightbox-img-6" src="./img/chart-6.png" alt="Grafico Risultati 6">
             </div>
-            <p><strong>Perché è utile:</strong> Fino a questo momento l'analisi si è concentrata solo su un franchise, ma per dimostrare che il nostro progetto è davvero necessario 
-                dobbiamo guardare il quadro generale. Questa query allarga il campo d'azione estraendo e mettendo a confronto i dati di tre manga pilastro del settore. 
-                I risultati dimostrano che, indipendentemente dalla popolarità o dall'autore dell'opera, il modo in cui Wikidata descrive i personaggi soffre sempre dello stesso 
-                identico problema: mancano dati profondi sulla loro personalità e sul loro ruolo narrativo. Ottenere questa tripla estrazione ci dà la conferma definitiva che il 
-                problema è diffuso e che la nostra ontologia è la soluzione ideale per mappare l'intero panorama dei fumetti giapponesi.</p>
+            <p><strong>Perché è utile:</strong> Guardare oltre un singolo franchise è indispensabile per dimostrare la validità della nostra tesi. 
+                Estraendo e confrontando i dati di questi tre manga, i risultati evidenziano come il problema sia generalizzato: a prescindere dal genere o dalla popolarità dell'opera, 
+                Wikidata si ferma ai dati superficiali, tralasciando la caratterizzazione sociologica e gli archetipi dei personaggi. 
+                Questo triplo riscontro ci dà la certezza definitiva che ci troviamo di fronte a una lacuna diffusa su scala globale nel settore dell'animazione e del fumetto giapponese.</p>
         </div>
 
         <div class="query-box" id="query-box-7">
-            <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <em>P9071</em> character type solo in relazione alle opere selezionate</h3>
-            <p>.</p>
+            <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <code>P9071</code> - <em>character type</em> solo in relazione alle opere selezionate</h3>
+            <p>Definito il paniere dei tre manga scelti come benchmark, l'indagine si sposta dall'esplorazione generale dei metadati a una ricerca mirata e selettiva. 
+                Questa query interroga direttamente Wikidata per mappare i personaggi di Naruto, One Piece e Death Note che presentano una dichiarazione legata alla 
+                proprietà <code>wdt:P9071</code>, identificativa del tipo di personaggio. Si tratta di un passaggio cruciale per verificare sul campo se lo strumento 
+                teorico offerto da Wikidata venga realmente applicato dalla community per descrivere la natura sociologica dei protagonisti.</p>
             <pre class="query-embed" data-src="./queries/q7_P9071.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-7" data-limit="10">
@@ -268,16 +282,21 @@
                 <span class="lightbox-close">&times;</span>
                 <div class="lightbox-content" id="mynetwork-7" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
-            <p><strong>Perché è utile:</strong> Dopo aver esplorato il funzionamento generale di Wikidata, andiamo dritti al punto: quanti personaggi utilizzano la 
-                proprietà <em>P9071</em> per definire il proprio archetipo narrativo? Il risultato è sorprendente e mette in luce il vero problema: nonostante la proprietà 
+            <p><strong>Perché è utile:</strong> uanti personaggi utilizzano la proprietà <code>P9071</code> - <em>character type</em> per definire il proprio archetipo narrativo?<br/> 
+                Il risultato è sorprendente e mette in luce il vero problema: nonostante la proprietà 
                 esista sulla carta, quasi nessun personaggio di manga o anime è stato effettivamente collegato a un "tipo" o a un archetipo sociologico. 
-                Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa. 
-                È esattamente in questo spazio vuoto che si inserisce AniManga O-KG, dimostrando l'assoluta utilità del nostro lavoro.</p>
+                Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa.</p>
         </div>
 
         <div class="query-box" id="query-box-8">
-            <h3>Query 8: Raffiniamo la ricerca: cerchiamo i personaggi che hanno l'archetipo <em>P9071</em> - character type. </h3>
-            <p>.</p>            
+            <h3>Query 8: cerchiamo quali personaggi hanno l'archetipo <code>P9071</code> - <em>character type</em>. </h3>
+                <p>Dopo aver analizzato la struttura generale dei dati, questa query avvia una ricerca mirata per isolare con precisione chirurgica le lacune del dataset.<br/>
+                    Mantenendo rigorosamente il focus sulle 10 entità chiave identificate per i tre franchise (le declinazioni multimediali di Naruto, One Piece e Death Note), 
+                    l'interrogazione mappa a tappeto tutti i rispettivi personaggi con l'obiettivo specifico di verificare quanti di essi possiedano la proprietà 
+                    <code>wdt:P9071</code> (<em>character type</em>).<br/>
+                    Si tratta di un passaggio di raffinamento essenziale per quantificare numericamente il vuoto tassonomico su un campione controllato e stabile.</p>
+                    <code>wdt:P9071</code> al di fuori dei confini dei nostri casi di studio. Questa query agisce come un controllo macroscopico: azzera i filtri relativi alle 
+                    opere di riferimento e mappa la totalità dei personaggi censiti in Wikidata che possiedono un <em>character type</em> dichiarato. Questo passaggio permette di stabilire se lo strumento tassonomico sia ignorato in senso assoluto o se trovi applicazione in altri contesti narrativi.</p>
             <pre class="query-embed" data-src="./queries/q8_all_character_P9071.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-8" data-limit="10">
@@ -295,8 +314,8 @@
                 <span id="page-indicator">Pagina 1 di Lungh</span>
                 <button id="btn-next-q8" class="btn-action primary" onclick="paginaSuccessiva()">Successiva</button>
             </div>
-            <p><strong>Perché è utile:</strong> Dopo aver esplorato il funzionamento generale di Wikidata, andiamo dritti al punto: quanti personaggi utilizzano la 
-                proprietà <em>P9071</em> per definire il proprio archetipo narrativo? Il risultato è sorprendente e mette in luce il vero problema: nonostante la proprietà 
+            <p><strong>Perché è utile:</strong> Quanti personaggi utilizzano la 
+                proprietà <code>P9071</code> - <em>character type</em> per definire il proprio archetipo narrativo? Il risultato mette in luce il vero problema: nonostante la proprietà 
                 esista sulla carta, quasi nessun personaggio di manga o anime è stato effettivamente collegato a un "tipo" o a un archetipo sociologico. 
                 Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa. 
                 È esattamente in questo spazio vuoto che si inserisce AniManga O-KG, dimostrando l'assoluta utilità del nostro lavoro.</p>
@@ -319,12 +338,12 @@
                         <th>Etichetta del tipo</th>
                     </tr>
                 </thead>
-                <tbody id="tbody-query9"></tbody>
+                <tbody id="tbody-query9"><tr data-index="0"><td class=""><span title=": Crocodile@en">Crocodile</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="1"><td class=""><span title=": Kuro@en">Kuro</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="2"><td class=""><span title=": Sasuke Uchiha@en">Sasuke Uchiha</span></td><td class=""><span title=": Naruto@en">Naruto</span></td><td class=""><span title=": Lone Cowboy@en">Lone Cowboy</span></td><td class=""></td></tr><tr data-index="3"><td class=""><span title=": Light Yagami@en">Light Yagami</span></td><td class=""><span title=": Death Note@en">Death Note</span></td><td class=""><span title=": antihero@en">antihero</span></td><td class=""></td></tr><tr data-index="4"><td class=""><span title=": Light Yagami@en">Light Yagami</span></td><td class=""><span title=": Death Note@en">Death Note</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="5"><td class=""><span title=": Naruto Uzumaki@en">Naruto Uzumaki</span></td><td class=""><span title=": Naruto@en">Naruto</span></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""></td></tr><tr data-index="6"><td class=""><span title=": Monkey D. Luffy@en">Monkey D. Luffy</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""></td></tr><tr data-index="7"><td class=""><span title=": Sakazuki@en">Sakazuki</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr></tbody>
             </table>
-            <div class="pagination-container">
-                <button id="btn-prev-q9" class="btn-action primary" onclick="paginaPrecedente()">Precedente</button>
-                <span id="page-indicator">Pagina 1 di Lungh</span>
-                <button id="btn-next-q9" class="btn-action primary" onclick="paginaSuccessiva()">Successiva</button>
+            <div class="table-controls">
+                <button class="btn-action primary" id="toggleBtn-9">
+                    Mostra tutte
+                </button>
             </div>
             <p><strong>Perché è utile:</strong> Questa query è fondamentale perché standardizza e unifica i diversi modi in cui la community di Wikidata cataloga gli 
                 archetipi narrativi, permettendoci di mappare e confrontare l'anatomia dei personaggi di franchise complessi senza perdere dati per strada.</p>

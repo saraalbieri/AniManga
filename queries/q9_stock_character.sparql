@@ -1,49 +1,30 @@
-SELECT DISTINCT ?opera ?operaLabel ?totalCharacters ?personaggio ?personaggioLabel ?tipo ?tipoLabel 
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+
+SELECT DISTINCT ?personaggioLabel ?operaLabel ?tipoLabel  ?stockCharacterLabel
 WHERE {
-  # Filtra i personaggi presenti nei QID indicati (Naruto, One Piece, Death Note e derivati)
+  # 1. Definiamo l'elenco delle opere target
   VALUES ?opera { 
     wd:Q4431905 wd:Q642 wd:Q673 wd:Q104623150 wd:Q1834 
     wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 wd:Q25929253 
-  }
+  } 
   
-  # 1. Subquery: Calcoliamo il numero totale ASSOLUTO dei personaggi unici in queste opere
+  # 2. Trova i personaggi che compaiono in queste opere
+    ?opera wdt:P674 ?personaggio .
+  
+  # 3. UNION: Estraiamo la caratteristica e la chiamiamo ?stockCharacter in ENTRAMBI i rami
   {
-    SELECT (COUNT(DISTINCT ?c) AS ?totalCharacters) WHERE {
-      VALUES ?item { 
-        wd:Q4431905 wd:Q642 wd:Q673 wd:Q104623150 wd:Q1834 
-        wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 wd:Q25929253  
-      }
-      # Estrae i personaggi sia se l'opera punta al personaggio (P674) sia viceversa (P1441)
-      { ?item wdt:P674 ?c . }
-      UNION
-      { ?c wdt:P1441 ?item . }
-    }
-  }
-  
-  # 2. Riprendiamo il legame tra opera e personaggio (usando entrambi i metodi di Wikidata)
-  { ?opera wdt:P674 ?personaggio . }
-  UNION
-  { ?personaggio wdt:P1441 ?opera . }
-  
-  # 3. UNION per estrarre il tipo di personaggio (Archetipo / Stock Character)
-  {
-    ?personaggio wdt:P9071 ?tipo . # Proprietà "character type"
+    # Ramo A
+    ?personaggio wdt:P31 ?stockCharacter .
+    ?stockCharacter wdt:P31 wd:Q1089201 .
   }
   UNION
   {
-    # Trova i personaggi che sono istanza (P31) o sottoclasse di uno "stock character" (Q636497)
-    #Ad esempio, se un personaggio è un Tsundere o un Anti-hero, e queste classi sono registrate come sottoclassi di "stock character", la query le intercetta automaticamente.
-    ?personaggio wdt:P31/wdt:P279* wd:Q636497 . 
-    BIND(wd:Q636497 AS ?tipo)
+    # Ramo B 
+    ?personaggio wdt:P9071 ?tipo .
   }
-  UNION
-  {
-    ?personaggio wdt:P31 ?tipo .
-    # Escludiamo la classe generica "fictional character" (Q95074) per isolare solo lo stock character/tipo specifico
-    FILTER(?tipo != wd:Q95074)
-  }
-  
-  # Servizio per recuperare le etichette in inglese
+
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
-ORDER BY ?personaggioLabel

@@ -525,15 +525,15 @@ function caricaDatiQuery8(urlFile) {
 function renderizzaTabellaQ8() {
     const tbody = document.getElementById("tbody-query8");
     const indicator = document.getElementById("page-indicator-q8");
-    const btnPrev = document.getElementById("btn-prev-q8");
-    const btnNext = document.getElementById("btn-next-q8");
+    const btnPrev_8 = document.getElementById("btn-prev-q8");
+    const btnNext_8 = document.getElementById("btn-next-q8");
 
     if (!tbody) return;
     tbody.innerHTML = "";
 
     const inizio = (paginaCorrenteQ8 - 1) * righePerPaginaQ8;
     const fine = Math.min(inizio + righePerPaginaQ8, datiQuery8.length);
-    const totalePagine = Math.ceil(datiQuery8.length / righePerPaginaQ8);
+    const totalePagine8 = Math.ceil(datiQuery8.length / righePerPaginaQ8);
 
     const righeMostrate = datiQuery8.slice(inizio, fine);
 
@@ -553,34 +553,34 @@ function renderizzaTabellaQ8() {
         tbody.appendChild(tr);
     });
 
-    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ8} di ${totalePagine} (${datiQuery8.length} elementi)`;
-    if (btnPrev) btnPrev.disabled = (paginaCorrenteQ8 === 1);
-    if (btnNext) btnNext.disabled = (paginaCorrenteQ8 === totalePagine || totalePagine === 0);
+    if (indicator) indicator.textContent = `Pagina ${paginaCorrenteQ8} di ${totalePagine8} (${datiQuery8.length} elementi)`;
+    if (btnPrev_8) btnPrev_8.disabled = (paginaCorrenteQ8 === 1);
+    if (btnNext_8) btnNext_8.disabled = (paginaCorrenteQ8 === totalePagine8 || totalePagine8 === 0);
 }
 
 function configuraControlliQ8() {
-    const btnPrev = document.getElementById("btn-prev-q8");
-    const btnNext = document.getElementById("btn-next-q8");
+    const btnPrev_8 = document.getElementById("btn-prev-q8");
+    const btnNext_8 = document.getElementById("btn-next-q8");
 
-    if (btnPrev && !btnPrev.dataset.listener) {
-        btnPrev.addEventListener('click', () => {
+    if (btnPrev_8 && !btnPrev_8.dataset.listener) {
+        btnPrev_8.addEventListener('click', () => {
             if (paginaCorrenteQ8 > 1) {
                 paginaCorrenteQ8--;
                 renderizzaTabellaQ8();
             }
         });
-        btnPrev.dataset.listener = "true";
+        btnPrev_8.dataset.listener = "true";
     }
 
-    if (btnNext && !btnNext.dataset.listener) {
-        btnNext.addEventListener('click', () => {
-            const totalePagine = Math.ceil(datiQuery8.length / righePerPaginaQ8);
-            if (paginaCorrenteQ8 < totalePagine) {
+    if (btnNext_8 && !btnNext_8.dataset.listener) {
+        btnNext_8.addEventListener('click', () => {
+            const totalePagine8 = Math.ceil(datiQuery8.length / righePerPaginaQ8);
+            if (paginaCorrenteQ8 < totalePagine8) {
                 paginaCorrenteQ8++;
                 renderizzaTabellaQ8();
             }
         });
-        btnNext.dataset.listener = "true";
+        btnNext_8.dataset.listener = "true";
     }
 }
 
