@@ -679,6 +679,7 @@ function configuraControlliQ9bis() {
 // 2. GRAFI
 // ==========================================
 
+//Iniziale
 function loadGraphTipoPersonaggio() {
     fetch("./queries_results/query_grafo_iniziale.json")
         .then(response => response.json())
@@ -839,6 +840,46 @@ function loadGraphTipoPersonaggio() {
         });
 }
 
+//finali
+function loadFinalGraph(personaggio) {
+    // Dati basati sulle tue normalizzazioni manuali in llm-benchmark.html
+    const dataset = {
+        "Itachi": {
+            nodes: [
+                {id: 1, label: "Itachi Uchiha", group: "personaggio"},
+                {id: 2, label: "Tragic Hero (wd:Q1969230)", group: "archetipo-gen"},
+                {id: 3, label: "sacrificial-shinobi", group: "archetipo-jp"}
+            ],
+            edges: [
+                {from: 1, to: 2, label: "GeneralArchetype"},
+                {from: 1, to: 3, label: "JapaneseArchetype"}
+            ]
+        },
+        "Nami": {
+            nodes: [
+                {id: 1, label: "Nami", group: "personaggio"},
+                {id: 2, label: "trickster-ally", group: "archetipo-gen"},
+                {id: 3, label: "kitsune", group: "archetipo-jp"}
+            ],
+            edges: [
+                {from: 1, to: 2, label: "GeneralArchetype"},
+                {from: 1, to: 3, label: "JapaneseArchetype"}
+            ]
+        }
+    };
+
+    // Configurazione visuale coerente con il tuo stile
+    const options = {
+        groups: {
+            personaggio: { color: "#3b82f6", shape: "ellipse" },
+            "archetipo-gen": { color: "#10b981", shape: "box" },
+            "archetipo-jp": { color: "#ef4444", shape: "diamond" }
+        }
+    };
+    
+    // ... inizializzazione vis.Network come negli esempi precedenti
+}
+
 // ==========================================
 // 3. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
 // ==========================================
@@ -982,5 +1023,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById("mynetwork-grafo_iniziale")) {
         loadGraphTipoPersonaggio();
     }
+
+    //grafi finali
+    loadFinalGraph("Itachi", "mynetwork-itachi");
+    loadFinalGraph("Nami", "mynetwork-nami");
 
 });
