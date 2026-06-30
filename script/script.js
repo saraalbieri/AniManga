@@ -10,22 +10,22 @@ const righePerPagina = 25;
 // Stato per la Query 2
 let datiQuery2 = [];
 let paginaCorrenteQ2 = 1;
-const righePerPaginaQ2 = 15; 
+const righePerPaginaQ2 = 10; 
 
 // Stato per la Query 3
 let datiQuery3 = [];
 let paginaCorrenteQ3 = 1;
-const righePerPaginaQ3 = 15; 
+const righePerPaginaQ3 = 10; 
 
 // Stato per la Query 8
 let datiQuery8 = [];
 let paginaCorrenteQ8 = 1;
-const righePerPaginaQ8 = 25; 
+const righePerPaginaQ8 = 10; 
 
 // Stato per la Query 9
 let datiQuery9 = [];
 let paginaCorrenteQ9 = 1;
-const righePerPaginaQ9 = 25; 
+const righePerPaginaQ9 = 10; 
 
 
 // ==========================================

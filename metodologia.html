@@ -81,18 +81,14 @@
                     Abbiamo recuperato i personaggi collegati alle opere usando i QID verificati delle tre opere e query con <code>VALUES</code>, <code>UNION</code>, <code>FILTER</code>, <code>LIMIT</code> e <code>ORDER BY</code>, perché Wikidata può modellare il legame tra opera e personaggio attraverso proprietà diverse.</div></li>
                 <li><div><strong>Confronto delle proprietà disponibili</strong><br>
                     Abbiamo estratto le proprietà dei personaggi principali e poi di personaggi secondari o narrativamente più ambigui. Questo confronto ha mostrato che Wikidata contiene soprattutto dati enciclopedici, identificativi o editoriali, mentre gli aspetti narrativi sono meno strutturati.</div></li>
-                <li><div><strong>Identificazione del gap su <code>P9071</code></strong><br>
-                    Abbiamo individuato <code>wdt:P9071</code> (<em>character type</em>) come proprietà adatta a rappresentare archetipi narrativi. Nel campione di 15 personaggi, però, 11 risultano senza valori <code>P9071</code>.</div></li>
-                <li><div><strong>Acquisizione delle fonti descrittive</strong><br>
-                    Per i personaggi privi di informazioni narratologiche sufficienti, abbiamo previsto il recupero di descrizioni da fonti esterne e API pubbliche: Jikan/MyAnimeList, AniList e Wikipedia.</div></li>
-                <li><div><strong>Normalizzazione delle descrizioni</strong><br>
-                    I testi recuperati vengono puliti, confrontati e riscritti come brevi parafrasi basate sulle fonti, mantenendo solo elementi utili alla classificazione: ruolo narrativo, motivazioni, relazioni e tratti comportamentali.</div></li>
+                <li><div><strong>Identificazione del gap su <code>P9071</code> - character type</strong><br>
+                    Abbiamo individuato <code>wdt:P9071</code> (<em>character type</em>) come proprietà adatta a rappresentare archetipi narrativi. ***********************</div></li>                
                 <li><div><strong>Prompt engineering e confronto tra modelli</strong><br>
                     Le descrizioni normalizzate vengono usate con tre tecniche di prompting: Zero-shot, Few-shot e Chain-of-Thought. Gli output di diversi LLM vengono confrontati per accuratezza, coerenza e aderenza al formato richiesto.</div></li>
                 <li><div><strong>Validazione manuale</strong><br>
-                    Gli archetipi proposti non vengono accettati automaticamente: controlliamo coerenza con la descrizione, compatibilità con Wikidata, correttezza dei QID e rischio di allucinazione.</div></li>
-                <li><div><strong>Generazione RDF/Turtle</strong><br>
-                    Gli output validati vengono trasformati in triple RDF con <code>wdt:P9071</code>. Quando un archetipo non esiste in Wikidata, viene proposto un namespace locale <code>animanga:</code>.</div></li>
+                    Gli archetipi proposti non vengono accettati automaticamente: controlliamo coerenza con la descrizione, compatibilità con Wikidata, correttezza dei QID e rischio di allucinazione. *******</div></li>
+                <li><div><strong>Generazione Template RDF</strong><br>
+                    Gli output validati vengono trasformati in triple RDF con <code>wdt:P9071</code>. Quando un archetipo non esiste in Wikidata, viene proposto un namespace locale <code>animanga:</code>. *******</div></li>
             </ol>
             <p>
                 In forma sintetica, la pipeline può essere riassunta così: <strong>SPARQL exploration → property comparison → P9071 gap identification → source description retrieval → description normalization → LLM prompting → model comparison → validation → RDF generation</strong>.
