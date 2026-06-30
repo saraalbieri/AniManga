@@ -187,7 +187,7 @@ function loadGraphFromJSON_8() {
                 });
             });
 
-            var container = document.getElementById('mynetwork-7');
+            var container = document.getElementById('mynetwork-8');
             if (!container) return;
 
             var dataVis = {
@@ -794,7 +794,7 @@ function loadGraphTipoPersonaggio() {
                 }
             });
 
-            const container = document.getElementById("mynetwork-grafo");
+            const container = document.getElementById("mynetwork-grafo_iniziale");
 
             const graphData = {
                 nodes: new vis.DataSet(nodesArray),
