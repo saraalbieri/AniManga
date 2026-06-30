@@ -13,7 +13,7 @@
         <a class="navbar-brand" href="index.html">AniManga O-KG</a>
         <div class="navbar-menu">
             <a href="./index.html">Home</a>
-            <a href="./metodologia.html">Metodologia</a>
+            <a href="./metodologia.html" class="active">Metodologia</a>
             <a href="./sparql.html">SPARQL</a>
             <a href="./llm-benchmark.html">LLM Results</a>
             <a href="./conclusioni.html">Conclusioni</a>
@@ -26,120 +26,107 @@
             
             <h2>1. Identificazione del Data Gap in Wikidata</h2>
             <p>
-                Il progetto è iniziato con una fase di ricerca esplorativa all'interno del dominio degli anime e dei manga. Il nostro obiettivo iniziale era individuare un possibile <em>data gap</em> in Wikidata, cioè un tipo di informazione rilevante per l'analisi culturale e narrativa ma non ancora rappresentato in modo sistematico nel Knowledge Graph.
+                Il progetto è iniziato con una fase di ricerca esplorativa per valutare la qualità dei dati legati al dominio degli anime e dei manga. Il nostro obiettivo era capire se la complessità sociologica e narratologica dei personaggi fosse adeguatamente rappresentata nel Knowledge Graph.
             </p>
             <p>
-                Abbiamo iniziato analizzando i personaggi principali di alcune opere molto note: <em>Death Note</em>, <em>One Piece</em> e <em>Naruto</em>. In questa prima fase abbiamo osservato che Wikidata contiene molte informazioni strutturate sui personaggi, come l'opera di appartenenza, il sesso o genere, eventuali doppiatori, immagini, descrizioni brevi e collegamenti ad altre entità. Tuttavia, queste informazioni descrivono soprattutto aspetti identificativi, biografici o editoriali.
+                Analizzando le entità di tre franchise pilastro (<em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>), abbiamo osservato che Wikidata è molto ricca di informazioni strutturate di tipo enciclopedico (es. creatori, doppiatori, genere, data di pubblicazione, ID esterni). Tuttavia, spostando il focus sulle dinamiche narrative (es. il ruolo di un antieroe, di un trickster o di un mentore), i dati scompaiono.
             </p>
             <p>
-                Successivamente abbiamo esteso l'analisi anche ad alcuni personaggi secondari o con funzioni narrative diverse, come rivali, mentori, antagonisti, figure comiche e personaggi moralmente ambigui. Proprio confrontando personaggi principali e secondari abbiamo notato una differenza significativa: mentre le informazioni enciclopediche sono spesso presenti, le caratteristiche narratologiche e psicologiche dei personaggi sono raramente esplicitate come proprietà RDF.
+                Attraverso una serie di query SPARQL progressive, abbiamo dimostrato l'esistenza di un profondo <em>data gap</em>. La proprietà ufficiale <code>wdt:P9071</code> (<em>character type</em>) risulta quasi inutilizzata a livello globale. Inoltre, le interrogazioni hanno fatto emergere un problema di <strong>frammentazione semantica</strong>: in assenza di uno standard applicato, gli utenti di Wikidata ricorrono a workaround incoerenti (es. usando la proprietà <code>P31</code> riferita alla classe generica <em>stock character</em>). 
             </p>
             <p>
-                Per estrarre e confrontare le proprietà disponibili sui personaggi abbiamo usato query SPARQL su Wikidata. In particolare, abbiamo verificato la presenza della proprietà <code>wdt:P9071</code>, corrispondente a <em>character type</em>, che permette di collegare un personaggio al suo archetipo narrativo. Questa proprietà è adatta al nostro dominio, ma nel campione analizzato risulta assente nella maggior parte dei casi.
+                Questa lacuna strutturale costituisce la base metodologica che giustifica lo sviluppo della nostra ontologia (AniManga O-KG): fornire uno standard rigoroso per mappare gli archetipi.
             </p>
-            <p>
-                La ricca conoscenza culturale di questo settore rimane spesso confinata sotto forma di testo libero e destrutturato all'interno delle community wiki di settore, dei fan database e delle recensioni. Il nostro obiettivo progettuale è quindi estrarre questa conoscenza e trasformarla in una proposta RDF controllabile, interrogabile e documentata.
-            </p>
-
-            <table class="results-table">
-                <thead>
-                    <tr><th>Indicatore</th><th>Valore verificato</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Anime analizzati</td><td>One Piece, Naruto, Death Note</td></tr>
-                    <tr><td>Personaggi selezionati</td><td>15</td></tr>
-                    <tr><td>Personaggi con almeno un valore <code>P9071</code></td><td>4</td></tr>
-                    <tr><td>Personaggi senza valori <code>P9071</code></td><td>11</td></tr>
-                    <tr><td>Data della verifica SPARQL</td><td>8 giugno 2026</td></tr>
-                </tbody>
-            </table>
 
             <h2>2. Corpus di analisi</h2>
             <p>
-                Abbiamo scelto tre opere molto note, diverse per tono e struttura narrativa: <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>. Per ciascuna opera abbiamo selezionato cinque personaggi, in modo da coprire protagonisti, rivali, mentori, antagonisti, figure comiche e personaggi moralmente ambigui.
+                Abbiamo selezionato tre opere eterogenee per target, tematiche e struttura narrativa. Per ciascuna abbiamo isolato i personaggi principali per testare le nostre tecniche di classificazione semantica.
             </p>
 
             <table class="results-table">
                 <thead>
-                    <tr><th>Opera</th><th>Personaggi</th><th>Focus narrativo</th></tr>
+                    <tr><th>Opera</th><th>Esempi di Personaggi Testati</th><th>Focus narrativo del franchise</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><em>One Piece</em></td><td>Monkey D. Luffy, Roronoa Zoro, Nami, Sanji, Nico Robin</td><td>avventura, gruppo, lealtà, comic relief</td></tr>
-                    <tr><td><em>Naruto</em></td><td>Naruto Uzumaki, Sasuke Uchiha, Sakura Haruno, Kakashi Hatake, Itachi Uchiha</td><td>rivalità, mentorship, trauma, antieroe tragico</td></tr>
-                    <tr><td><em>Death Note</em></td><td>Light Yagami, L, Misa Amane, Ryuk, Near</td><td>ambiguità morale, detective, trickster, ossessione</td></tr>
+                    <tr><td><em>One Piece</em></td><td>Monkey D. Luffy, Nami</td><td>avventura, esplorazione, lealtà, trickster benevoli</td></tr>
+                    <tr><td><em>Naruto</em></td><td>Naruto Uzumaki, Itachi Uchiha</td><td>sacrificio, redenzione, antieroi e martiri dell'ombra</td></tr>
+                    <tr><td><em>Death Note</em></td><td>Light Yagami, L</td><td>ambiguità morale, sfida intellettuale, genio distaccato</td></tr>
                 </tbody>
             </table>
 
-            <h2>3. Flusso di lavoro</h2>
+            <h2>3. Flusso di lavoro (Pipeline)</h2>
             <p>
-                Dopo la fase esplorativa, la pipeline è stata ridefinita per seguire in modo esplicito il percorso che ci ha portato dal dominio anime/manga all'individuazione del gap su <code>P9071</code>. Il processo non parte direttamente dagli LLM: prima usa SPARQL per osservare Wikidata, confrontare le proprietà disponibili e dimostrare che gli archetipi narrativi sono poco rappresentati.
+                La metodologia non usa gli LLM come punto di partenza, ma come strumento di arricchimento a valle di un'attenta analisi esplorativa. Il flusso di lavoro si articola nei seguenti step:
             </p>
             <ol class="step-list">
-                <li><div><strong>Esplorazione iniziale del dominio</strong><br>
-                    Abbiamo cercato in Wikidata le entità relative a <em>One Piece</em>, <em>Naruto</em> e <em>Death Note</em>, verificando che opere e personaggi fossero già rappresentati nel Knowledge Graph.</div></li>
-                <li><div><strong>Scoperta dei personaggi tramite SPARQL</strong><br>
-                    Abbiamo recuperato i personaggi collegati alle opere usando i QID verificati delle tre opere e query con <code>VALUES</code>, <code>UNION</code>, <code>FILTER</code>, <code>LIMIT</code> e <code>ORDER BY</code>, perché Wikidata può modellare il legame tra opera e personaggio attraverso proprietà diverse.</div></li>
-                <li><div><strong>Confronto delle proprietà disponibili</strong><br>
-                    Abbiamo estratto le proprietà dei personaggi principali e poi di personaggi secondari o narrativamente più ambigui. Questo confronto ha mostrato che Wikidata contiene soprattutto dati enciclopedici, identificativi o editoriali, mentre gli aspetti narrativi sono meno strutturati.</div></li>
-                <li><div><strong>Identificazione del gap su <code>P9071</code> - character type</strong><br>
-                    Abbiamo individuato <code>wdt:P9071</code> (<em>character type</em>) come proprietà adatta a rappresentare archetipi narrativi. ***********************</div></li>                
-                <li><div><strong>Prompt engineering e confronto tra modelli</strong><br>
-                    Le descrizioni normalizzate vengono usate con tre tecniche di prompting: Zero-shot, Few-shot e Chain-of-Thought. Gli output di diversi LLM vengono confrontati per accuratezza, coerenza e aderenza al formato richiesto.</div></li>
-                <li><div><strong>Validazione manuale</strong><br>
-                    Gli archetipi proposti non vengono accettati automaticamente: controlliamo coerenza con la descrizione, compatibilità con Wikidata, correttezza dei QID e rischio di allucinazione. *******</div></li>
-                <li><div><strong>Generazione Template RDF</strong><br>
-                    Gli output validati vengono trasformati in triple RDF con <code>wdt:P9071</code>. Quando un archetipo non esiste in Wikidata, viene proposto un namespace locale <code>animanga:</code>. *******</div></li>
+                <li><div><strong>Esplorazione e Scoping (Query 1-4)</strong><br>
+                    Mappatura iniziale delle entità, disambiguazione delle opere dai media derivati e isolamento della lista univoca dei personaggi per i tre franchise.</div></li>
+                <li><div><strong>Analisi del Gap e della Frammentazione (Query 5-9)</strong><br>
+                    Verifica strutturale dei metadati. Identificazione del mancato utilizzo di <code>wdt:P9071</code> su scala globale e analisi dei pattern non standard (uso di <code>wdt:P31</code>) tramite operatori logici <code>UNION</code>.</div></li>
+                <li><div><strong>LLM Prompting a input minimo</strong><br>
+                    Per classificare i personaggi si usa una tecnica <em>Zero-shot Chain-of-Thought</em> fornendo al modello solo nome e opera. Si richiede esplicitamente una categorizzazione su due livelli: <strong>archetipo generale</strong> e <strong>archetipo giapponese</strong>, obbligando il modello a motivare la scelta.</div></li>
+                <li><div><strong>Reconciliation Semantica (Query 10)</strong><br>
+                    Gli output dell'LLM non vengono accettati ciecamente. La Query 10 verifica su Wikidata se l'archetipo generale proposto esista già e sia formalmente classificato come "stock character" (es. tragic hero = <code>wd:Q1969230</code>).</div></li>
+                <li><div><strong>Normalizzazione e Generazione RDF</strong><br>
+                    Le etichette testuali vengono normalizzate (es. <em>sacrificial shinobi</em>) e convertite in triple Turtle. Vengono riutilizzati i QID ufficiali ove possibile; per i concetti mancanti, vengono coniati nuovi identificativi locali (<code>ex:</code>) collegati tramite le proprietà della nostra ontologia.</div></li>
             </ol>
             <p>
-                In forma sintetica, la pipeline può essere riassunta così: <strong>SPARQL exploration → property comparison → P9071 gap identification → source description retrieval → description normalization → LLM prompting → model comparison → validation → RDF generation</strong>.
+                Sintesi: <strong>SPARQL exploration → Semantic Fragmentation analysis → Minimal LLM Prompting (Zero-shot CoT) → Reconciliation (Query 10) → RDF generation</strong>.
             </p>
             
             <h2>4. Struttura del Knowledge Graph</h2>
             <p>
-                La proposta di arricchimento si fonda sul riuso del modello Wikidata. I personaggi sono rappresentati tramite le loro entità <code>wd:</code>, la relazione narratologica usa la proprietà diretta <code>wdt:P9071</code>, mentre gli archetipi già esistenti vengono collegati tramite il loro QID. Per gli archetipi culturalmente rilevanti ma assenti o troppo specifici per Wikidata, usiamo un namespace locale <code>animanga:</code>.
+                La proposta di arricchimento si fonda sull'estensione del modello esistente. I personaggi mantengono il loro identificativo Wikidata (<code>wd:</code>). L'arricchimento avviene applicando il doppio livello narrativo emerso dai benchmark LLM, utilizzando i prefissi della nostra ontologia (<code>animanga:</code>) e le risorse locali per gli archetipi inediti (<code>ex:</code>).
             </p>
-            <p>
-                La struttura minima della tripla è:
-            </p>
-            <pre class="code-block"><code>[wd:Personaggio] → wdt:P9071 → [wd:Archetipo oppure animanga:Archetipo]</code></pre>
+            <pre class="code-block"><code>[wd:Personaggio] → animanga:hasGeneralArchetype → [wd:QID_Archetipo]
+[wd:Personaggio] → animanga:hasJapaneseArchetype → [ex:Nuovo_Archetipo]</code></pre>
 
             <h2>5. Proprietà e copertura</h2>
             <p>
-                Seguendo il modello dell'analisi di copertura, abbiamo distinto tra proprietà già presenti in Wikidata e proprietà oggetto dell'arricchimento.
+                La seguente tabella illustra la ripartizione tra gli elementi pre-esistenti in Wikidata e quelli introdotti dal nostro modello.
             </p>
             <table class="results-table">
                 <thead>
-                    <tr><th>Elemento</th><th>Uso nel progetto</th><th>Fonte</th><th>Copertura nel campione</th></tr>
+                    <tr><th>Elemento</th><th>Uso nel progetto</th><th>Vocabolario / Fonte</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><code>wd:</code> character entity</td><td>identifica il personaggio</td><td>Wikidata</td><td>15/15</td></tr>
-                    <tr><td><code>schema:description</code></td><td>descrizione breve enciclopedica</td><td>Wikidata</td><td>variabile</td></tr>
-                    <tr><td><code>wdt:P1441</code> / <code>wdt:P1080</code></td><td>collegamento a opera o universo narrativo</td><td>Wikidata</td><td>variabile</td></tr>
-                    <tr><td><code>wdt:P9071</code></td><td>character type / archetipo narrativo</td><td>Wikidata</td><td>4/15 già presenti, 11/15 mancanti</td></tr>
-                    <tr><td><code>animanga:</code></td><td>archetipi locali proposti</td><td>proposta del progetto</td><td>usato quando manca un QID adatto</td></tr>
-                    <tr><td>descrizioni testuali</td><td>input per LLM</td><td>Jikan, AniList, Wikipedia</td><td>recupero tramite frontend/API</td></tr>
+                    <tr><td><code>wd:Q...</code></td><td>Identificativo univoco del personaggio o dell'opera</td><td>Wikidata</td></tr>
+                    <tr><td><code>wdt:P1441</code></td><td>Collegamento tra personaggio e opera (present in work)</td><td>Wikidata</td></tr>
+                    <tr><td><code>wdt:P9071</code></td><td>Character type (proprietà base investigata nel gap)</td><td>Wikidata</td></tr>
+                    <tr><td><code>animanga:hasGeneralArchetype</code></td><td>Specifica l'archetipo narrativo universale</td><td>AniManga O-KG</td></tr>
+                    <tr><td><code>animanga:hasJapaneseArchetype</code></td><td>Specifica l'archetipo legato alla cultura anime/manga</td><td>AniManga O-KG</td></tr>
+                    <tr><td><code>ex:...</code></td><td>Risorse locali per archetipi assenti in Wikidata (es. <em>kitsune</em>)</td><td>Normalizzazione LLM</td></tr>
                 </tbody>
             </table>
 
-            <h2>6. Allineamento Ontologico e RDFS</h2>
+            <h2>6. Allineamento Ontologico (Template RDF)</h2>
             <p>
-                Le triple estratte non vengono inserite in modo isolato, ma mappate all'interno del perimetro concettuale delle proprietà narratologiche già esistenti nel vocabolario di Wikidata. Quando l'archetipo esiste in Wikidata, usiamo direttamente il relativo QID; quando invece il concetto è rilevante ma non disponibile come entità stabile, proponiamo un namespace locale <code>animanga:</code>.
+                Questa scelta di modellazione su due livelli garantisce una perfetta retrocompatibilità. Laddove Wikidata offre già il nodo concettuale corretto e verificato (es. <em>tragic hero</em>), il nostro grafo fa da ponte verso l'Open Data globale. Laddove mancano figure tipiche dell'animazione giapponese, agiamo da estensione formale.
             </p>
-            <pre class="code-block"><code>@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
-@prefix wdt: &lt;http://www.wikidata.org/prop/direct/&gt; .
-@prefix animanga: &lt;https://w3id.org/animanga/archetype/&gt; .
+            <pre class="code-block"><code>@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
+@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
+@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 
-wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
-            <p>
-                Questa scelta permette di mantenere compatibilità con Wikidata senza forzare concetti culturali specifici, come <em>dandere</em> o <em>shonen protagonist</em>, dentro categorie troppo generiche.
-            </p>
+# Esempio di allineamento per Nami (One Piece)
+wd:Q877964
+    animanga:hasGeneralArchetype ex:trickster-ally ;
+    animanga:hasJapaneseArchetype ex:kitsune .
 
-            <h2>7. Decisioni metodologiche</h2>
+ex:trickster-ally
+    rdfs:label "trickster alleato"@it ;
+    rdfs:label "trickster ally"@en .
+
+ex:kitsune
+    rdfs:label "kitsune"@it ;
+    rdfs:label "kitsune"@en .</code></pre>
+
+            <h2>7. Decisioni metodologiche centrali</h2>
             <p>
-                Gli LLM non vengono usati come fonte primaria, ma come strumenti di classificazione semantica. Le fonti descrittive forniscono il testo di partenza; Wikidata fornisce identificativi e proprietà già strutturate; la validazione umana decide quali output possono diventare triple RDF.
+                Abbiamo adottato un approccio altamente restrittivo (<em>minimal input</em>) per testare le reali capacità inferenziali dei Large Language Models. Fornendo solo nome e opera, abbiamo evitato di "inquinare" i prompt con descrizioni esterne (come le trame delle Wiki), azzerando i bias derivanti da testi già scritti da fan.
             </p>
             <p>
-                In particolare, non accettiamo QID generati direttamente dagli LLM: ogni identificativo deve essere verificato tramite Wikidata. Inoltre, quando un archetipo non è presente come entità Wikidata, la tripla viene marcata come proposta locale tramite <code>animanga:</code>, invece di inventare un QID inesistente.
+                Inoltre, abbiamo evitato rigorosamente l'allucinazione dei dati Linked Data: <strong>gli LLM non generano triple né QID</strong>. Producono un output testuale motivato che subisce prima un processo di normalizzazione umana e, successivamente, uno step di <em>reconciliation semantica</em> SPARQL. Solo se un QID supera la Query 10 viene promosso a nodo strutturale nella nostra architettura.
             </p>
         </main>
 
@@ -163,23 +150,25 @@ wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
                         <line x1="200" y1="100" x2="100" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#arrow-grey)"/>
                         
                         <line x1="200" y1="100" x2="300" y2="50" stroke="#f43f5e" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrow-pink)"/> 
-                        <line x1="200" y1="100" x2="300" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#arrow-grey)"/>
+                        <line x1="200" y1="100" x2="300" y2="150" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrow-pink)"/>
                         
                         <text x="135" y="65" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(26, 135, 65)">wdt:P1441</text>
-                        <text x="260" y="65" fill="#f43f5e" font-size="10" font-family="monospace" text-anchor="middle" transform="rotate(-26, 260, 65)">wdt:P9071</text>
+                        <text x="260" y="55" fill="#f43f5e" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(-26, 260, 65)">hasGeneralArchetype</text>
+                        <text x="260" y="140" fill="#f43f5e" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(26, 260, 135)">hasJapaneseArchetype</text>
 
                         <circle cx="200" cy="100" r="14" fill="#38bdf8"/> <circle cx="100" cy="50" r="10" fill="#94a3b8"/>  <circle cx="100" cy="150" r="8" fill="#94a3b8"/>  
-                        <circle cx="300" cy="50" r="12" fill="#f43f5e"/>  <circle cx="300" cy="150" r="8" fill="#94a3b8"/>  
+                        <circle cx="300" cy="50" r="12" fill="#f43f5e"/>  <circle cx="300" cy="150" r="12" fill="#f43f5e"/>  
                         
-                        <text x="200" y="130" fill="#e2e8f0" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">wd:Q1740</text>
-                        <text x="200" y="145" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="middle">(Sasuke Uchiha)</text>
+                        <text x="200" y="130" fill="#e2e8f0" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">wd:Q1043344</text>
+                        <text x="200" y="145" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="middle">(Itachi Uchiha)</text>
                         
-                        <text x="315" y="45" fill="#f43f5e" font-size="11" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="start">am:LoneCowboy</text>
-                        <text x="85" y="45" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="end">wd:Q25929253</text>
+                        <text x="315" y="45" fill="#f43f5e" font-size="11" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="start">wd:Q1969230 (Tragic Hero)</text>
+                        <text x="315" y="155" fill="#f43f5e" font-size="11" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="start">ex:sacrificial-shinobi</text>
+                        <text x="85" y="45" fill="#94a3b8" font-size="10" font-family="sans-serif" text-anchor="end">wd:Q81 (Naruto)</text>
                     </svg>
 
-                    <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Grafo</h4>
-                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra le entità narrative estratte e le classi ontologiche.</p>
+                    <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Grafo (Doppio Livello)</h4>
+                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione delle interconnessioni concettuali tra il personaggio e i due livelli archetipici.</p>
                 </div>
             </a>
 
@@ -190,12 +179,12 @@ wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
                         <text x="15" y="25" fill="#475569" font-size="12" font-family="monospace" font-weight="bold">&lt;owl:Ontology&gt;</text>
 
                         <line x1="200" y1="110" x2="80" y2="110" stroke="#475569" stroke-width="2"/>
-                        <line x1="200" y1="110" x2="200" y2="40" stroke="#475569" stroke-width="2"/>
-                        <line x1="200" y1="110" x2="320" y2="110" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
+                        <line x1="200" y1="110" x2="320" y2="60" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
+                        <line x1="200" y1="110" x2="320" y2="160" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
 
                         <text x="140" y="100" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="middle">wdt:P1441</text>
-                        <text x="260" y="100" fill="#f43f5e" font-size="10" font-family="monospace" text-anchor="middle">wdt:P9071</text>
-                        <text x="205" y="80" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="start">am:role</text>
+                        <text x="270" y="75" fill="#f43f5e" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(-22, 270, 75)">hasGeneralArchetype</text>
+                        <text x="270" y="140" fill="#f43f5e" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(22, 270, 140)">hasJapaneseArchetype</text>
 
                         <circle cx="200" cy="110" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
                         <circle cx="200" cy="110" r="5" fill="#38bdf8"/>
@@ -205,17 +194,18 @@ wd:Q477948 wdt:P9071 animanga:ShonenProtagonist .</code></pre>
                         <circle cx="80" cy="110" r="4" fill="#94a3b8"/>
                         <text x="80" y="145" fill="#94a3b8" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">wd:Work</text>
 
-                        <circle cx="320" cy="110" r="14" fill="#0f172a" stroke="#f43f5e" stroke-width="3"/>
-                        <circle cx="320" cy="110" r="4" fill="#f43f5e"/>
-                        <text x="320" y="145" fill="#f43f5e" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:Archetype</text>
+                        <circle cx="320" cy="60" r="14" fill="#0f172a" stroke="#f43f5e" stroke-width="3"/>
+                        <circle cx="320" cy="60" r="4" fill="#f43f5e"/>
+                        <text x="320" y="40" fill="#f43f5e" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:GenArchetype</text>
 
-                        <circle cx="200" cy="40" r="12" fill="#0f172a" stroke="#94a3b8" stroke-width="3"/>
-                        <circle cx="200" cy="40" r="4" fill="#94a3b8"/>
-                        <text x="200" y="20" fill="#94a3b8" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:Role</text>
+                        <circle cx="320" cy="160" r="14" fill="#0f172a" stroke="#f43f5e" stroke-width="3"/>
+                        <circle cx="320" cy="160" r="4" fill="#f43f5e"/>
+                        <text x="320" y="190" fill="#f43f5e" font-size="12" font-family="Segoe UI, sans-serif" font-weight="bold" text-anchor="middle">am:JapArchetype</text>
+
                     </svg>
 
                     <h4 style="margin:0 0 5px 0; color:#1e1b4b;">Struttura del Metamodello</h4>
-                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione del grafo astratto per definire un'ontologia formale e scalabile.</p>
+                    <p style="font-size:0.9em; color:#64748b; margin:0;">Visualizzazione del grafo astratto evoluto con il sistema di diramazione ontologica dei ruoli.</p>
                 </div>
             </a>
         </aside>
