@@ -1,0 +1,18 @@
+@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
+@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
+@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+# Nami esiste in Wikidata: si riusa il suo QID.
+# Gli archetipi "trickster ally" e "kitsune" sono usati qui come normalizzazioni interne.
+wd:Q877964
+    animanga:hasGeneralArchetype ex:trickster-ally ;
+    animanga:hasJapaneseArchetype ex:kitsune .
+
+ex:trickster-ally
+    rdfs:label "trickster alleato"@it ;
+    rdfs:label "trickster ally"@en .
+
+ex:kitsune
+    rdfs:label "kitsune"@it ;
+    rdfs:label "kitsune"@en .

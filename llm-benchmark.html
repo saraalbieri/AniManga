@@ -444,68 +444,16 @@
             </p>
             <div class="prompt-label">Query di verifica QID</div>
             <div class="code-block-simple">
-                PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
-PREFIX schema: &lt;http://schema.org/&gt;
-PREFIX wd: &lt;http://www.wikidata.org/entity/&gt;
-PREFIX wdt: &lt;http://www.wikidata.org/prop/direct/&gt;
-PREFIX wikibase: &lt;http://wikiba.se/ontology#&gt;
-PREFIX bd: &lt;http://www.bigdata.com/rdf#&gt;
-
-# Verifica del QID dell'archetipo proposto dall'LLM.
-# Il risultato viene accettato solo se l'entità è classificata come stock character.
-SELECT ?item ?itemLabel ?description WHERE {
-  ?item wdt:P31 wd:Q636497.
-
-  ?item rdfs:label ?itemLabel.
-  FILTER(LANG(?itemLabel) = "en")
-  FILTER(REGEX(STR(?itemLabel), "^tragic hero$", "i"))
-
-  OPTIONAL {
-    ?item schema:description ?description.
-    FILTER(LANG(?description) = "en")
-  }
-
-  SERVICE wikibase:label {
-    bd:serviceParam wikibase:language "en,it".
-  }
-}
-LIMIT 10</div>
+                <pre class="query-embed" data-src="./queries/q11_verifica_qID.sparql"><code>Caricamento query in corso...</code></pre>    
+            </div>
             <div class="prompt-label">Template Turtle — Itachi</div>
-            <div class="code-block-simple">             
-                @prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
-@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-
-# Itachi Uchiha esiste in Wikidata: si riusa il suo QID.
-# "tragic hero" esiste in Wikidata come stock character: si riusa il QID.
-# "sacrificial shinobi" è una normalizzazione specifica del progetto: resta ex:.
-wd:Q1043344
-    animanga:hasGeneralArchetype wd:Q1969230 ;
-    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
-
-ex:sacrificial-shinobi
-    rdfs:label "shinobi sacrificiale"@it ;
-    rdfs:label "sacrificial shinobi"@en .</div>
+            <div class="code-block-simple">          
+                <pre class="query-embed" data-src="./queries/q12_template_turtle.sparql"><code>Caricamento query in corso...</code></pre>    
+            </div>
             <div class="prompt-label">Template Turtle — Nami</div>
-            <div class="code-block-simple">@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
-@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-
-# Nami esiste in Wikidata: si riusa il suo QID.
-# Gli archetipi "trickster ally" e "kitsune" sono usati qui come normalizzazioni interne.
-wd:Q877964
-    animanga:hasGeneralArchetype ex:trickster-ally ;
-    animanga:hasJapaneseArchetype ex:kitsune .
-
-ex:trickster-ally
-    rdfs:label "trickster alleato"@it ;
-    rdfs:label "trickster ally"@en .
-
-ex:kitsune
-    rdfs:label "kitsune"@it ;
-    rdfs:label "kitsune"@en .</div>
+            <div class="code-block-simple">
+                <pre class="query-embed" data-src="./queries/q13_riuso_qID.sparql"><code>Caricamento query in corso...</code></pre>             
+            </div>
             <p class="mini-note">
                 Questa soluzione evita di inventare QID Wikidata quando non esiste un identificativo verificato.
                 L'archetipo generale e quello giapponese sono modellati come due risorse distinte del knowledge graph

@@ -1,0 +1,26 @@
+PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+PREFIX schema: &lt;http://schema.org/&gt;
+PREFIX wd: &lt;http://www.wikidata.org/entity/&gt;
+PREFIX wdt: &lt;http://www.wikidata.org/prop/direct/&gt;
+PREFIX wikibase: &lt;http://wikiba.se/ontology#&gt;
+PREFIX bd: &lt;http://www.bigdata.com/rdf#&gt;
+
+# Verifica del QID dell'archetipo proposto dall'LLM.
+# Il risultato viene accettato solo se l'entità è classificata come stock character.
+SELECT ?item ?itemLabel ?description WHERE {
+  ?item wdt:P31 wd:Q636497.
+
+  ?item rdfs:label ?itemLabel.
+  FILTER(LANG(?itemLabel) = "en")
+  FILTER(REGEX(STR(?itemLabel), "^tragic hero$", "i"))
+
+  OPTIONAL {
+    ?item schema:description ?description.
+    FILTER(LANG(?description) = "en")
+  }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,it".
+  }
+}
+LIMIT 10

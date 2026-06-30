@@ -1,0 +1,15 @@
+@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .
+@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .
+@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+# Itachi Uchiha esiste in Wikidata: si riusa il suo QID.
+# "tragic hero" esiste in Wikidata come stock character: si riusa il QID.
+# "sacrificial shinobi" è una normalizzazione specifica del progetto: resta ex:.
+wd:Q1043344
+    animanga:hasGeneralArchetype wd:Q1969230 ;
+    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
+
+ex:sacrificial-shinobi
+    rdfs:label "shinobi sacrificiale"@it ;
+    rdfs:label "sacrificial shinobi"@en .
