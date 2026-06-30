@@ -159,7 +159,7 @@ function loadGraph7FromJSON() {
                     if (ruolo.includes('villain') || ruolo.includes('antagonist')) {
                         bgColor = '#ef4444'; 
                         borderColor = '#991b1b';
-                        fontSettings = { color: 'white', face: 'Arial' };
+                        fontSettings = { color: 'black', face: 'Arial' };
                     } else if (ruolo.includes('protagonist') || ruolo.includes('hero')) {
                         bgColor = '#eab308'; 
                         borderColor = '#854d0e';
