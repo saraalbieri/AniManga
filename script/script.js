@@ -593,7 +593,7 @@ function scrollareAInizioTabellaQ8() {
 }
 
 // --- Logica Caricamento e Impaginazione Query 9bis ---
-function caricaDatiQuery7(urlFile) {
+function caricaDatiQuery9bis(urlFile) {
     const tbody = document.getElementById("tbody-query9bis");
     if (!tbody) return;
 
