@@ -413,7 +413,7 @@ function caricaDatiQuery7(urlFile) {
         .then(data => {
             if (data && data.results && data.results.bindings) {
                 datiQuery7 = data.results.bindings;
-                paginaCorrenteQ3 = 1;
+                paginaCorrenteQ7 = 1;
                 renderizzaTabellaQ7();
                 configuraControlliQ7();
             }
@@ -479,7 +479,7 @@ function configuraControlliQ7() {
 
     if (btnNext && !btnNext.dataset.listener) {
         btnNext.addEventListener('click', () => {
-            const totalePagine = Math.ceil(datiQuery3.length / righePerPaginaQ3);
+            const totalePagine = Math.ceil(datiQuery7.length / righePerPaginaQ7);
             if (paginaCorrenteQ7 < totalePagine) {
                 paginaCorrenteQ7++;
                 renderizzaTabellaQ7();
@@ -530,7 +530,7 @@ function renderizzaTabellaQ8() {
 
     const righeMostrate = datiQuery8.slice(inizio, fine);
 
-    righeDaMostrare.forEach(row => {
+    righeMostrate.forEach(row => {
         const tr = document.createElement("tr");
 
         const opera = row.opera ? row.opera.value : "";
@@ -584,7 +584,6 @@ function configuraControlliQ8() {
         btnNext_8.dataset.listener = "true";
     }
 }
-
 
 function scrollareAInizioTabellaQ8() {
     const tabella = document.getElementById("tbody-query8");
@@ -759,12 +758,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 maxVelocity: 50, solver: 'forceAtlas2Based', timestep: 0.35, stabilization: { iterations: 150 }
             }
         };
-        new vis.Network(container_final, data_core, options_core);
+        new vis.Network(container_final, data_final, options_final);
     }
 
 
     // --- GRAFO ONTOLOGICO (Schema) ---
     var container_onto = document.getElementById('animanga-onto-graph');
+
     if (container_onto) {
         var nodes_onto = new vis.DataSet([
             { id: 'am:Character', label: 'am:Character\n(Personaggio Immaginario)', group: 'coreClass', shape: 'box', margin: 15 },
@@ -793,6 +793,7 @@ document.addEventListener('DOMContentLoaded', function() {
             layout: { hierarchical: { direction: 'LR', sortMethod: 'directed', levelSeparation: 300, nodeSpacing: 150 } },
             physics: false
         };
+        var data_onto = { nodes: nodes_onto, edges: edges_onto };
         new vis.Network(container_onto, data_onto, options_onto);
     }
 
@@ -917,17 +918,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Avvio Query 7
     if (document.getElementById("tbody-query7")) {
-        caricaDatiDaJson("./queries_results/query_7.json");
+        caricaDatiDaJson7("./queries_results/query_7.json");
     }
 
     // Avvio Query 8
     if (document.getElementById("tbody-query8")) {
         caricaDatiQuery8("./queries_results/query_8.json");
-    }
-
-    // Avvio Query 9
-    if (document.getElementById("tbody-query9")) {
-        caricaDatiQuery9("./queries_results/query_9.json");
     }
 
 });
