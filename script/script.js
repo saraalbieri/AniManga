@@ -585,13 +585,6 @@ function configuraControlliQ8() {
     }
 }
 
-/*function scrollareAInizioTabellaQ8() {
-    const tabella = document.getElementById("tbody-query8");
-    if(tabella) {
-        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}*/
-
 // --- Logica Caricamento e Impaginazione Query 9bis ---
 function caricaDatiQuery9bis(urlFile) {
     const tbody = document.getElementById("tbody-query9bis");
@@ -681,15 +674,159 @@ function configuraControlliQ9bis() {
     }
 }
 
-/*function scrollareAInizioTabellaQ9bis() {
-    const tabella = document.getElementById("tbody-query9b");
-    if(tabella) {
-        tabella.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}*/
 
 // ==========================================
-// 2. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
+// 2. GRAFI
+// ==========================================
+
+function loadGraphTipoPersonaggio() {
+    fetch("./queries_results/query_grafo.json")
+        .then(response => response.json())
+        .then(data => {
+            const nodesArray = [];
+            const edgesArray = [];
+            const addedNodes = new Set();
+            const addedEdges = new Set();
+
+            data.results.bindings.forEach(row => {
+                const operaId = row.opera.value;
+                const operaLabel = row.operaLabel ? row.operaLabel.value : operaId.split("/").pop();
+
+                const personaggioId = row.personaggio.value;
+                const personaggioLabel = row.personaggioLabel ? row.personaggioLabel.value : personaggioId.split("/").pop();
+
+                const tipoLabel = row.tipoPersonaggioLabel ? row.tipoPersonaggioLabel.value : null;
+
+                if (!addedNodes.has(operaId)) {
+                    nodesArray.push({
+                        id: operaId,
+                        label: operaLabel,
+                        group: "opera",
+                        shape: "box",
+                        color: {
+                            background: "#10b981",
+                            border: "#047857"
+                        },
+                        font: {
+                            color: "white",
+                            bold: true
+                        }
+                    });
+                    addedNodes.add(operaId);
+                }
+
+                if (!addedNodes.has(personaggioId)) {
+                    nodesArray.push({
+                        id: personaggioId,
+                        label: personaggioLabel,
+                        group: "personaggio",
+                        shape: "ellipse",
+                        color: {
+                            background: "#3b82f6",
+                            border: "#1e40af"
+                        },
+                        font: {
+                            color: "white"
+                        }
+                    });
+                    addedNodes.add(personaggioId);
+                }
+
+                const edgeOperaKey = `${personaggioId}-${operaId}`;
+
+                if (!addedEdges.has(edgeOperaKey)) {
+                    edgesArray.push({
+                        from: personaggioId,
+                        to: operaId,
+                        label: "appare in",
+                        arrows: "to",
+                        color: {
+                            color: "#94a3b8"
+                        },
+                        font: {
+                            color: "#475569",
+                            background: "white"
+                        }
+                    });
+                    addedEdges.add(edgeOperaKey);
+                }
+
+                if (tipoLabel) {
+                    const tipoId = `tipo-${tipoLabel}`;
+
+                    if (!addedNodes.has(tipoId)) {
+                        nodesArray.push({
+                            id: tipoId,
+                            label: tipoLabel,
+                            group: "tipoPersonaggio",
+                            shape: "diamond",
+                            color: {
+                                background: "#ef4444",
+                                border: "#991b1b"
+                            },
+                            font: {
+                                color: "white",
+                                bold: true
+                            }
+                        });
+                        addedNodes.add(tipoId);
+                    }
+
+                    const edgeTipoKey = `${personaggioId}-${tipoId}`;
+
+                    if (!addedEdges.has(edgeTipoKey)) {
+                        edgesArray.push({
+                            from: personaggioId,
+                            to: tipoId,
+                            label: "tipo personaggio",
+                            arrows: "to",
+                            color: {
+                                color: "#ef4444"
+                            },
+                            font: {
+                                color: "#ef4444",
+                                bold: true,
+                                background: "white"
+                            }
+                        });
+                        addedEdges.add(edgeTipoKey);
+                    }
+                }
+            });
+
+            const container = document.getElementById("mynetwork-grafo");
+
+            const graphData = {
+                nodes: new vis.DataSet(nodesArray),
+                edges: new vis.DataSet(edgesArray)
+            };
+
+            const options = {
+                physics: {
+                    stabilization: { iterations: 150 },
+                    solver: "forceAtlas2Based",
+                    forceAtlas2Based: {
+                        gravitationalConstant: -120,
+                        centralGravity: 0.01,
+                        springLength: 180,
+                        springConstant: 0.05
+                    }
+                },
+                interaction: {
+                    hover: true,
+                    tooltipDelay: 200
+                }
+            };
+
+            new vis.Network(container, graphData, options);
+        })
+        .catch(error => {
+            console.error("Errore nel caricamento del grafo:", error);
+        });
+}
+
+// ==========================================
+// 3. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1025,6 +1162,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Avvio Query 8
     if (document.getElementById("tbody-query9bis")) {
         caricaDatiQuery9bis("./queries_results/query_9bis.json");
+    }
+
+    // grafo iniziale
+    if (document.getElementById("mynetwork-grafo")) {
+        loadGraphTipoPersonaggio();
     }
 
 });
