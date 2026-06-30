@@ -64,15 +64,13 @@
                 <li><div><strong>Analisi del Gap e della Frammentazione (Query 5-9)</strong><br>
                     Verifica strutturale dei metadati. Identificazione del mancato utilizzo di <code>wdt:P9071</code> su scala globale e analisi dei pattern non standard (uso di <code>wdt:P31</code>) tramite operatori logici <code>UNION</code>.</div></li>
                 <li><div><strong>LLM Prompting a input minimo</strong><br>
-                    Per classificare i personaggi si usa una tecnica <em>Zero-shot Chain-of-Thought</em> fornendo al modello solo nome e opera. Si richiede esplicitamente una categorizzazione su due livelli: <strong>archetipo generale</strong> e <strong>archetipo giapponese</strong>, obbligando il modello a motivare la scelta.</div></li>
+                    Per classificare i personaggi si usano tecniche come <em>Zero-shot</em>, <em>Few-shot</em> e <em>Zero-shot Chain-of-Thought</em> fornendo al modello solo 
+                    nome e opera e all'occorrenza degli esempi. Si richiede esplicitamente una categorizzazione su due livelli: <strong>archetipo generale</strong> e <strong>archetipo giapponese</strong>, obbligando il modello a motivare la scelta.</div></li>
                 <li><div><strong>Reconciliation Semantica (Query 10)</strong><br>
                     Gli output dell'LLM non vengono accettati ciecamente. La Query 10 verifica su Wikidata se l'archetipo generale proposto esista già e sia formalmente classificato come "stock character" (es. tragic hero = <code>wd:Q1969230</code>).</div></li>
                 <li><div><strong>Normalizzazione e Generazione RDF</strong><br>
                     Le etichette testuali vengono normalizzate (es. <em>sacrificial shinobi</em>) e convertite in triple Turtle. Vengono riutilizzati i QID ufficiali ove possibile; per i concetti mancanti, vengono coniati nuovi identificativi locali (<code>ex:</code>) collegati tramite le proprietà della nostra ontologia.</div></li>
             </ol>
-            <p>
-                Sintesi: <strong>SPARQL exploration → Semantic Fragmentation analysis → Minimal LLM Prompting (Zero-shot CoT) → Reconciliation (Query 10) → RDF generation</strong>.
-            </p>
             
             <h2>4. Struttura del Knowledge Graph</h2>
             <p>

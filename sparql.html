@@ -247,15 +247,15 @@
                 Questo triplo riscontro ci dà la certezza definitiva che ci troviamo di fronte a una lacuna diffusa su scala globale nel settore dell'animazione e del fumetto giapponese.</p>
         </div>
 
-        <div class="query-box" id="query-box-7">
-            <h3>Query 7: cerchiamo quali personaggi hanno l'archetipo <code>P9071</code> - <em>character type</em> solo in relazione alle opere selezionate</h3>
+        <div class="query-box" id="query-box-8">
+            <h3>Query 8: cerchiamo quali personaggi hanno l'archetipo <code>P9071</code> - <em>character type</em> solo in relazione alle opere selezionate</h3>
             <p>Definito il paniere dei tre manga scelti come benchmark, l'indagine si sposta dall'esplorazione generale dei metadati a una ricerca mirata e selettiva. 
                 Questa query interroga direttamente Wikidata per mappare i personaggi di Naruto, One Piece e Death Note che presentano una dichiarazione legata alla 
                 proprietà <code>wdt:P9071</code>, identificativa del tipo di personaggio. Si tratta di un passaggio cruciale per verificare sul campo se lo strumento 
                 teorico offerto da Wikidata venga realmente applicato dalla community per descrivere la natura sociologica dei protagonisti.</p>
-            <pre class="query-embed" data-src="./queries/q7_P9071.sparql"><code>Caricamento query in corso...</code></pre>
+            <pre class="query-embed" data-src="./queries/q8_P9071.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
-            <table class="results-table" id="results-table-7" data-limit="10">
+            <table class="results-table" id="results-table-8" data-limit="10">
                 <thead>
                     <tr>
                         <th>Opera - Entità</th>
@@ -266,7 +266,7 @@
                         <th>Etichetta Character type</th>
                     </tr>
                 </thead>
-                <tbody id="tbody-query7"></tbody>
+                <tbody id="tbody-query8"></tbody>
             </table>
             <div class="pagination-container">
                 <button id="btn-prev" class="btn-action primary">Precedente</button>
@@ -274,13 +274,13 @@
                 <button id="btn-next" class="btn-action primary">Successiva</button>
             </div>
             <div class="table-controls">
-                <button class="btn-action primary" id="chartBtn-7">
+                <button class="btn-action primary" id="chartBtn-8">
                     Grafo
                 </button>
             </div>
-            <div id="lightbox-7" class="lightbox-overlay">
+            <div id="lightbox-8" class="lightbox-overlay">
                 <span class="lightbox-close">&times;</span>
-                <div class="lightbox-content" id="mynetwork-7" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+                <div class="lightbox-content" id="mynetwork-8" style="width: 90%; height: 85vh; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
             </div>
             <p><strong>Perché è utile:</strong> quanti personaggi utilizzano la proprietà <code>P9071</code> - <em>character type</em> per definire il proprio archetipo narrativo?<br/> 
                 Il risultato è sorprendente e mette in luce il vero problema: nonostante la proprietà 
@@ -288,16 +288,12 @@
                 Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa.</p>
         </div>
 
-        <div class="query-box" id="query-box-8">
-            <h3>Query 8: cerchiamo quali personaggi hanno l'archetipo <code>P9071</code> - <em>character type</em>. </h3>
-                <p>Dopo aver analizzato la struttura generale dei dati, questa query avvia una ricerca mirata per isolare con precisione chirurgica le lacune del dataset.<br/>
-                    Mantenendo rigorosamente il focus sulle 10 entità chiave identificate per i tre franchise (le declinazioni multimediali di Naruto, One Piece e Death Note), 
-                    l'interrogazione mappa a tappeto tutti i rispettivi personaggi con l'obiettivo specifico di verificare quanti di essi possiedano la proprietà 
-                    <code>wdt:P9071</code> (<em>character type</em>).<br/>
-                    Si tratta di un passaggio di raffinamento essenziale per quantificare numericamente il vuoto tassonomico su un campione controllato e stabile.</p>
-            <pre class="query-embed" data-src="./queries/q8_all_character_P9071.sparql"><code>Caricamento query in corso...</code></pre>
+        <div class="query-box" id="query-box-7">
+            <h3>Query 7: tutti i personaggi</h3>
+                <p></p>
+            <pre class="query-embed" data-src="./queries/q7_all_character.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
-            <table class="results-table" id="results-table-8" data-limit="10">
+            <table class="results-table" id="results-table-7" data-limit="10">
                 <thead>
                     <tr>
                         <th>Personaggio - Entità</th>
@@ -305,50 +301,37 @@
                         <th>Etichetta Character type</th>
                     </tr>
                 </thead>
-                <tbody id="tbody-query8"></tbody>
+                <tbody id="tbody-query7"></tbody>
             </table>
             <div class="pagination-container">
-                <button id="btn-prev-q8" class="pagination-btn">Precedente</button>
+                <button id="btn-prev-q7" class="pagination-btn">Precedente</button>
                 <span id="page-indicator-q8">Pagina 1 di Lungh</span>
-                <button id="btn-next-q8" class="pagination-btn">Successiva</button>
+                <button id="btn-next-q7" class="pagination-btn">Successiva</button>
             </div>
-            <p><strong>Perché è utile:</strong> Quanti personaggi utilizzano la 
-                proprietà <code>P9071</code> - <em>character type</em> per definire il proprio archetipo narrativo? Il risultato mette in luce il vero problema: nonostante la proprietà 
-                esista sulla carta, quasi nessun personaggio di manga o anime è stato effettivamente collegato a un "tipo" o a un archetipo sociologico. 
-                Questa query dimostra in modo inequivocabile che Wikidata si ferma alla superficie (dati tecnici, autori, date) ma ignora la struttura narrativa. 
-                È esattamente in questo spazio vuoto che si inserisce AniManga O-KG, dimostrando l'assoluta utilità del nostro lavoro.</p>
+            <p><strong>Perché è utile:</strong> </p>
         </div>
 
         <div class="query-box" id="query-box-9">
-            <h3>Query 9: stock character</h3>
-            <p>I risultati deludenti della Query 8 sollevano un dubbio metodologico: i dati sugli archetipi sono del tutto assenti, oppure sono stati 
-                modellati in modo incoerente dagli utenti?<br/>
-                Questa query indaga proprio la frammentazione semantica di Wikidata. Utilizzando il costrutto logico <code>UNION</code>, lo script interroga 
-                i tre franchise di riferimento seguendo due percorsi distinti: 
-                da un lato cerca l'attributo ufficiale <code>wdt:P9071</code> (<em>character type</em>), 
-                dall'altro traccia un workaround molto diffuso, ovvero la classificazione del personaggio come istanza (<code>wdt:P31</code>) 
-                di un "personaggio tipo" o <em>stock character</em> (<code>wd:Q1089201</code>).</p>
+            <h3>Query 9: </h3>
+            <p></p>
             <pre class="query-embed" data-src="./queries/q9_stock_character.sparql"><code>Caricamento query in corso...</code></pre>
             <h4>Risultati ottenuti</h4>
             <table class="results-table" id="results-table-9" data-limit="10">
                 <thead>
                     <tr>
-                        <th>Etichetta del personaggio</th>
-                        <th>Etichetta dell'opera</th>
-                        <th>Etichetta del tipo</th>
-                        <th>Etichetta Stock Character</th>
+                        <th>Proprietà</th>
+                        <th>Etichetta della proprietà</th>
+                        <th>descrizione del tipo di proprietà</th>
                     </tr>
                 </thead>
-                <tbody id="tbody-query9"><tr data-index="0"><td class=""><span title=": Crocodile@en">Crocodile</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="1"><td class=""><span title=": Kuro@en">Kuro</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="2"><td class=""><span title=": Sasuke Uchiha@en">Sasuke Uchiha</span></td><td class=""><span title=": Naruto@en">Naruto</span></td><td class=""><span title=": Lone Cowboy@en">Lone Cowboy</span></td><td class=""></td></tr><tr data-index="3"><td class=""><span title=": Light Yagami@en">Light Yagami</span></td><td class=""><span title=": Death Note@en">Death Note</span></td><td class=""><span title=": antihero@en">antihero</span></td><td class=""></td></tr><tr data-index="4"><td class=""><span title=": Light Yagami@en">Light Yagami</span></td><td class=""><span title=": Death Note@en">Death Note</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr><tr data-index="5"><td class=""><span title=": Naruto Uzumaki@en">Naruto Uzumaki</span></td><td class=""><span title=": Naruto@en">Naruto</span></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""></td></tr><tr data-index="6"><td class=""><span title=": Monkey D. Luffy@en">Monkey D. Luffy</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""></td></tr><tr data-index="7"><td class=""><span title=": Sakazuki@en">Sakazuki</span></td><td class=""><span title=": One Piece@en">One Piece</span></td><td class=""><span title=": villain@en">villain</span></td><td class=""></td></tr></tbody>
+                <tbody id="tbody-query9"><tbody><tr data-index="0"><td class=""><a href="http://www.wikidata.org/entity/Q161936" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q161936" target="_blank" class="item-link" rel="noopener">wd:Q161936</a></td><td class=""><span title=": Death@en">Death</span></td><td class=""><span title=": Stock Character">Stock Character</span></td></tr><tr data-index="1"><td class=""><a href="http://www.wikidata.org/entity/Q65934439" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q65934439" target="_blank" class="item-link" rel="noopener">wd:Q65934439</a></td><td class=""><span title=": Lone Cowboy@en">Lone Cowboy</span></td><td class=""><span title=": Character Type">Character Type</span></td></tr><tr data-index="2"><td class=""><a href="http://www.wikidata.org/entity/Q65934439" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q65934439" target="_blank" class="item-link" rel="noopener">wd:Q65934439</a></td><td class=""><span title=": Lone Cowboy@en">Lone Cowboy</span></td><td class=""><span title=": Stock Character">Stock Character</span></td></tr><tr data-index="3"><td class=""><a href="http://www.wikidata.org/entity/Q113946608" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q113946608" target="_blank" class="item-link" rel="noopener">wd:Q113946608</a></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""><span title=": Character Type">Character Type</span></td></tr><tr data-index="4"><td class=""><a href="http://www.wikidata.org/entity/Q113946608" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q113946608" target="_blank" class="item-link" rel="noopener">wd:Q113946608</a></td><td class=""><span title=": The Chosen One@en">The Chosen One</span></td><td class=""><span title=": Stock Character">Stock Character</span></td></tr><tr data-index="5"><td class=""><a href="http://www.wikidata.org/entity/Q110910" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q110910" target="_blank" class="item-link" rel="noopener">wd:Q110910</a></td><td class=""><span title=": antihero@en">antihero</span></td><td class=""><span title=": Character Type">Character Type</span></td></tr><tr data-index="6"><td class=""><a href="http://www.wikidata.org/entity/Q110910" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q110910" target="_blank" class="item-link" rel="noopener">wd:Q110910</a></td><td class=""><span title=": antihero@en">antihero</span></td><td class=""><span title=": Stock Character">Stock Character</span></td></tr><tr data-index="7"><td class=""><a href="http://www.wikidata.org/entity/Q290691" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q290691" target="_blank" class="item-link" rel="noopener">wd:Q290691</a></td><td class=""><span title=": villain@en">villain</span></td><td class=""><span title=": Character Type">Character Type</span></td></tr><tr data-index="8"><td class=""><a href="http://www.wikidata.org/entity/Q290691" title="Explore item" class="explore glyphicon glyphicon-search" tabindex="-1" aria-hidden="true"></a> <a title="" href="http://www.wikidata.org/entity/Q290691" target="_blank" class="item-link" rel="noopener">wd:Q290691</a></td><td class=""><span title=": villain@en">villain</span></td><td class=""><span title=": Stock Character">Stock Character</span></td></tr></tbody></tbody>
             </table>
             <div class="table-controls">
                 <button class="btn-action primary" id="toggleBtn-9">
                     Mostra tutte
                 </button>
             </div>
-            <p><strong>Perché è utile:</strong> Questa query è cruciale perché rivela il secondo grande problema di Wikidata oltre alla mancanza di 
-                dati: la totale assenza di standardizzazione. Scopriamo infatti che i pochi archetipi narrativi presenti sono dispersi e modellati in 
-                modo incoerente a seconda della sensibilità dell'utente che li ha inseriti.</p>
+            <p><strong>Perché è utile:</strong> </p>
         </div>
 
         <div class="query-box" id="query-box-10">

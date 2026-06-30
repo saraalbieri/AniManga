@@ -728,8 +728,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var nodes_final = new vis.DataSet([
         { id: 'wd:Q1043344', label: 'Itachi Uchiha', group: 'character' },
         { id: 'wd:Q81', label: 'Naruto (Opera)', group: 'series' },
-        { id: 'wd:Q1969230', label: 'Tragic Hero', group: 'archetype' }, // QID Wikidata
-        { id: 'ex:sacrificial-shinobi', label: 'Sacrificial Shinobi', group: 'archetype' } // Risorsa locale
+        { id: 'wd:Q1969230', label: 'Tragic Hero', group: 'generalArchetype' }, // QID Wikidata
+        { id: 'ex:sacrificial-shinobi', label: 'Sacrificial Shinobi', group: 'japaneseArchetype' } // Risorsa locale
     ]);
 
     var edges_final = new vis.DataSet([
@@ -737,16 +737,16 @@ document.addEventListener('DOMContentLoaded', function() {
         { from: 'wd:Q1043344', to: 'wd:Q81', label: 'appare in', color: {color: '#BDBDBD'} },
         
         // Relazione Archetipo Generale (Tratteggiata)
-        { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'hasGeneral', dashes: true, color: {color: '#f43f5e'} },
+        { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'hasGeneralArchetype', dashes: true, color: {color: '#f43f5e'} },
         
         // Relazione Archetipo Giapponese (Nuova - es. Colore diverso o freccia specifica)
-        { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'hasJapanese', color: {color: '#9C27B0'}, width: 2 }
+        { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'hasJapaneseArchetype', color: {color: '#9C27B0'}, width: 2 }
       ]);    
 
-    var container_core = document.getElementById('animanga-final-graph');
-    if (container_core) {
-        var data_core = { nodes: nodes_core, edges: edges_core };
-        var options_core = {
+    var container_final = document.getElementById('animanga-final-graph');
+    if (container_final) {
+        var data_final = { nodes: nodes_core, edges: edges_core };
+        var options_final = {
             nodes: { shape: 'dot', size: 20, font: { size: 14, face: 'Helvetica', color: '#333' }, borderWidth: 2 },
             groups: {
                 series: { color: { background: '#4CAF50', border: '#388E3C' }, shape: 'box', font: {size: 18, color: 'white'} },
@@ -760,7 +760,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 maxVelocity: 50, solver: 'forceAtlas2Based', timestep: 0.35, stabilization: { iterations: 150 }
             }
         };
-        new vis.Network(container_core, data_core, options_core);
+        new vis.Network(container_final, data_core, options_core);
     }
 
 

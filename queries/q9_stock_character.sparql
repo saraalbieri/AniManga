@@ -3,28 +3,34 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX schema: <http://schema.org/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 
-SELECT DISTINCT ?personaggioLabel ?operaLabel ?tipoLabel  ?stockCharacterLabel
+SELECT DISTINCT ?stockCharValue ?stockCharValueLabel ?descrizione
 WHERE {
-  # 1. Definiamo l'elenco delle opere target
-  VALUES ?opera { 
-    wd:Q4431905 wd:Q642 wd:Q673 wd:Q104623150 wd:Q1834 
-    wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 wd:Q25929253 
-  } 
-  
-  # 2. Trova i personaggi che compaiono in queste opere
-    ?opera wdt:P674 ?personaggio .
-  
-  # 3. UNION: Estraiamo la caratteristica e la chiamiamo ?stockCharacter in ENTRAMBI i rami
+  VALUES ?opera {
+    wd:Q4431905 wd:Q642 wd:Q673 wd:Q104623150 wd:Q1834
+    wd:Q26971382 wd:Q28667972 wd:Q718624 wd:Q710324 wd:Q25929253
+  }
+
+  # Personaggi dell'opera (P674)
+  ?opera wdt:P674 ?personaggio .
+
+    # 3. UNION: Estraiamo la caratteristica e la chiamiamo ?stockCharacter in ENTRAMBI i rami
   {
     # Ramo A
-    ?personaggio wdt:P31 ?stockCharacter .
-    ?stockCharacter wdt:P31 wd:Q1089201 .
+      # Cerca tutte le proprietà (sottoproprietà di P31) usate sui personaggi
+    ?personaggio ?stockCharProp ?stockCharValue .
+      # Filtra ulteriormente: il valore deve essere istanza di Q636497 (stock character)
+    ?stockCharValue wdt:P31/wdt:P279* wd:Q636497 .
+    BIND("Stock Character" AS ?descrizione)
   }
   UNION
   {
     # Ramo B 
-    ?personaggio wdt:P9071 ?tipo .
+    ?personaggio wdt:P9071 ?stockCharValue .
+    BIND("Character Type" AS ?descrizione)
   }
 
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en" .
+  }
 }
+ORDER BY ?stockCharValueLabel
