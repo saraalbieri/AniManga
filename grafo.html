@@ -22,58 +22,25 @@
     </nav>
 
     <main class="container">
-
     <h2>Esplorazione Dinamica dell'AniManga O-KG</h2>
-    <p>Questa sezione offre una rappresentazione visiva interattiva delle reti semantiche costruite durante il progetto. Il grafo mappa sia le relazioni enciclopediche fattuali estratte da Wikidata, sia gli arricchimenti narratologici (archetipi e ruoli) inferiti dalla pipeline LLM.</p>
+    <p>Questa sezione visualizza la rete semantica del progetto. Il grafo non si limita a mappare le relazioni enciclopediche di Wikidata, ma integra il nostro arricchimento metodologico basato su una <strong>classificazione a doppio livello</strong>: archetipi narrativi generali e archetipi culturali giapponesi.</p>
 
-    <p>Per l'interfaccia frontend è stata integrata la libreria Vis.js. Poiché l'architettura nativa di Vis.js richiede strutture dati in formato JSON, è stato implementato un livello di trasformazione che traduce le triple RDF (Soggetto-Predicato-Oggetto) in un modello a rete relazionale composto da nodi (entità) e archi (predicati).</p>
-
-    <p>Nella configurazione della visualizzazione sono state applicate precise scelte di design per garantire la trasparenza e la leggibilità semantica:</p>
     <ul>
-        <li><strong>Provenienza del Dato (Data Provenance):</strong> Un principio fondamentale nell'ingegneria della conoscenza è la chiara distinzione tra i dati estratti da fonti consolidate e quelli inferiti dall'Intelligenza Artificiale. Per questo motivo, gli archi che rappresentano relazioni provenienti da Wikidata (es. l'appartenenza a una serie) sono tracciati con linee continue, mentre i collegamenti agli archetipi generati dall'LLM sono evidenziati tramite linee tratteggiate.</li>
-        <li><strong>Clustering Semantico:</strong> Le entità sono suddivise visivamente in gruppi cromatici basati sulle rispettive classi (Personaggio, Serie, Archetipo). Questa tematizzazione cromatica permette di decodificare l'architettura logica dell'ontologia a colpo d'occhio.</li>
+        <li><strong>Provenienza del Dato:</strong> Gli archi che rappresentano relazioni fattuali provenienti da Wikidata sono a linea continua. Le relazioni inferite dall'LLM e validate manualmente sono distinte: le linee tratteggiate collegano l'archetipo generale, mentre quelle con marcatore specifico evidenziano l'archetipo culturale giapponese.</li>
+        <li><strong>Modello a Due Livelli:</strong> Ogni personaggio (es. <em>Itachi Uchiha</em>) funge da nodo centrale che connette il suo ruolo nella trama (l'opera di appartenenza) alle due nuove dimensioni semantiche introdotte dal progetto (<code>animanga:hasGeneralArchetype</code> e <code>animanga:hasJapaneseArchetype</code>).</li>
     </ul>
 
-    <h3>Procedura di Costruzione del Grafo</h3>
-    <p>La topologia di questa rete non è stata disegnata manualmente, ma rappresenta il risultato dinamico della nostra intera pipeline di estrazione e arricchimento semantico. Il processo di costruzione si articola in quattro fasi principali:</p>
-    
+    <h3>Pipeline di visualizzazione</h3>
     <ol class="step-list">
-        <li>
-            <div><strong>Estrazione dell'Ossatura Base (SPARQL)</strong><br/>
-            Il primo step ha definito i nodi di partenza interrogando l'endpoint di Wikidata. Abbiamo estratto le entità relative alle 
-            tre opere analizzate (<em>One Piece</em>, <em>Naruto</em>, <em>Death Note</em>) e i personaggi a esse collegati tramite 
-            le proprietà <code>wdt:P1441</code> (present in work) o <code>wdt:P1080</code> (from narrative universe).
-            </div>
-        </li>
-        <li>
-            <div><strong>Identificazione del Gap e Inferenza (LLM)</strong><br/>
-            Sui nodi dei personaggi estratti, abbiamo verificato sistematicamente l'assenza della proprietà <code>wdt:P9071</code> 
-            (character type). Per colmare il vuoto semantico, le API di fonti esterne (come Jikan/MyAnimeList e AniList) 
-            hanno fornito il contesto testuale grezzo. I Large Language Models hanno analizzato questi testi classificando ogni 
-            personaggio all'interno di un vocabolario di archetipi controllato.
-            </div>
-        </li>
-        <li>
-            <div><strong>Formalizzazione RDF</strong><br/>
-            Gli archetipi generati dall'Intelligenza Artificiale, una volta superata la validazione umana, sono stati convertiti in 
-            triple formali. Se l'archetipo esisteva in Wikidata (es. <em>Byronic hero</em>), il grafo crea un arco verso il suo 
-            QID nativo; se assente, genera un nodo locale appoggiandosi al namespace <code>animanga:</code>.
-            </div>
-        </li>
-        <li>
-            <div><strong>Rendering Visivo (Vis.js)</strong><br/>
-            Le triple Turtle sono state infine convertite nella struttura JSON richiesta da Vis.js. Le linee continue della rete 
-            mappano i dati fattuali originariamente estratti da Wikidata (Soggetto-Opera), mentre le linee tratteggiate mappano le 
-            relazioni inferite dal modello generativo (Soggetto-Archetipo).
-            </div>
-        </li>
+        <li><div><strong>Estraziome Base:</strong> Recupero dei personaggi da Wikidata per i tre franchise campione.</div></li>
+        <li><div><strong>Classificazione LLM:</strong> Generazione di etichette su due livelli tramite prompting Zero-shot CoT.</div></li>
+        <li><div><strong>Reconciliation Semantica:</strong> Validazione dei QID tramite Query 10 per evitare duplicazioni inutili.</div></li>
+        <li><div><strong>Rendering RDF:</strong> Visualizzazione della rete che distingue tra entità ufficiali Wikidata (es. <em>Tragic Hero</em>) e risorse locali (es. <em>sacrificial-shinobi</em>).</div></li>
     </ol>
 
     <div id="core_graph">
-        <p><strong>Grafo</strong></p>
         <div id="animanga-core-graph" class="animanga-graph"></div>
     </div>
-
-    </main>
+</main>
 </body>
 </html>

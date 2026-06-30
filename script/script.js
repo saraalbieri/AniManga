@@ -601,106 +601,24 @@ function scrollareAInizioTabellaQ8() {
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- GRAFO CORE (AniManga O-KG) ---
-    var nodes_core = new vis.DataSet([
-        { id: 'Q462172', label: 'One Piece', group: 'series' },
-        { id: 'Q81', label: 'Naruto', group: 'series' },
-        { id: 'Q1834', label: 'Death Note', group: 'series' },
-        { id: 'Q477388', label: 'Monkey D. Luffy', group: 'character' },
-        { id: 'Q635674', label: 'Roronoa Zoro', group: 'character' },
-        { id: 'Q836371', label: 'Nami', group: 'character' },
-        { id: 'Q843825', label: 'Sanji', group: 'character' },
-        { id: 'Q1048897', label: 'Nico Robin', group: 'character' },
-        { id: 'Q719363', label: 'Naruto Uzumaki', group: 'character' },
-        { id: 'Q1622379', label: 'Sasuke Uchiha', group: 'character' },
-        { id: 'Q327170', label: 'Sakura Haruno', group: 'character' },
-        { id: 'Q193156', label: 'Kakashi Hatake', group: 'character' },
-        { id: 'Q715694', label: 'Itachi Uchiha', group: 'character' },
-        { id: 'Q52989', label: 'Light Yagami', group: 'character' },
-        { id: 'Q1638848', label: 'L', group: 'character' },
-        { id: 'Q327572', label: 'Misa Amane', group: 'character' },
-        { id: 'Q1994344', label: 'Ryuk', group: 'character' },
-        { id: 'Q1197475', label: 'Near', group: 'character' },
-        { id: 'Q212235', label: 'Protagonista', group: 'role' },
-        { id: 'Q1651815', label: 'Deuteragonista', group: 'role' },
-        { id: 'Q55280287', label: 'Tritagonista', group: 'role' },
-        { id: 'Q1254394', label: 'Antagonista', group: 'role' },
-        { id: 'Q108035', label: 'Antieroe', group: 'role' },
-        { id: 'am:MentorRole', label: 'Mentore', group: 'role' },
-        { id: 'am:ObserverRole', label: 'Osservatore Neutrale', group: 'role' },
-        { id: 'am:ShonenHero', label: 'Eroe Shonen', group: 'archetype' },
-        { id: 'am:Genki', label: 'Genki (Energico)', group: 'archetype' },
-        { id: 'am:LoyalCompanion', label: 'Braccio Destro', group: 'archetype' },
-        { id: 'Q126315570', label: 'Kuudere (Freddo/Distaccato)', group: 'archetype' },
-        { id: 'Q5356345', label: 'Tsundere (Scontroso/Dolce)', group: 'archetype' },
-        { id: 'am:ChivalrousPervert', label: 'Cavaliere Pervertito', group: 'archetype' },
-        { id: 'am:Underdog', label: 'Emarginato (Underdog)', group: 'archetype' },
-        { id: 'am:Avenger', label: 'Vendicatore', group: 'archetype' },
-        { id: 'am:TragicVillain', label: 'Cattivo Tragico', group: 'archetype' },
-        { id: 'Q3101569', label: 'Genio', group: 'archetype' },
-        { id: 'am:VillainProtagonist', label: 'Protagonista Malvagio', group: 'archetype' },
-        { id: 'am:EccentricGenius', label: 'Genio Eccentrico', group: 'archetype' },
-        { id: 'Q2281987', label: 'Yandere (Ossessivo)', group: 'archetype' },
-        { id: 'am:Trickster', label: 'Trickster', group: 'archetype' },
-        { id: 'am:ChildProdigy', label: 'Bambino Prodigio', group: 'archetype' }
-    ]);
+    // Esempio di aggiornamento nodi e archi nel tuo script.js
+var nodes_core = new vis.DataSet([
+    { id: 'wd:Q1043344', label: 'Itachi Uchiha', group: 'character' },
+    { id: 'wd:Q81', label: 'Naruto (Opera)', group: 'series' },
+    { id: 'wd:Q1969230', label: 'Tragic Hero', group: 'archetype' }, // QID Wikidata
+    { id: 'ex:sacrificial-shinobi', label: 'Sacrificial Shinobi', group: 'archetype' } // Risorsa locale
+]);
 
-    var edges_core = new vis.DataSet([
-        { from: 'Q477388', to: 'Q462172', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q635674', to: 'Q462172', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q836371', to: 'Q462172', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q843825', to: 'Q462172', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1048897', to: 'Q462172', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q719363', to: 'Q81', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1622379', to: 'Q81', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q327170', to: 'Q81', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q193156', to: 'Q81', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q715694', to: 'Q81', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q52989', to: 'Q1834', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1638848', to: 'Q1834', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q327572', to: 'Q1834', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1994344', to: 'Q1834', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1197475', to: 'Q1834', label: 'appare in', arrows: 'to', color: {color: '#BDBDBD'} },
-        { from: 'Q1622379', to: 'Q715694', label: 'parente di', arrows: 'to, from', color: {color: '#E91E63'}, width: 2 },
-        { from: 'Q477388', to: 'Q212235', label: 'ruolo', arrows: 'to' },
-        { from: 'Q635674', to: 'Q1651815', label: 'ruolo', arrows: 'to' },
-        { from: 'Q836371', to: 'Q55280287', label: 'ruolo', arrows: 'to' },
-        { from: 'Q843825', to: 'Q212235', label: 'ruolo', arrows: 'to' },
-        { from: 'Q719363', to: 'Q212235', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1622379', to: 'Q1651815', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1622379', to: 'Q1254394', label: 'ruolo', arrows: 'to' },
-        { from: 'Q327170', to: 'Q55280287', label: 'ruolo', arrows: 'to' },
-        { from: 'Q193156', to: 'am:MentorRole', label: 'ruolo', arrows: 'to' },
-        { from: 'Q715694', to: 'Q1254394', label: 'ruolo', arrows: 'to' },
-        { from: 'Q52989', to: 'Q212235', label: 'ruolo', arrows: 'to' },
-        { from: 'Q52989', to: 'Q108035', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1638848', to: 'Q1651815', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1638848', to: 'Q1254394', label: 'ruolo', arrows: 'to' },
-        { from: 'Q327572', to: 'Q55280287', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1994344', to: 'am:ObserverRole', label: 'ruolo', arrows: 'to' },
-        { from: 'Q1197475', to: 'Q1651815', label: 'ruolo', arrows: 'to' },
-        { from: 'Q477388', to: 'am:ShonenHero', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q477388', to: 'am:Genki', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q635674', to: 'am:LoyalCompanion', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q635674', to: 'Q126315570', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q836371', to: 'Q5356345', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q843825', to: 'am:ChivalrousPervert', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1048897', to: 'Q126315570', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q719363', to: 'am:ShonenHero', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q719363', to: 'am:Underdog', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1622379', to: 'am:Avenger', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1622379', to: 'Q126315570', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q327170', to: 'Q5356345', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q193156', to: 'Q126315570', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q715694', to: 'am:TragicVillain', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q52989', to: 'Q3101569', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q52989', to: 'am:VillainProtagonist', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1638848', to: 'Q3101569', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1638848', to: 'am:EccentricGenius', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q327572', to: 'Q2281987', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1994344', to: 'am:Trickster', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1197475', to: 'Q3101569', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true },
-        { from: 'Q1197475', to: 'am:ChildProdigy', label: 'archetipo', arrows: 'to', color: {color: '#FF9800'}, dashes: true }
-    ]);
+var edges_core = new vis.DataSet([
+    // Relazione base (Wikidata)
+    { from: 'wd:Q1043344', to: 'wd:Q81', label: 'appare in', color: {color: '#BDBDBD'} },
+    
+    // Relazione Archetipo Generale (Tratteggiata)
+    { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'hasGeneral', dashes: true, color: {color: '#f43f5e'} },
+    
+    // Relazione Archetipo Giapponese (Nuova - es. Colore diverso o freccia specifica)
+    { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'hasJapanese', color: {color: '#9C27B0'}, width: 2 }
+]);
 
     var container_core = document.getElementById('animanga-core-graph');
     if (container_core) {
