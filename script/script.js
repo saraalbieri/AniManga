@@ -680,7 +680,7 @@ function configuraControlliQ9bis() {
 // ==========================================
 
 function loadGraphTipoPersonaggio() {
-    fetch("./queries_results/query_grafo.json")
+    fetch("./queries_results/query_grafo_iniziale.json")
         .then(response => response.json())
         .then(data => {
             const nodesArray = [];
@@ -754,15 +754,15 @@ function loadGraphTipoPersonaggio() {
                 if (tipoLabel) {
                     const tipoId = `tipo-${tipoLabel}`;
 
-                    if (!addedNodes.has(tipoId)) {
+                    if (!addedNodes.has(tipoId)) {  //La parte che rende rossi i tipoPersonaggioLabel
                         nodesArray.push({
                             id: tipoId,
                             label: tipoLabel,
                             group: "tipoPersonaggio",
                             shape: "diamond",
                             color: {
-                                background: "#ef4444",
-                                border: "#991b1b"
+                                background: "#ef4444", 
+                                border: "#991b1b"       
                             },
                             font: {
                                 color: "white",
