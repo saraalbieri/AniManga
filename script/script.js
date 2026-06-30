@@ -707,7 +707,7 @@ function loadGraphTipoPersonaggio() {
                     nodesArray.push({
                         id: operaId,
                         label: operaLabel,
-                        group: "opera",
+                        //group: "opera",
                         shape: "box",
                         color: {
                             background: "#10b981",
@@ -726,7 +726,7 @@ function loadGraphTipoPersonaggio() {
                     nodesArray.push({
                         id: personaggioId,
                         label: personaggioLabel,
-                        group: "personaggio",
+                        //group: "personaggio",
                         shape: "ellipse",
                         color: {
                             background: "#3b82f6",
@@ -768,7 +768,7 @@ function loadGraphTipoPersonaggio() {
                         nodesArray.push({
                             id: tipoId,
                             label: tipoLabel,
-                            group: "tipoPersonaggio",
+                            //group: "tipoPersonaggio",
                             shape: "diamond",
                             color: {
                                 background: "#ef4444", 
