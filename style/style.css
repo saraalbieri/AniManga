@@ -823,7 +823,7 @@ p {
     flex-direction: row; /* Mette gli elementi in fila */
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .legend-box {
