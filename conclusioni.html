@@ -89,30 +89,64 @@
         </section>
 
         <section class="report-section">
-            <h2>Risultati RDF</h2>
+            <h2>Risultati RDF e Modellazione Ontologica</h2>
             <p>
                 Le classificazioni ritenute più solide vengono trasformate in triple Turtle solo dopo la validazione. Quando l'archetipo esiste già in Wikidata si riusa il relativo QID; quando invece il concetto è più specifico o non disponibile come entità stabile, viene creata una risorsa interna del knowledge graph.
             </p>
             <pre class="query-embed" data-src="./queries/q17_concl.ttl"><code>Caricamento query in corso...</code></pre>
-            <p>
+            <!--p>
                 Questo esempio mostra la doppia strategia adottata: i personaggi già presenti in Wikidata vengono identificati con il loro QID, mentre <code>wd:Q1969230</code> viene riusato perché identifica l'archetipo generale <em>tragic hero</em>. Le risorse interne come <code>ex:sacrificial-shinobi</code>, <code>ex:trickster-ally</code> ed <code>ex:kitsune</code> rappresentano normalizzazioni più specifiche, derivate dagli output del benchmark e validate manualmente.
+            </p-->
+            <p>
+                La modellazione adottata segue una strategia ibrida basata sulla distinzione tra <strong>A-Box</strong> (i dati) e <strong>T-Box</strong> (l'ontologia). 
+                Per i personaggi e gli archetipi consolidati, riutilizziamo i QID ufficiali di Wikidata (<code>wd:</code>), garantendo l'interoperabilità con il 
+                grafo di conoscenza globale.<br/>
+                Parallelamente, le risorse come <code>ex:sacrificial-shinobi</code>, <code>ex:trickster-ally</code> ed 
+                <code>ex:kitsune</code> rappresentano normalizzazioni specifiche del nostro progetto, derivate dagli output degli LLM e validate manualmente per 
+                colmare il <em>data gap</em> narratologico di Wikidata.
             </p>
+            
+            <p>
+                Abbiamo formalizzato questa struttura introducendo la classe <code>am:Character</code>, definita come sottoclasse di <code>wd:Q95074</code> 
+                (<em>personaggio immaginario</em>). Questa scelta è cruciale per due ragioni:
+            </p>
+            <ul>
+                <li><strong>Separazione Semantica</strong>: definire <code>am:Character</code> come classe ontologica ci permette di imporre vincoli e proprietà 
+                    specifiche (come <code>animanga:hasGeneralArchetype</code>) che Wikidata non prevede nativamente per l'analisi sociologica dei personaggi.</li>
+                <li><strong>Interoperabilità Gerarchica</strong>: dichiarare <code>am:Character</code> come sottoclasse di un concetto esistente su Wikidata crea un "ponte" logico; in questo modo, 
+                    il nostro modello rimane un'estensione coerente e validata del Web Semantico, preservando la specificità del dominio manga senza isolarsi dai dati 
+                    enciclopedici già esistenti.</li>
+            </ul>
         </section>
 
         <section class="report-section">
             <h2>Considerazioni Finali</h2>
+        
             <p>
-                L'approccio ibrido sviluppato dimostra come sia possibile colmare un data gap nelle piattaforme di conoscenza collaborativa senza delegare agli LLM la produzione automatica del knowledge graph. Gli LLM generano ipotesi interpretative, SPARQL e Wikidata servono a verificarne l'allineamento, e la validazione umana decide quali archetipi possono diventare RDF.
+                L'approccio ibrido qui sviluppato dimostra come sia possibile colmare i <em>data gap</em> strutturali nelle piattaforme di conoscenza collaborativa, 
+                evitando di delegare acriticamente agli LLM la generazione automatica del Knowledge Graph.  
+                Il valore metodologico del progetto non risiede nella semplice produzione di triple RDF, bensì nella definizione di un 
+                <strong>protocollo di validazione controllato</strong>, in cui ogni tecnologia interviene secondo le proprie specificità:
             </p>
+            <ul>
+                <li><strong>SPARQL</strong> agisce come strumento diagnostico per mappare l'esistente e circoscrivere il vuoto informativo.</li>
+                <li><strong>Gli LLM</strong> forniscono ipotesi interpretative ad alto valore aggiunto, trasformando dati grezzi in categorie sociologiche e narrative.</li>
+                <li><strong>La validazione umana</strong> funge da filtro critico essenziale, mitigando le allucinazioni del modello e garantendo che solo le 
+                    interpretazioni coerenti siano formalizzate.</li>
+                <li><strong>RDF</strong>, infine, agisce come lingua franca che rende il risultato interoperabile, inserendo le nostre deduzioni all'interno del Web 
+                    Semantico globale.</li>
+            </ul>
             <p>
-                Il risultato più importante non è quindi la singola tripla prodotta, ma la definizione di un metodo controllato: SPARQL individua il gap, gli LLM propongono classificazioni, la validazione umana filtra errori e allucinazioni, RDF rende il risultato interoperabile.
+                Questa pipeline "Human-in-the-loop" trasforma la fragilità degli LLM in una risorsa: il modello suggerisce, ma è l'umano a validare e la semantica formale 
+                a consolidare. Il risultato finale è un modello che non si limita a raccogliere dati, ma arricchisce il dominio culturale anime e manga con una 
+                profondità critica altrimenti inaccessibile ai sistemi basati solo su metadati enciclopedici.
             </p>
         </section>
 
     </main>
 
     <footer class="project-footer">
-        <p>&copy; 2026 Progetto di Simulazione Semantica &bull; Master GEPID &bull; Alma Mater Studiorum - Università di Bologna</p>
+        <p>&copy; 2026 Progetto di Metodologie e tecniche di simulazione &bull; GEPID &bull; Alma Mater Studiorum - Università di Bologna</p>
     </footer>
 
 </body>
