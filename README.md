@@ -70,7 +70,6 @@ La metodologia segue un percorso in cinque fasi:
 | `queries/` | Query SPARQL e template Turtle usati nel progetto |
 | `queries_results/` | Risultati delle query esportati in JSON, caricati dinamicamente dalle pagine tramite `script/script.js` |
 | `data/` | File RDF/Turtle dell'ontologia e dei dati locali |
-| `validation/` | Bozza di vincoli SHACL |
 | `img/` | Immagini e grafici usati nel sito |
 | `script/script.js` | Logica JavaScript per il caricamento dinamico di query/risultati, tabelle con paginazione e grafi interattivi |
 | `style/` | Foglio di stile del sito |
