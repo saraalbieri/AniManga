@@ -900,6 +900,44 @@ function loadFinalGraph(personaggio, containerId) {
     new vis.Network(container, graphData, options);
 }
 
+//ontologico
+function loadOntologyGraph() {
+    var container_onto = document.getElementById('animanga-onto-graph');
+
+    if (container_onto) {
+        var nodes_onto = new vis.DataSet([
+            { id: 'am:Character', label: 'am:Character\n(Personaggio Immaginario)', group: 'coreClass', shape: 'box', margin: 15 },
+            { id: 'am:Series', label: 'am:Series\n(Serie/Opera)', group: 'baseClass', shape: 'ellipse' },
+            { id: 'am:NarrativeRole', label: 'am:NarrativeRole\n(Ruolo Narrativo)', group: 'baseClass', shape: 'ellipse' },
+            { id: 'am:Archetype', label: 'am:Archetype\n(Archetipo / Trope)', group: 'enrichedClass', shape: 'ellipse' },
+            { id: 'prov:Activity', label: 'prov:Activity\n(Elaborazione LLM)', group: 'provClass', shape: 'hexagon' }
+        ]);
+
+        var edges_onto = new vis.DataSet([
+            { from: 'am:Character', to: 'am:Series', label: 'am:appearsIn\n(equiv: wdt:P1441)', arrows: 'to', font: {align: 'horizontal'}, color: {color: '#607D8B'} },
+            { from: 'am:Character', to: 'am:NarrativeRole', label: 'am:hasNarrativeRole\n(equiv: wdt:P4595)', arrows: 'to', font: {align: 'horizontal'}, color: {color: '#607D8B'} },
+            { from: 'am:Character', to: 'am:Archetype', label: 'am:hasArchetype\n(equiv: wdt:P9071)', arrows: 'to', font: {align: 'horizontal', color: '#E65100'}, dashes: true, color: {color: '#FF9800'}, width: 2 },
+            { from: 'am:Archetype', to: 'prov:Activity', label: 'prov:wasGeneratedBy', arrows: 'to', font: {align: 'horizontal', color: '#4A148C'}, dashes: true, color: {color: '#9C27B0'} }
+        ]);
+
+        var options_onto = {
+            nodes: { font: { size: 16, face: 'Courier New', multi: 'html', bold: true }, borderWidth: 2, shadow: true },
+            groups: {
+                coreClass: { color: { background: '#2196F3', border: '#1565C0' }, font: { color: 'white' } },
+                baseClass: { color: { background: '#E0E0E0', border: '#9E9E9E' } },
+                enrichedClass: { color: { background: '#FFE082', border: '#FF8F00' } },
+                provClass: { color: { background: '#E1BEE7', border: '#8E24AA' } }
+            },
+            edges: { font: { size: 12, face: 'Courier New', background: 'white' }, length: 250, smooth: { type: 'cubicBezier', forceDirection: 'horizontal', roundness: 0.4 } },
+            layout: { hierarchical: { direction: 'LR', sortMethod: 'directed', levelSeparation: 300, nodeSpacing: 150 } },
+            physics: false
+        };
+        
+        var data_onto = { nodes: nodes_onto, edges: edges_onto };
+        new vis.Network(container_onto, data_onto, options_onto);
+    }
+}
+
 // ==========================================
 // 3. INIZIALIZZAZIONE E EVENT LISTENERS (DOM Content Loaded)
 // ==========================================
@@ -1047,5 +1085,8 @@ document.addEventListener('DOMContentLoaded', function() {
     //grafi finali
     loadFinalGraph("Itachi", "mynetwork-itachi");
     loadFinalGraph("Nami", "mynetwork-nami");
+    if (document.getElementById('animanga-onto-graph')) {
+        loadOntologyGraph();
+    }
 
 });
