@@ -86,13 +86,39 @@
         </div>
 
 
-        <h2>Schema Ontologico: AniManga O-KG</h2>
-            <p>Rappresentazione delle classi Core (am:Character) e del processo di arricchimento tramite LLM (prov:Activity).</p>
-        <!-- Sezione Grafo Ontologico -->
-        <div class="graph-wrapper">            
-            <!-- Contenitore specifico per il grafo ontologico -->
-            <div id="animanga-onto-graph" style="width: 100%; height: 500px; border: 1px solid #dee2e6; background: #fafafa; border-radius: 8px;"></div>
+        <h2>Schema Ontologico Evoluto: AniManga O-KG</h2>
+        <p>
+            Il modello ora distingue esplicitamente tra <code>am:GenArchetype</code> (riuso di QID Wikidata) 
+            e <code>am:JapArchetype</code> (normalizzazione manuale di risorse locali <code>ex:</code>).
+        </p>
+        <div class="graph-wrapper" style="margin-top: 20px;">
+            <div id="animanga-onto-graph" style="width: 100%; height: 400px; border: 1px solid #dee2e6; border-radius: 8px;"></div>
         </div>
+
+        <table class="table-legenda">
+    <tbody>
+        <tr>
+            <td><span style="display:inline-block; width:12px; height:12px; background:#3b82f6; border-radius:50%;"></td>
+            <td><strong>wd:</strong></td>
+            <td>Istanza (Personaggio Wikidata)</td>
+        </tr>
+        <tr>
+            <td><span style="display:inline-block; width:12px; height:12px; background:#f59e0b;"></td>
+            <td><strong>am:</strong></td>
+            <td>Classe ontologica</td>
+        </tr>
+        <tr>
+            <td><span style="display:inline-block; width:12px; height:12px; background:#10b981;"></td>
+            <td><strong>wd: (QID)</strong></td>
+            <td>Archetipo generale (Wikidata)</td>
+        </tr>
+        <tr>
+            <td><span style="display:inline-block; width:12px; height:12px; background:#ef4444; transform: rotate(45deg);"></td>
+            <td><strong>ex:</strong></td>
+            <td>Risorsa specifica del progetto</td>
+        </tr>
+    </tbody>
+</table>
 
     </main>
 </body>
