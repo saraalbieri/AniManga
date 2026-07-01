@@ -1,17 +1,37 @@
 @prefix animanga: <https://w3id.org/animanga/ontology/> .
-@prefix ex: <https://w3id.org/animanga/resource/> .
-@prefix wd: <http://www.wikidata.org/entity/> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:       <https://w3id.org/animanga/resource/> .
+@prefix wd:       <http://www.wikidata.org/entity/> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-# Esempio di allineamento per Nami (One Piece)
+# =================================================================
+# 1. DEFINIZIONE DELLO SCHEMA ONTOLOGICO (T-Box)
+# =================================================================
+
+# Classe principale ancorata gerarchicamente a Wikidata
+animanga:Character rdf:type owl:Class ;
+    rdfs:label "Character"@en ;
+    rdfs:label "Personaggio"@it ;
+    rdfs:subClassOf wd:Q95074 . # character in wikidata
+
+# =================================================================
+# 2. DATI E ISTANZE REALI (A-Box)
+# =================================================================
+
+# --- ALLINEAMENTO PER NAMI ---
+# Il personaggio viene tipizzato e collegato ai due livelli archetipici
 wd:Q877964
-    animanga:hasGeneralArchetype ex:trickster-ally ;
-    animanga:hasJapaneseArchetype ex:kitsune .
+    rdf:type animanga:Character ;
+    animanga:hasGeneralArchetype ex:trickster-ally ; # Risorsa locale normalizzata
+    animanga:hasJapaneseArchetype ex:kitsune . # Risorsa locale normalizzata
 
+# Normalizzazione dell'archetipo generale di Nami
 ex:trickster-ally
     rdfs:label "trickster alleato"@it ;
     rdfs:label "trickster ally"@en .
 
+# Normalizzazione dell'archetipo giapponese di Nami
 ex:kitsune
     rdfs:label "kitsune"@it ;
     rdfs:label "kitsune"@en .

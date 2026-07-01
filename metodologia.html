@@ -98,8 +98,19 @@
 
             <h2>6. Allineamento Ontologico (Template RDF)</h2>
             <p>
-                Questa scelta di modellazione su due livelli garantisce una perfetta retrocompatibilità. Laddove Wikidata offre già il nodo concettuale corretto e verificato (es. <em>tragic hero</em>), il nostro grafo fa da ponte verso l'Open Data globale. Laddove mancano figure tipiche dell'animazione giapponese, agiamo da estensione formale.
+                Questa scelta di modellazione su due livelli garantisce una perfetta retrocompatibilità e un solido rigore formale. 
+                La nostra ontologia definisce esplicitamente lo schema (T-Box) introducendo la classe core <code>am:Character</code>, 
+                ancorata formalmente alla gerarchia globale di Wikidata tramite la relazione <code>rdfs:subClassOf</code> riferita a <code>wd:Q95074</code> 
+                (<em>personaggio immaginario</em>). <br/>
+                Le istanze dei personaggi mantengono il loro QID enciclopedico originario, ma vengono tipizzate (<code>rdf:type</code>) all'interno del nostro metamodello.
             </p>
+            <p>
+                Laddove Wikidata offre già il nodo concettuale corretto e verificato (come lo stock character <code>wd:Q1969230</code> per il <em>tragic hero</em>), 
+                il nostro grafo fa da ponte riutilizzando la risorsa Open Data globale. <br/>
+                Laddove mancano figure tipiche o normalizzazioni specifiche della cultura pop e dell'animazione giapponese (come <code>ex:sacrificial-shinobi</code> o 
+                <code>ex:kitsune</code>), agiamo da estensione formale coniando risorse locali.
+            </p>
+
             <pre class="query-embed" data-src="./queries/q14_allineamento_nami.ttl"><code>Caricamento query in corso...</code></pre>
 
             <h2>7. Decisioni metodologiche centrali</h2>
