@@ -93,32 +93,7 @@
             <p>
                 Le classificazioni ritenute più solide vengono trasformate in triple Turtle solo dopo la validazione. Quando l'archetipo esiste già in Wikidata si riusa il relativo QID; quando invece il concetto è più specifico o non disponibile come entità stabile, viene creata una risorsa interna del knowledge graph.
             </p>
-            <div class="code-block">
-@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .<br>
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .<br>
-@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .<br>
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .<br><br>
-# Itachi Uchiha esiste in Wikidata: si riusa il suo QID.<br>
-# "tragic hero" esiste in Wikidata come stock character: si riusa il QID.<br>
-# "sacrificial shinobi" è una normalizzazione specifica del progetto: resta ex:.<br>
-wd:Q1043344<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype wd:Q1969230 ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:sacrificial-shinobi .<br><br>
-ex:sacrificial-shinobi<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "shinobi sacrificiale"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "sacrificial shinobi"@en .<br><br>
-# Nami esiste in Wikidata: si riusa il suo QID.<br>
-# Gli archetipi "trickster ally" e "kitsune" sono normalizzazioni interne.<br>
-wd:Q877964<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype ex:trickster-ally ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:kitsune .<br><br>
-ex:trickster-ally<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster alleato"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster ally"@en .<br><br>
-ex:kitsune<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "kitsune"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "kitsune"@en .
-            </div>
+            <pre class="query-embed" data-src="./queries/q17_concl.ttl"><code>Caricamento query in corso...</code></pre>
             <p>
                 Questo esempio mostra la doppia strategia adottata: i personaggi già presenti in Wikidata vengono identificati con il loro QID, mentre <code>wd:Q1969230</code> viene riusato perché identifica l'archetipo generale <em>tragic hero</em>. Le risorse interne come <code>ex:sacrificial-shinobi</code>, <code>ex:trickster-ally</code> ed <code>ex:kitsune</code> rappresentano normalizzazioni più specifiche, derivate dagli output del benchmark e validate manualmente.
             </p>

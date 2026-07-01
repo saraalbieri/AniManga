@@ -1,0 +1,42 @@
+@prefix animanga: <https://w3id.org/animanga/ontology/> .
+@prefix ex: <https://w3id.org/animanga/resource/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# --- DEFINIZIONE DELLO SCHEMA ONTOLOGICO (T-Box) ---
+animanga:Character rdf:type owl:Class ;
+    rdfs:label "Character"@en ;
+    rdfs:subClassOf wd:Q95074 . 
+
+animanga:hasGeneralArchetype rdf:type owl:ObjectProperty .
+animanga:hasJapaneseArchetype rdf:type owl:ObjectProperty .
+
+# --- DATI E ISTANZE (A-Box) ---
+# Itachi Uchiha siste in Wikidata: si riusa il suo QID.
+# "tragic hero" esiste in Wikidata come stock character: si riusa il QID.
+# "sacrificial shinobi" è una normalizzazione specifica del progetto: resta ex:.
+wd:Q1043344
+    rdf:type animanga:Character ;
+    animanga:hasGeneralArchetype wd:Q1969230 ;
+    animanga:hasJapaneseArchetype ex:sacrificial-shinobi .
+
+ex:sacrificial-shinobi
+    rdfs:label "shinobi sacrificiale"@it ;
+    rdfs:label "sacrificial shinobi"@en .
+
+# Nami esiste in Wikidata: si riusa il suo QID.
+wd:Q877964
+    rdf:type animanga:Character ;
+    animanga:hasGeneralArchetype ex:trickster-ally ;
+    animanga:hasJapaneseArchetype ex:kitsune .
+
+# Gli archetipi "trickster ally" e "kitsune" sono normalizzazioni interne.
+ex:trickster-ally
+    rdfs:label "trickster alleato"@it ;
+    rdfs:label "trickster ally"@en .
+
+ex:kitsune
+    rdfs:label "kitsune"@it ;
+    rdfs:label "kitsune"@en .
