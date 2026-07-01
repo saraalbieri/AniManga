@@ -17,7 +17,7 @@
             <a href="./metodologia.html">Metodologia</a>
             <a href="./sparql.html">SPARQL</a>
             <a href="./llm-benchmark.html">LLM Results</a>
-            <a href="./conclusioni.html">Conclusioni</a>
+            <a href="./conclusioni.html" class="active">Conclusioni</a>
         </div>
     </nav>
 
@@ -33,104 +33,102 @@
         <section class="report-section">
             <h2>Sfide Metodologiche e Soluzioni</h2>
             <p>
-                Durante lo sviluppo della pipeline abbiamo individuato una criticità centrale: Wikidata descrive bene molti aspetti enciclopedici dei personaggi anime e manga, ma rappresenta in modo limitato gli archetipi narrativi tramite la proprietà <code>wdt:P9071</code> (<em>character type</em>). Per questo motivo il progetto non parte direttamente dagli LLM, ma usa prima SPARQL per osservare il modello dati e verificare il gap.
+                Durante lo sviluppo della pipeline abbiamo individuato una criticità centrale: Wikidata descrive bene molti aspetti enciclopedici dei personaggi anime e manga, ma rappresenta in modo limitato gli archetipi narrativi tramite la proprietà <code>wdt:P9071</code> (<em>character type</em>)[cite: 17]. Per questo motivo il progetto non parte direttamente dagli LLM, ma usa prima SPARQL per osservare il modello dati e verificare il gap[cite: 17].
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Allineamento Culturale e Semantico</h3>
             <p>
-                Gli archetipi prodotti dai modelli possono appartenere a livelli diversi: categorie narrative generali, come <em>tragic hero</em>, e categorie più vicine al contesto anime e manga, come <em>shinobi sacrificale</em> o figure culturali giapponesi. La soluzione adottata distingue quindi tra archetipi già presenti in Wikidata e risorse interne del knowledge graph, evitando di forzare concetti specifici dentro categorie troppo generiche.
+                Gli archetipi prodotti dai modelli possono appartenere a livelli diversi: categorie narrative generali, come <em>tragic hero</em>, e categorie più vicine al contesto anime e manga, come <em>shinobi sacrificale</em> o figure culturali giapponesi[cite: 17]. La soluzione adottata distingue quindi tra archetipi già presenti in Wikidata e risorse interne del knowledge graph, evitando di forzare concetti specifici dentro categorie troppo generiche[cite: 17].
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Normalizzazione delle Label</h3>
             <p>
-                Uno stesso archetipo può comparire con formulazioni diverse: <em>eroe tragico</em>, <em>tragic hero</em>, <em>antieroe tragico</em> o <em>martire dell'ombra</em>. Gli output degli LLM non vengono quindi copiati automaticamente nel grafo: prima vengono confrontati, raggruppati e ricondotti a una label controllata scelta dal progetto.
+                Uno stesso archetipo può comparire con formulazioni diverse: <em>eroe tragico</em>, <em>tragic hero</em>, <em>antieroe tragico</em> o <em>martire dell'ombra</em>[cite: 17]. Gli output degli LLM non vengono quindi copiati automaticamente nel grafo: prima vengono confrontati, raggruppati e ricondotti a una label controllata scelta dal progetto[cite: 17].
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Verifica dei QID Wikidata</h3>
             <p>
-                Prima della generazione RDF viene verificato se l'archetipo esiste già in Wikidata. 
-                La ricerca avviene tramite query SPARQL sulle label <em>character type</em> e <em>stock character</em>, non solo tramite somiglianza lessicale. 
-                Nel caso di Itachi Uchiha, <em>tragic hero</em> è presente solo come <em>stock character</em> e può essere riusato tramite <code>wd:Q1969230</code>.
+                Prima della generazione RDF viene verificato se l'archetipo esiste già in Wikidata[cite: 17]. 
+                La ricerca avviene tramite query SPARQL sulle label <em>character type</em> e <em>stock character</em>, non solo tramite somiglianza lessicale[cite: 17]. 
+                Nel caso di Itachi Uchiha, <em>tragic hero</em> è presente solo come <em>stock character</em> e può essere riusato tramite <code>wd:Q1969230</code>[cite: 17].
             </p>
             <h3 style="color: #0f172a; margin-top: 20px;">Allucinazione dei QID</h3>
             <p>
-                Gli LLM sono utili per proporre classificazioni interpretative, ma non sono affidabili come fonte primaria per identificativi Wikidata. Per questo motivo i QID non vengono richiesti o accettati direttamente dall'output del modello: vengono verificati separatamente tramite Wikidata o query SPARQL.
+                Gli LLM sono utili per proporre classificazioni interpretative, ma non sono affidabili come fonte primaria per identificativi Wikidata[cite: 17]. Per questo motivo i QID non vengono richiesti o accettati direttamente dall'output del modello: vengono verificati separatamente tramite Wikidata o query SPARQL[cite: 17].
             </p>
         </section>
 
         <section class="report-section">
             <h2>Risultati del Benchmark LLM</h2>
             <p>
-                Il benchmark ha confrontato tre tecniche di prompting su input minimi, usando soltanto nome del personaggio e opera di appartenenza. Gemini, ChatGPT e Copilot sono stati usati come strumenti di proposta, non come fonti definitive del knowledge graph.
+                Il benchmark ha confrontato tre tecniche di prompting su input minimi, usando soltanto nome del personaggio e opera di appartenenza[cite: 17]. Gemini, ChatGPT e Copilot sono stati usati come strumenti di proposta, non come fonti definitive del knowledge graph[cite: 17].
             </p>
             
             <div style="display: flex; gap: 20px; margin-top: 20px;">
                 <div style="flex: 1; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
                     <h4 style="margin-top: 0; color: #1e1b4b; border-bottom: 2px solid #38bdf8; padding-bottom: 5px;">Zero-shot</h4>
                     <p style="font-size: 0.95em; color: #475569;">
-                        Produce risposte rapide e generalmente coerenti, ma tende a restituire etichette sintetiche o varianti lessicali diverse. Per questo motivo richiede un passaggio successivo di normalizzazione manuale.
+                        Produce risposte rapide e generalmente coerenti, ma richiede un passaggio successivo di normalizzazione manuale[cite: 17].
                     </p>
                 </div>
                 
                 <div style="flex: 1; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
                     <h4 style="margin-top: 0; color: #1e1b4b; border-bottom: 2px solid #f43f5e; padding-bottom: 5px;">Few-shot</h4>
                     <p style="font-size: 0.95em; color: #475569;">
-                        Aiuta a stabilizzare il formato dell'output, ma può orientare il modello verso gli archetipi presenti negli esempi. Il caso di Luffy associato a <em>The Chosen One</em> mostra proprio questo possibile effetto di bias.
+                        Aiuta a stabilizzare il formato dell'output, ma può orientare il modello verso gli archetipi presenti negli esempi[cite: 17].
                     </p>
                 </div>
 
                 <div style="flex: 1; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
                     <h4 style="margin-top: 0; color: #1e1b4b; border-bottom: 2px solid #22c55e; padding-bottom: 5px;">Zero-shot CoT</h4>
                     <p style="font-size: 0.95em; color: #475569;">
-                        È la tecnica più utile nei casi ambigui, perché esplicita funzione narrativa, motivazioni e archetipo finale prima della validazione.
+                        È la tecnica più utile nei casi ambigui, perché esplicita funzione narrativa, motivazioni e archetipo finale prima della validazione[cite: 17].
                     </p>
                 </div>
             </div>
-            <p style="margin-top: 20px;">
-                Lo <strong>Zero-shot Chain-of-Thought</strong> è risultato il metodo più utile per personaggi ambigui come Itachi, perché rende esplicito il percorso interpretativo: funzione nella trama, motivazioni principali e archetipo finale. Questa maggiore trasparenza facilita la validazione umana prima della trasformazione in RDF.
+        </section>
+
+        <section class="report-section">
+            <h2>Formalizzazione Ontologica (Metamodello)</h2>
+            <p>
+                Per garantire l'interoperabilità e il rigore semantico, il progetto ha definito una T-Box specifica. 
+                La classe <code>am:Character</code> rappresenta il punto di convergenza tra l'istanza presente in Wikidata e il sistema di classificazione proposto[cite: 17].
+            </p>
+            
+            <div class="code-block">
+                # Definizione della classe principale nell'ontologia<br>
+                animanga:Character rdf:type owl:Class ;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "Character"@en ;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rdfs:subClassOf wd:Q95074 . <br><br>
+                
+                # Le istanze (personaggi) appartengono alla classe am:Character<br>
+                wd:Q1043344 rdf:type animanga:Character .<br>
+                wd:Q877964 rdf:type animanga:Character .
+            </div>
+
+            <p style="margin-top: 15px;">
+                Collocare <code>am:Character</code> come sottoclasse di <code>wd:Q95074</code> (<em>personaggio immaginario</em> su Wikidata) 
+                permette di mantenere una continuità semantica con il grafo di conoscenza globale, 
+                estendendolo però con le nostre proprietà specifiche <code>animanga:hasGeneralArchetype</code> 
+                e <code>animanga:hasJapaneseArchetype</code>[cite: 17].
             </p>
         </section>
 
         <section class="report-section">
             <h2>Risultati RDF</h2>
             <p>
-                Le classificazioni ritenute più solide vengono trasformate in triple Turtle solo dopo la validazione. Quando l'archetipo esiste già in Wikidata si riusa il relativo QID; quando invece il concetto è più specifico o non disponibile come entità stabile, viene creata una risorsa interna del knowledge graph.
+                Le classificazioni ritenute più solide vengono trasformate in triple Turtle solo dopo la validazione[cite: 17].
             </p>
             <div class="code-block">
-@prefix animanga: &lt;https://w3id.org/animanga/ontology/&gt; .<br>
-@prefix ex: &lt;https://w3id.org/animanga/resource/&gt; .<br>
-@prefix wd: &lt;http://www.wikidata.org/entity/&gt; .<br>
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .<br><br>
-# Itachi Uchiha esiste in Wikidata: si riusa il suo QID.<br>
-# "tragic hero" esiste in Wikidata come stock character: si riusa il QID.<br>
-# "sacrificial shinobi" è una normalizzazione specifica del progetto: resta ex:.<br>
-wd:Q1043344<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype wd:Q1969230 ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:sacrificial-shinobi .<br><br>
-ex:sacrificial-shinobi<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "shinobi sacrificiale"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "sacrificial shinobi"@en .<br><br>
-# Nami esiste in Wikidata: si riusa il suo QID.<br>
-# Gli archetipi "trickster ally" e "kitsune" sono normalizzazioni interne.<br>
-wd:Q877964<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasGeneralArchetype ex:trickster-ally ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;animanga:hasJapaneseArchetype ex:kitsune .<br><br>
-ex:trickster-ally<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster alleato"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "trickster ally"@en .<br><br>
-ex:kitsune<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "kitsune"@it ;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label "kitsune"@en .
+                wd:Q1043344 animanga:hasGeneralArchetype wd:Q1969230 ; animanga:hasJapaneseArchetype ex:sacrificial-shinobi .<br>
+                wd:Q877964 animanga:hasGeneralArchetype ex:trickster-ally ; animanga:hasJapaneseArchetype ex:kitsune .
             </div>
             <p>
-                Questo esempio mostra la doppia strategia adottata: i personaggi già presenti in Wikidata vengono identificati con il loro QID, mentre <code>wd:Q1969230</code> viene riusato perché identifica l'archetipo generale <em>tragic hero</em>. Le risorse interne come <code>ex:sacrificial-shinobi</code>, <code>ex:trickster-ally</code> ed <code>ex:kitsune</code> rappresentano normalizzazioni più specifiche, derivate dagli output del benchmark e validate manualmente.
+                Queste risorse rappresentano normalizzazioni specifiche, derivate dagli output del benchmark e validate manualmente[cite: 17].
             </p>
         </section>
 
         <section class="report-section">
             <h2>Considerazioni Finali</h2>
             <p>
-                L'approccio ibrido sviluppato dimostra come sia possibile colmare un data gap nelle piattaforme di conoscenza collaborativa senza delegare agli LLM la produzione automatica del knowledge graph. Gli LLM generano ipotesi interpretative, SPARQL e Wikidata servono a verificarne l'allineamento, e la validazione umana decide quali archetipi possono diventare RDF.
-            </p>
-            <p>
-                Il risultato più importante non è quindi la singola tripla prodotta, ma la definizione di un metodo controllato: SPARQL individua il gap, gli LLM propongono classificazioni, la validazione umana filtra errori e allucinazioni, RDF rende il risultato interoperabile.
+                L'approccio ibrido sviluppato dimostra come sia possibile colmare un data gap nelle piattaforme di conoscenza collaborativa senza delegare agli LLM la produzione automatica del knowledge graph[cite: 17]. Gli LLM generano ipotesi interpretative, SPARQL e Wikidata servono a verificarne l'allineamento, e la validazione umana decide quali archetipi possono diventare RDF[cite: 17].
             </p>
         </section>
 
