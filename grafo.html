@@ -95,30 +95,45 @@
             <div id="animanga-onto-graph" style="width: 100%; height: 400px; border: 1px solid #dee2e6; border-radius: 8px;"></div>
         </div>
 
-        <table class="table-legenda">
-    <tbody>
-        <tr>
-            <td><span style="display:inline-block; width:12px; height:12px; background:#3b82f6; border-radius:50%;"></td>
-            <td><strong>wd:</strong></td>
-            <td>Istanza (Personaggio Wikidata)</td>
-        </tr>
-        <tr>
-            <td><span style="display:inline-block; width:12px; height:12px; background:#f59e0b;"></td>
-            <td><strong>am:</strong></td>
-            <td>Classe ontologica</td>
-        </tr>
-        <tr>
-            <td><span style="display:inline-block; width:12px; height:12px; background:#10b981;"></td>
-            <td><strong>wd: (QID)</strong></td>
-            <td>Archetipo generale (Wikidata)</td>
-        </tr>
-        <tr>
-            <td><span style="display:inline-block; width:12px; height:12px; background:#ef4444; transform: rotate(45deg);"></td>
-            <td><strong>ex:</strong></td>
-            <td>Risorsa specifica del progetto</td>
-        </tr>
-    </tbody>
-</table>
+        <aside class="legend-box" style="margin-top: 20px; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px; background-color: #ffffff;">
+            <h3>Legenda Ontologica</h3>
+            <table class="table-legenda" style="width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 0.9em;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #eee;">
+                        <th style="padding: 8px; text-align: left;">Elemento</th>
+                        <th style="padding: 8px; text-align: left;">Tipo / Proprietà</th>
+                        <th style="padding: 8px; text-align: left;">Descrizione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px;"><span style="display:inline-block; width:15px; height:15px; background:#f59e0b;"></span></td>
+                        <td style="padding: 8px;"><strong>am:</strong></td>
+                        <td style="padding: 8px;">Classe Ontologica (T-Box)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><span style="display:inline-block; width:15px; height:15px; background:#3b82f6; border-radius:50%;"></span></td>
+                        <td style="padding: 8px;"><strong>wd:</strong></td>
+                        <td style="padding: 8px;">Istanza (Personaggio Wikidata)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><span style="display:inline-block; width:15px; height:15px; background:#10b981;"></span></td>
+                        <td style="padding: 8px;"><strong>wdt:P674</strong></td>
+                        <td style="padding: 8px;">Proprietà: Connette Opera a Personaggio</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><span style="display:inline-block; width:15px; height:15px; background:#10b981;"></span></td>
+                        <td style="padding: 8px;"><strong>wd:QID</strong></td>
+                        <td style="padding: 8px;">Archetipo Generale (Wikidata)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><span style="display:inline-block; width:15px; height:15px; background:#ef4444; transform: rotate(45deg);"></span></td>
+                        <td style="padding: 8px;"><strong>ex:</strong></td>
+                        <td style="padding: 8px;">Archetipo Giapponese (Risorsa locale)[cite: 10]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </aside>
 
     </main>
 </body>

@@ -906,39 +906,30 @@ function loadOntologyGraph() {
     if (!container_onto) return;
 
     var nodes_onto = new vis.DataSet([
-        // Classe Core
-        { id: 'am:Character', label: 'am:Character\n(Classe)', group: 'coreClass', shape: 'box' },
+        // Classe Ontologica
+        { id: 'am:Character', label: 'am:Character\n(Classe Ontologica)', group: 'coreClass', shape: 'box' },
         
-        // Personaggi (Istanze da Wikidata)
+        // Istanze e Nodi
+        { id: 'wd:Q642', label: 'wd:Q642\n(Naruto - Serie)', group: 'baseClass', shape: 'box' },
         { id: 'wd:Q1043344', label: 'wd:Q1043344\n(Itachi Uchiha)', group: 'instance', shape: 'ellipse' },
-        { id: 'wd:Q877964', label: 'wd:Q877964\n(Nami)', group: 'instance', shape: 'ellipse' },
-        
-        // Archetipi Generali (WD)
         { id: 'wd:Q1969230', label: 'wd:Q1969230\n(Tragic Hero)', group: 'genArchetype', shape: 'box' },
-        { id: 'ex:trickster-ally', label: 'ex:trickster-ally\n(Trickster)', group: 'genArchetype', shape: 'box' },
-        
-        // Archetipi Giapponesi (Normalizzazione ex:)
-        { id: 'ex:sacrificial-shinobi', label: 'ex:sacrificial-shinobi', group: 'japArchetype', shape: 'diamond' },
-        { id: 'ex:kitsune', label: 'ex:kitsune', group: 'japArchetype', shape: 'diamond' }
+        { id: 'ex:sacrificial-shinobi', label: 'ex:sacrificial-shinobi', group: 'japArchetype', shape: 'diamond' }
     ]);
 
     var edges_onto = new vis.DataSet([
-        // Istanziazione
-        { from: 'wd:Q1043344', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true },
-        { from: 'wd:Q877964', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true },
-        
-        // Relazioni Itachi (secondo CONSTRUCT)
+        // Correzione: P674 connette l'Opera al Personaggio
+        { from: 'wd:Q642', to: 'wd:Q1043344', label: 'wdt:P674 (characters)', arrows: 'to', color: {color: '#607D8B'} },
+        // Tipizzazione (rdf:type)
+        { from: 'wd:Q1043344', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: {color: '#94a3b8'} },
+        // Archetipi
         { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'animanga:hasGeneralArchetype', arrows: 'to', color: '#10b981' },
-        { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'animanga:hasJapaneseArchetype', arrows: 'to', color: '#ef4444' },
-        
-        // Relazioni Nami (secondo Turtle[cite: 14])
-        { from: 'wd:Q877964', to: 'ex:trickster-ally', label: 'animanga:hasGeneralArchetype', arrows: 'to', color: '#10b981' },
-        { from: 'wd:Q877964', to: 'ex:kitsune', label: 'animanga:hasJapaneseArchetype', arrows: 'to', color: '#ef4444' }
+        { from: 'wd:Q1043344', to: 'ex:sacrificial-shinobi', label: 'animanga:hasJapaneseArchetype', arrows: 'to', color: '#ef4444' }
     ]);
 
     var options_onto = {
         groups: {
             coreClass: { color: { background: '#f59e0b', border: '#b45309' }, font: { color: 'white' } },
+            baseClass: { color: { background: '#e2e8f0', border: '#94a3b8' } },
             instance: { color: { background: '#3b82f6', border: '#1e40af' }, font: { color: 'white' } },
             genArchetype: { color: { background: '#10b981', border: '#047857' }, font: { color: 'white' } },
             japArchetype: { color: { background: '#ef4444', border: '#991b1b' }, font: { color: 'white' } }
