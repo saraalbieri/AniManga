@@ -907,7 +907,7 @@ function loadOntologyGraph() {
 
     var nodes_onto = new vis.DataSet([
         // Classe Ontologica
-        /*{ id: 'am:Character', label: 'am:Character\n(Classe)', group: 'coreClass', shape: 'box' },*/
+        { id: 'am:Character', label: 'am:Character\n(Classe)', group: 'coreClass', shape: 'box' },
 
         //serie
         { id: 'wd:Q642', label: 'wd:Q642\n(Naruto)', group: 'baseClass', shape: 'box' },
@@ -932,8 +932,8 @@ function loadOntologyGraph() {
         { from: 'wd:Q16682047', to: 'wd:Q877964', label: 'wdt:P674 (characters)', arrows: 'to', color: {color: '#607D8B'} },
 
         // Istanziazione (rdf:type)
-       /* { from: 'wd:Q1043344', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: '#94a3b8' },
-        { from: 'wd:Q877964', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: '#94a3b8' },*/
+        { from: 'wd:Q1043344', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: '#94a3b8' },
+        { from: 'wd:Q877964', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: '#94a3b8' },
         
         // Relazioni Itachi
         { from: 'wd:Q1043344', to: 'wd:Q1969230', label: 'animanga:hasGeneralArchetype', arrows: 'to', color: '#10b981' },
