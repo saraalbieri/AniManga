@@ -910,7 +910,8 @@ function loadOntologyGraph() {
         { id: 'am:Character', label: 'am:Character\n(Classe)', group: 'coreClass', shape: 'box' },
 
         //serie
-        { id: 'wd:Q642', label: 'wd:Q642\n(Naruto - Serie)', group: 'baseClass', shape: 'box' },
+        { id: 'wd:Q642', label: 'wd:Q642\n(Naruto)', group: 'baseClass', shape: 'box' },
+        { id: 'wd:Q16682047', label: 'wd:Q16682047\n(One Piece universe)', group: 'baseClass', shape: 'box' },
         
         // Personaggi (Istanze)
         { id: 'wd:Q1043344', label: 'wd:Q1043344\n(Itachi Uchiha)', group: 'instance', shape: 'ellipse' },
@@ -928,6 +929,7 @@ function loadOntologyGraph() {
    var edges_onto = new vis.DataSet([
         // Correzione: P674 connette l'Opera al Personaggio
         { from: 'wd:Q642', to: 'wd:Q1043344', label: 'wdt:P674 (characters)', arrows: 'to', color: {color: '#607D8B'} },
+        { from: 'wd:Q16682047', to: 'wd:Q877964', label: 'wdt:P674 (characters)', arrows: 'to', color: {color: '#607D8B'} },
 
         // Istanziazione (rdf:type)
         { from: 'wd:Q1043344', to: 'am:Character', label: 'rdf:type', arrows: 'to', dashes: true, color: '#94a3b8' },
